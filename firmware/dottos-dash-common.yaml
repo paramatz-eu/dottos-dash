@@ -350,12 +350,12 @@ binary_sensor:
       - if:
           condition:
             lambda: 'return millis() - id(morse_key_pressed_at) < static_cast<uint32_t>(id(dash_threshold_ms).state);'
-        then:
+          then:
           # The held tone already played; adding one here would sound on release.
           - script.execute:
               id: enter_dot
               play_tone: false
-        else:
+          else:
           - script.execute:
               id: enter_dash
               play_tone: false
@@ -379,12 +379,12 @@ binary_sensor:
       - if:
           condition:
             lambda: 'return millis() - id(morse_key_pressed_at) < static_cast<uint32_t>(id(dash_threshold_ms).state);'
-        then:
+          then:
           # The held tone already played; adding one here would sound on release.
           - script.execute:
               id: enter_dot
               play_tone: false
-        else:
+          else:
           - script.execute:
               id: enter_dash
               play_tone: false
