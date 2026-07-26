@@ -196,22 +196,35 @@ script:
       - rtttl.stop
       - light.turn_off: rgb_light
 
+  # `play_tone` exists because these two scripts have three callers with very
+  # different sound needs. A real key sounds only while it is held down, so a
+  # press that already produced a tone must not add a second one on release.
+  # The encoder and the on-screen buttons have no press-and-hold, so they do
+  # need a tone of their own.
   - id: enter_dot
     mode: queued
+    parameters:
+      play_tone: bool
     then:
       - lambda: |-
           id(morse_buffer) += ".";
           id(live_morse).publish_state(id(morse_buffer));
           id(morse_event_counter) += 1;
           id(morse_event).publish_state(std::to_string(id(morse_event_counter)) + ":.");
+      # The light still flashes for every input. With the release tone gone it
+      # is the only immediate sign of whether a press became a dot or a dash.
       - script.execute: flash_dot
-      # Let the key-release action stop its continuous tone first.
-      - delay: 20ms
-      - rtttl.play: "dot:d=32,o=6,b=180:c"
+      - if:
+          condition:
+            lambda: 'return play_tone;'
+          then:
+            - rtttl.play: "dot:d=32,o=6,b=180:c"
       - script.execute: decode_after_pause
 
   - id: enter_dash
     mode: queued
+    parameters:
+      play_tone: bool
     then:
       - lambda: |-
           id(morse_buffer) += "-";
@@ -219,9 +232,11 @@ script:
           id(morse_event_counter) += 1;
           id(morse_event).publish_state(std::to_string(id(morse_event_counter)) + ":-");
       - script.execute: flash_dash
-      # Let the key-release action stop its continuous tone first.
-      - delay: 20ms
-      - rtttl.play: "dash:d=16,o=5,b=180:g"
+      - if:
+          condition:
+            lambda: 'return play_tone;'
+          then:
+            - rtttl.play: "dash:d=16,o=5,b=180:g"
       - script.execute: decode_after_pause
 
   - id: decode_after_pause
@@ -320,11 +335,16 @@ binary_sensor:
       - min_length: 40ms
         max_length: 300ms
         then:
-          - script.execute: enter_dot
+          # The held tone already played; adding one here would sound on release.
+          - script.execute:
+              id: enter_dot
+              play_tone: false
       - min_length: 301ms
         max_length: 8000ms
         then:
-          - script.execute: enter_dash
+          - script.execute:
+              id: enter_dash
+              play_tone: false
 
   - platform: gpio
     id: morse_button
@@ -345,11 +365,16 @@ binary_sensor:
       - min_length: 40ms
         max_length: 300ms
         then:
-          - script.execute: enter_dot
+          # The held tone already played; adding one here would sound on release.
+          - script.execute:
+              id: enter_dot
+              play_tone: false
       - min_length: 301ms
         max_length: 8000ms
         then:
-          - script.execute: enter_dash
+          - script.execute:
+              id: enter_dash
+              play_tone: false
 
 # Encoder stage: physical left is a dot, physical right is a dash.
 # Leaving the encoder unplugged is safe; the button stage still works.
@@ -369,10 +394,14 @@ sensor:
         pullup: true
     on_clockwise:
       then:
-        - script.execute: enter_dash
+        - script.execute:
+            id: enter_dash
+            play_tone: true
     on_anticlockwise:
       then:
-        - script.execute: enter_dot
+        - script.execute:
+            id: enter_dot
+            play_tone: true
 
 button:
   # These two endpoints are used by the embedded webpage. They intentionally
@@ -381,12 +410,16 @@ button:
     name: "Web Dot"
     icon: mdi:gesture-tap
     on_press:
-      - script.execute: enter_dot
+      - script.execute:
+          id: enter_dot
+          play_tone: true
   - platform: template
     name: "Web Dash"
     icon: mdi:gesture-tap-hold
     on_press:
-      - script.execute: enter_dash
+      - script.execute:
+          id: enter_dash
+          play_tone: true
   - platform: template
     name: "Play Dot"
     icon: mdi:music-note
