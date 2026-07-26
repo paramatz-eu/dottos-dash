@@ -44,6 +44,26 @@ danach wächst die Schaltung in sicheren, überschaubaren Schritten.
 | Sicher mit einem Kind starten oder Aufgaben in der Familie aufteilen | **[Familienleitfaden (Englisch)](FAMILY-GUIDE.md)** |
 | Das Projekt verbessern | [CONTRIBUTING.md](CONTRIBUTING.md) |
 
+### Was dabei gelernt wird
+
+Morsecode ist der Einstieg, nicht das Ziel. Zwei Signale und ein Draht sind das
+kleinste ehrliche Beispiel dafür, wie jeder Computer arbeitet. Deshalb steckt
+hinter jeder Aufgabe eine technische Idee:
+
+| Im Projekt | Die Idee dahinter |
+| --- | --- |
+| Punkt und Strich, an und aus | **Binär**: Zwei deutlich verschiedene Zustände genügen einer Maschine, weil sie Störungen überstehen. Eine solche Entscheidung heißt **Bit**. |
+| Der Weg durch den Morsebaum | Jedes Signal halbiert, was noch möglich ist; jedes zusätzliche Bit verdoppelt, was gesagt werden kann. Acht Bits sind ein **Byte** und reichen für ein Zeichen. |
+| Die Byte-Werkstatt im Spiel | Stellenwerte (128 … 1) und die gemeinsame **ASCII**-Liste, die jedem Zeichen eine Zahl gibt: `A` ist 65, also `01000001`. |
+| Buchstaben- und Wortpause | Warum Morse Pausen braucht und ein Byte nicht: Gruppen fester Länge brauchen kein Trennzeichen. |
+| Die echte Taste drücken | Ein GPIO-Pin liest genau ein Bit – HIGH oder LOW – und die Firmware macht aus seiner Dauer Daten. |
+| Licht und Ton | PWM sind schnelle Einsen und Nullen; I2S bringt den Ton als Binärzahlen zum Verstärker. |
+| Stufe für Stufe bauen | Vermuten, eine Sache ändern, beobachten: So finden Technikerinnen und Techniker wirklich einen Fehler. |
+
+Im Spiel behandelt der Abschnitt **Wie Computer denken: zwei Signale genügen**
+diese Binär-Ideen mit einer Byte-Werkstatt; [BAUEN.md](BAUEN.md) zeigt dasselbe
+auf der Ebene der Pins.
+
 ### Das bietet das Projekt
 
 - Kein Konto, Cloud-Dienst, Internet oder Heim-WLAN nötig.
@@ -107,6 +127,13 @@ sich einzelne Äste näher ansehen.
 Die Nachrichten-Werkstatt erlaubt A–Z, Zahlen und Leerzeichen. Tasten-Töne und
 Pausenlänge stehen unter **Ton und Tasten-Einstellungen**.
 
+Unter dem Morse-Spickzettel führt **Wie Computer denken: zwei Signale genügen**
+den Punkt und den Strich des Spiels weiter in die Informatik: zwei Zustände, ein
+Bit und eine Byte-Werkstatt, in der acht umschaltbare Bits die Zahl, das
+zugehörige Zeichen und dessen Morsecode zeigen. Dort steht auch die Antwort auf
+die Frage, die das Spiel aufwirft: Morse ist *fast* binär, braucht aber
+zusätzlich die Pause.
+
 Gespeichert werden nur Dash-Punkte, die nächste Aufgabe und das aktuelle
 Geschichtskapitel im Browser selbst. Auf der ESP32-Seite sprechen die
 Bildschirm-Tasten nur mit genau diesem ESP32, damit sein Licht und Ton
@@ -119,8 +146,8 @@ unter der GitHub-Pages-Adresse erreichbar; die deutsche Fassung liegt unter
 
 ## 2. Den ESP32 flashen
 
-Die Piezo-Version ist der beste Anfang. GPIO27 kann zunächst leer bleiben –
-ein Piezo muss noch nicht angeschlossen sein.
+Eine Firmware passt für jede Ton-Variante. Sie kann schon vor dem Verkabeln
+eines Piezos oder MAX98357A geflasht werden; später ist eines oder beides möglich.
 
 1. [ESPHome](https://esphome.io/guides/getting_started_command_line.html) auf
    dem Computer der erwachsenen Person installieren.
@@ -128,7 +155,7 @@ ein Piezo muss noch nicht angeschlossen sein.
 3. Im Projektordner diesen Befehl ausführen:
 
    ```sh
-   esphome run firmware/dottos-dash-piezo.yaml
+   esphome run firmware/dottos-dash.yaml
    ```
 
 4. Falls dieses DevKit nicht selbst in den Upload-Modus geht: **BOOT** gedrückt
@@ -163,8 +190,7 @@ Unten im ESP32-Spiel **Für Erwachsene: Mit Heim-WLAN verbinden** aufklappen.
 Den Namen und das Passwort eines 2,4-GHz-WLANs eingeben und **WLAN speichern &
 verbinden** wählen. Der ESP32 speichert die Verbindungseinstellung selbst,
 nicht dieses Projekt. Danach das Handy mit demselben Heim-WLAN verbinden und
-`http://dottos-dash.local/` öffnen (bei der MAX98357A-Firmware
-`dottos-dash-max.local`). Falls der Name auf dem Handy nicht
+`http://dottos-dash.local/` öffnen. Falls der Name auf dem Handy nicht
 gefunden wird, die IP-Adresse des ESP32 in der Geräteliste des Routers
 nachsehen. Ist das Heim-WLAN nicht erreichbar, erscheint das WLAN `Dotto's
 Dash` nach kurzer Zeit wieder.
@@ -172,7 +198,7 @@ Dash` nach kurzer Zeit wieder.
 ### Spätere Firmware weitergeben
 
 Der erste USB-Flash installiert auch das Update-Werkzeug im Browser. Für ein
-späteres Update dieselbe Variante kompilieren, die entstandene **OTA**-`.bin`
+späteres Update `firmware/dottos-dash.yaml` kompilieren, die entstandene **OTA**-`.bin`
 an die Person mit dem Board senden und mit **Dotto's Dash** verbinden. Unten
 auf der Spielseite **Für Erwachsene: Firmware aktualisieren** öffnen, die Datei
 auswählen und warten, bis der ESP32 neu startet. Niemals eine
@@ -230,16 +256,14 @@ Morsebaum auf der Webseite. Wenn sich der Drehgeber falsch herum anfühlt,
 | `-` | GND |
 
 Es muss ein **passiver** Piezo-Summer sein, kein Summer, der bei Strom von
-allein piept. Die bereits geflashte Piezo-Firmware unterstützt ihn sofort; nach
-dem späteren Anschließen ist kein erneutes Flashen nötig.
+allein piept. Die bereits geflashte `dottos-dash.yaml` unterstützt ihn sofort;
+nach dem späteren Anschließen ist kein erneutes Flashen nötig.
 
 ### Stufe 4b – MAX98357A und kleiner Lautsprecher
 
-Für lauteren Klang stattdessen diese Firmware flashen:
-
-```sh
-esphome run firmware/dottos-dash-max98357a.yaml
-```
+Für lauteren Klang wird der MAX98357A an dieselbe Firmware angeschlossen. Er
+kann statt des Piezos oder zusätzlich dazu benutzt werden; mit beiden Teilen
+spielen beide jeden Spielton.
 
 | MAX98357A-Pin | Verbindung zum ESP32 |
 | --- | --- |
@@ -256,14 +280,14 @@ arbeiten mit 3,3 V und dürfen niemals 5 V abbekommen.
 ## Was gehört ins GitHub-Repository?
 
 ```text
-index.html / style.css / app.js         Webspiel; diese Dateien werden in beide Firmware-Versionen eingebettet
+index.html / style.css / app.js         Webspiel; diese Dateien werden in die Firmware eingebettet
 de/index.html                           Deutsche Offline-Version
-firmware/dottos-dash-piezo.yaml      Zuerst flashen; Piezo ist optional
-firmware/dottos-dash-max98357a.yaml  I2S-Alternative für Lautsprecher
+firmware/dottos-dash.yaml            Flashen; unterstützt Piezo und MAX98357A zusammen
 firmware/dottos-dash-common.yaml     Gemeinsames Verhalten des Lernpads
 ```
 
-Vor dem Veröffentlichen beide Firmware-Varianten auf echter Hardware testen.
+Vor dem Veröffentlichen die Firmware mit angeschlossenem Piezo und MAX98357A
+auf echter Hardware testen.
 Dann nur die Quelldateien committen, nicht `.esphome/`, `secrets.yaml` oder
 generierte `.bin`-Dateien. Ein Foto von Ottos fertigem Projekt und getestete
 Firmware-Dateien in einem GitHub Release machen das Projekt für andere noch
@@ -272,8 +296,8 @@ einfacher.
 ## Entwicklung
 
 Das Webspiel besteht aus einfachem HTML, CSS und JavaScript. ESPHome bettet
-`style.css` und `app.js` beim Kompilieren in beide Firmware-Varianten ein.
-Gemeinsame Änderungen deshalb mit beiden Varianten und auf echter Hardware
+`style.css` und `app.js` beim Kompilieren in die Firmware ein. Gemeinsame
+Änderungen deshalb mit angeschlossenem Piezo und MAX98357A auf echter Hardware
 testen. Die praktische Checkliste steht in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Lizenz

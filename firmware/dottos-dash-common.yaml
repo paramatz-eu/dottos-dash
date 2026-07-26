@@ -1,5 +1,5 @@
 # Shared firmware for the Dotto's Dash learning pad.
-# Do not flash this file directly. Choose the piezo or MAX98357A build instead.
+# Do not flash this file directly; flash dottos-dash.yaml instead.
 
 esphome:
   name: ${device_name}
@@ -90,8 +90,10 @@ number:
     icon: mdi:gesture-tap-hold
     optimistic: true
     restore_value: true
-    initial_value: 250
-    min_value: 100
+    # Keep these bounds in step with DASH_THRESHOLD in app.js — the page writes
+    # this number over REST and the board would silently clamp a rejected value.
+    initial_value: 300
+    min_value: 150
     max_value: 1000
     step: 50
     unit_of_measurement: ms
@@ -101,7 +103,9 @@ number:
     icon: mdi:timer-outline
     optimistic: true
     restore_value: true
-    initial_value: 500
+    # min_value stays at 300: that is the lowest the page can derive (at the
+    # 150 ms dash threshold), and a tighter clamp here would silently reject it.
+    initial_value: 600
     min_value: 300
     max_value: 2000
     step: 100
@@ -153,6 +157,29 @@ output:
     pin: GPIO18
 
 script:
+  # ESPHome's RTTTL component has one sound destination per instance. The
+  # hardware build declares one for the piezo and one for the MAX98357A, so
+  # every game sound can reach either connected part—or both together.
+  - id: play_sound
+    mode: restart
+    parameters:
+      tune: string
+    then:
+      - rtttl.play:
+          id: piezo_rtttl
+          rtttl: !lambda 'return tune;'
+      - rtttl.play:
+          id: max98357a_rtttl
+          rtttl: !lambda 'return tune;'
+
+  - id: stop_sound
+    mode: restart
+    then:
+      - rtttl.stop:
+          id: piezo_rtttl
+      - rtttl.stop:
+          id: max98357a_rtttl
+
   - id: ready_animation
     mode: restart
     then:
@@ -162,7 +189,9 @@ script:
           red: 20%
           green: 80%
           blue: 100%
-      - rtttl.play: "ready:d=16,o=5,b=150:c,e,g"
+      - script.execute:
+          id: play_sound
+          tune: "ready:d=16,o=5,b=150:c,e,g"
       - delay: 900ms
       - light.turn_off: rgb_light
 
@@ -201,14 +230,15 @@ script:
           red: 25%
           green: 70%
           blue: 100%
-      # An eight-second note is stopped explicitly on release. This works for
-      # both the piezo and the MAX98357A firmware variants.
-      - rtttl.play: "key:d=1,o=6,b=30:c"
+      # An eight-second note is stopped explicitly on release.
+      - script.execute:
+          id: play_sound
+          tune: "key:d=1,o=6,b=30:c"
 
   - id: morse_key_up_feedback
     mode: restart
     then:
-      - rtttl.stop
+      - script.execute: stop_sound
       - light.turn_off: rgb_light
 
   # `play_tone` exists because these two scripts have three callers with very
@@ -233,7 +263,9 @@ script:
           condition:
             lambda: 'return play_tone;'
           then:
-            - rtttl.play: "dot:d=32,o=6,b=180:c"
+            - script.execute:
+                id: play_sound
+                tune: "dot:d=32,o=6,b=180:c"
       - script.execute: decode_after_pause
 
   - id: enter_dash
@@ -251,7 +283,9 @@ script:
           condition:
             lambda: 'return play_tone;'
           then:
-            - rtttl.play: "dash:d=16,o=5,b=180:g"
+            - script.execute:
+                id: play_sound
+                tune: "dash:d=16,o=5,b=180:g"
       - script.execute: decode_after_pause
 
   - id: decode_after_pause
@@ -313,7 +347,9 @@ script:
                 red: 0%
                 green: 100%
                 blue: 25%
-            - rtttl.play: "yes:d=16,o=6,b=170:g,c7"
+            - script.execute:
+                id: play_sound
+                tune: "yes:d=16,o=6,b=170:g,c7"
           else:
             - light.turn_on:
                 id: rgb_light
@@ -321,7 +357,9 @@ script:
                 red: 100%
                 green: 0%
                 blue: 20%
-            - rtttl.play: "try:d=16,o=5,b=130:c,8p,c"
+            - script.execute:
+                id: play_sound
+                tune: "try:d=16,o=5,b=130:c,8p,c"
       - delay: 650ms
       - light.turn_off: rgb_light
 
@@ -437,9 +475,13 @@ button:
     name: "Play Dot"
     icon: mdi:music-note
     on_press:
-      - rtttl.play: "dot:d=32,o=6,b=180:c"
+      - script.execute:
+          id: play_sound
+          tune: "dot:d=32,o=6,b=180:c"
   - platform: template
     name: "Play Dash"
     icon: mdi:music-note-eighth
     on_press:
-      - rtttl.play: "dash:d=16,o=5,b=180:g"
+      - script.execute:
+          id: play_sound
+          tune: "dash:d=16,o=5,b=180:g"

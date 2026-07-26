@@ -24,6 +24,7 @@
         <a href="#safety">Sicherheit</a>
         <a href="#basics">Strom verstehen</a>
         <a href="#parts">Bauteile kennenlernen</a>
+        <a href="#binary">Einsen und Nullen</a>
         <a href="#flash">Flashen</a>
         <a href="#light">RGB-Licht</a>
         <a href="#button">Morse-Taste</a>
@@ -108,12 +109,41 @@ oft innen verbunden   Mittelgraben trennt beide Seiten</pre>
           <p class="kid-question">Zeige mit dem Finger auf den ESP32: Wo sitzt sein USB-Anschluss? Zeige dann auf dem RGB-Modul die drei Buchstaben R, G und B.</p>
         </section>
 
+        <section id="binary" class="lesson-card concept-card">
+          <h2>Einsen und Nullen: die Sprache unter allem</h2>
+          <p>Bevor wir verkabeln, lohnt sich eine Frage: Was liest ein GPIO-Pin eigentlich? Er misst keine Volt wie ein Messgerät. Er beantwortet nur eine Frage: Ist dieser Pin näher an 3,3 V oder näher an 0 V? Diese zwei Antworten heißen <strong>HIGH</strong> und <strong>LOW</strong> oder <strong>1</strong> und <strong>0</strong>. Eine solche Antwort ist ein <strong>Bit</strong>, kurz für <em>binary digit</em>, also Binärziffer.</p>
+          <p>Zwei Zustände genügen einem Computer, weil zwei Zustände Störungen überstehen. Ein etwas schwaches oder verrauschtes Signal ist immer noch deutlich näher an einem der beiden Enden – und kann sauber weitergegeben werden. Genau das merkten schon die Telegrafisten 1844: Ein Klick kam an oder eben nicht.</p>
+          <table class="wire-table">
+            <thead><tr><th>In diesem Projekt</th><th>1 / HIGH</th><th>0 / LOW</th></tr></thead>
+            <tbody>
+              <tr><td>GPIO13 mit internem Pull-up</td><td>Taster offen</td><td>Taster gedrückt, mit GND verbunden</td></tr>
+              <tr><td>GPIO16 für den roten Kanal</td><td>Rot an</td><td>Rot aus</td></tr>
+              <tr><td>Drehgeber <kbd>CLK</kbd> und <kbd>DT</kbd></td><td>Kontakt offen</td><td>Kontakt geschlossen</td></tr>
+            </tbody>
+          </table>
+          <p>Ein einzelnes Bit sagt wenig, deshalb werden Bits gruppiert – und jedes zusätzliche Bit <strong>verdoppelt</strong>, wie viele verschiedene Dinge die Gruppe bedeuten kann.</p>
+          <pre class="wire-diagram">1 Bit  →   2 Werte   0  1
+2 Bits →   4 Werte   00  01  10  11
+3 Bits →   8 Werte
+8 Bits → 256 Werte   = 1 Byte = ein Textzeichen</pre>
+          <p>Computer haben sich auf eine gemeinsame Liste geeinigt, welche Zahl welches Zeichen bedeutet. Sie heißt <strong>ASCII</strong>: <kbd>A</kbd> ist 65, also <kbd>01000001</kbd>. Im Spiel kannst du unter <em>Baue ein Byte</em> diese acht Bits umschalten und siehst den Buchstaben mit seinem Morsecode.</p>
+          <h3>Wo die Bits in deinem Aufbau stecken</h3>
+          <ul>
+            <li><strong>Die Taste:</strong> Die Firmware liest immer wieder ein Bit von GPIO13 und misst, wie lange es 0 war. Unter der Strich-Grenze ist es ein Punkt, länger ein Strich.</li>
+            <li><strong>Die Farben:</strong> PWM schaltet einen Pin tausende Male pro Sekunde zwischen 1 und 0. „Halb hell“ heißt: Der Pin ist in jedem winzigen Zeitabschnitt zur Hälfte 1.</li>
+            <li><strong>Der Ton:</strong> I2S schickt dem MAX98357A eine Folge von Binärzahlen. <kbd>BCLK</kbd> tickt einmal pro Bit und <kbd>DIN</kbd> trägt das Bit selbst – so weiß der Verstärker genau, wo eine Zahl endet.</li>
+            <li><strong>Die Firmware:</strong> Beim Flashen wird etwa ein Megabyte an Bytes in den Speicher des ESP32 kopiert: das Programm, die Spielseite und diese Anleitung, alles als Einsen und Nullen.</li>
+          </ul>
+          <details><summary>Ist Morsecode dasselbe wie Binärcode?</summary><p>Fast. Morse hat zwei Signale, aber seine Buchstaben sind verschieden lang – <kbd>E</kbd> hat ein Signal, <kbd>Z</kbd> hat vier. Darum braucht Morse noch etwas Drittes: die Stille, die zeigt, wo ein Buchstabe endet. Ein Byte hat immer genau acht Bits; ein Computer braucht also keine Pause, um Zeichen zu trennen. Deshalb hat die Firmware eine Einstellung <kbd>Letter Pause</kbd> und dein Laptop nicht.</p></details>
+          <p class="kid-question">Zähl an einer Hand: Daumen 1, Zeigefinger 2, Mittelfinger 4, Ringfinger 8, kleiner Finger 16. Jeder Finger ist ein Bit, eine Hand zählt also bis 31. Welche Finger ergeben 21? Baue danach deine Initialen als Bytes im Spiel.</p>
+        </section>
+
         <section id="flash" class="lesson-card">
           <span class="step-label">Schritt 0</span>
           <h2>Vor dem Verkabeln flashen</h2>
           <p><strong>„Flashen“</strong> heißt: Das Morse-Programm wird in den Speicher des ESP32 übertragen. Danach kann der ESP32 das Programm auch ohne Computer ausführen. Dieser Schritt ist für die erwachsene Person, aber du darfst zusehen: Das ist der Moment, in dem das Gehirn seine Regeln lernt.</p>
           <ol><li>Nur den ESP32 per USB anschließen.</li><li>Auf dem Computer der erwachsenen Person ausführen:</li></ol>
-          <pre class="wire-diagram">esphome run firmware/dottos-dash-piezo.yaml</pre>
+          <pre class="wire-diagram">esphome run firmware/dottos-dash.yaml</pre>
           <ol start="3"><li>USB abziehen. Den ESP32 immer mit dem USB-Anschluss zur gleichen Seite ins Steckbrett stecken.</li><li>Beschriftungen wie <kbd>13</kbd>, <kbd>21</kbd>, <kbd>GND</kbd>, <kbd>3V3</kbd> und <kbd>VIN</kbd>/<kbd>5V</kbd> suchen. Diese Beschriftungen sind wichtig – nicht die Nummern der Steckbrett-Reihen.</li></ol>
           <table class="wire-table"><thead><tr><th>ESP32-Pin</th><th>Aufgabe</th></tr></thead><tbody><tr><td>GPIO16 / 17 / 18</td><td>RGB Rot / Grün / Blau</td></tr><tr><td>GPIO13</td><td>Taster oder Drehgeber-Schalter</td></tr><tr><td>GPIO21 / 19</td><td>Dreh-Signale</td></tr><tr><td>GPIO27</td><td>Passiver Piezo</td></tr><tr><td>GPIO26 / 25 / 22</td><td>MAX98357A Ton-Takt und Daten</td></tr></tbody></table>
           <p class="kid-question">Erst raten, dann nachsehen: Welcher Pin wird später deine Morse-Taste lesen? Die Antwort steht in der Tabelle: GPIO13.</p>
@@ -174,8 +204,7 @@ Nimm ein Bein links UND ein Bein rechts.</pre>
 GND    ───────── Piezo -</pre>
           <p>Ein <strong>passiver</strong> Piezo ist richtig. Er ist wie eine winzige Trommelfell-Scheibe: Die Firmware schubst ihn sehr schnell hin und her. Die Scheibe vibriert, bewegt Luft und daraus wird Ton. Ein <strong>aktiver</strong> Summer macht beim Anschließen an Strom selbst einen einzigen Ton – den wollen wir hier nicht.</p>
           <h3>Option B: MAX98357A und kleiner Lautsprecher</h3>
-          <p>Diese Option ist statt des Piezos für lauteren Klang. Zuerst die andere Firmware flashen.</p>
-          <pre class="wire-diagram">esphome run firmware/dottos-dash-max98357a.yaml</pre>
+          <p>Diese Option sorgt für lauteren Klang. Sie kann zusätzlich zum Piezo verkabelt werden; beide Tonteile nutzen dieselbe Firmware.</p>
           <table class="wire-table"><thead><tr><th>MAX98357A-Beschriftung</th><th>ESP32-Pin</th></tr></thead><tbody><tr><td><kbd>BCLK</kbd></td><td>GPIO26</td></tr><tr><td><kbd>LRC</kbd> / <kbd>WS</kbd></td><td>GPIO25</td></tr><tr><td><kbd>DIN</kbd></td><td>GPIO22</td></tr><tr><td><kbd>GND</kbd></td><td>GND</td></tr><tr><td><kbd>VIN</kbd></td><td>ESP32 <kbd>VIN</kbd> / <kbd>5V</kbd></td></tr><tr><td><kbd>SPK+</kbd>, <kbd>SPK-</kbd></td><td>Nur die beiden Lautsprecherkabel</td></tr></tbody></table>
           <p>Der Lautsprecher wird nur am Verstärker angeschlossen, nie direkt an einem ESP32-Pin. Stell dir den MAX98357A wie ein Megafon für den ESP32 vor: Der ESP32 flüstert digitale Ton-Nachrichten über <kbd>BCLK</kbd>, <kbd>LRC</kbd> und <kbd>DIN</kbd>; der Verstärker macht daraus genug Kraft für den Lautsprecher.</p>
           <p class="kid-question">Hör-Experiment: Was ist länger – ein Morse-Punkt oder ein Morse-Strich? Drücke beides und zähle im Kopf mit.</p>

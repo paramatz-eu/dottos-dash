@@ -29,8 +29,7 @@ jobs:
       fail-fast: false
       matrix:
         target:
-          - dottos-dash-piezo
-          - dottos-dash-max98357a
+          - dottos-dash
 
     steps:
       - name: Check out source

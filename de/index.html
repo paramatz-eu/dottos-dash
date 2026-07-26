@@ -89,9 +89,9 @@
           <div class="free-key-help-content">
             <p><strong>So sendest du:</strong> Kurz drücken ist ein Punkt. Ab der Strich-Grenze wird dein Druck ein Strich. Warte die Buchstabenpause zwischen Buchstaben und die Wortpause zwischen Wörtern.</p>
             <div class="timing-controls">
-              <label class="pause-control" for="dash-threshold"><span>Strich ab: <output id="dash-threshold-value">250 ms</output></span><input id="dash-threshold" type="range" min="100" max="1000" step="50" value="250"><small>Kürzere Drucke sind Punkte.</small></label>
-              <label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Danach liest der Decoder einen Buchstaben.</small></label>
-              <label class="pause-control" for="word-pause"><span>Wortpause: <output id="word-pause-value">1200 ms</output></span><input id="word-pause" type="range" min="700" max="5000" step="100" value="1200"><small>Danach setzt der Decoder ein Leerzeichen.</small></label>
+              <label class="pause-control" for="dash-threshold"><span>Strich ab: <output id="dash-threshold-value">300 ms</output></span><input id="dash-threshold" type="range" min="150" max="1000" step="50" value="300"><small>Kürzere Drucke sind Punkte. Stell das höher, wenn aus deinen Punkten Striche werden.</small></label>
+              <label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">600 ms</output></span><input id="letter-pause" type="range" min="500" max="2000" step="100" value="600"><small>Danach liest der Decoder einen Buchstaben. Sie bleibt immer länger als ein Strich.</small></label>
+              <label class="pause-control" for="word-pause"><span>Wortpause: <output id="word-pause-value">1400 ms</output></span><input id="word-pause" type="range" min="1200" max="5000" step="100" value="1400"><small>Danach setzt der Decoder ein Leerzeichen. Sie bleibt immer länger als die Buchstabenpause.</small></label>
             </div>
           </div>
         </details>
@@ -180,6 +180,46 @@
     <details class="cheat-sheet">
       <summary>Spickzettel: Morse-Alphabet</summary>
       <div id="alphabet" class="alphabet-grid"></div>
+    </details>
+
+    <details class="binary-lesson">
+      <summary>Wie Computer denken: zwei Signale genügen</summary>
+      <div class="binary-content">
+        <p>Dottos ganzes Alphabet besteht aus zwei Signalen. Das ist kein Trick, damit das Spiel leichter wird – es ist genau die Idee, mit der jeder Computer der Welt arbeitet.</p>
+        <p>Eine Maschine kann schlecht genau messen, aber sehr gut zwei deutlich verschiedene Zustände unterscheiden. Darum benutzt die Technik genau zwei und nennt sie <strong>1</strong> und <strong>0</strong>. Eine solche Entscheidung heißt <strong>Bit</strong>, kurz für <em>binary digit</em>, also Binärziffer.</p>
+        <table class="wire-table binary-table">
+          <thead><tr><th>Wo die zwei Zustände stecken</th><th>1</th><th>0</th></tr></thead>
+          <tbody>
+            <tr><td>Deine Morsetaste</td><td>gedrückt</td><td>losgelassen</td></tr>
+            <tr><td>Ein Telegrafendraht von 1844</td><td>Strom fließt</td><td>kein Strom</td></tr>
+            <tr><td>Ein Pin am ESP32</td><td>3,3 V (HIGH)</td><td>0 V (LOW)</td></tr>
+            <tr><td>Speicher im Handy oder Laptop</td><td>geladen</td><td>leer</td></tr>
+          </tbody>
+        </table>
+        <p>Ein Bit kann nur zwei Dinge sagen: ja oder nein, Punkt oder Strich, <strong>E</strong> oder <strong>T</strong>. Aber jedes weitere Bit <strong>verdoppelt</strong>, wie viel du sagen kannst – und das wird schnell riesig:</p>
+        <ul class="binary-doubling">
+          <li><strong>1 Bit</strong> → 2 Nachrichten <small>E und T, die erste Reihe im Baum</small></li>
+          <li><strong>2 Bits</strong> → 4 <small>I, A, N, M</small></li>
+          <li><strong>3 Bits</strong> → 8 <small>S, U, R, W, D, K, G, O</small></li>
+          <li><strong>8 Bits</strong> → 256 <small>genug für alle Buchstaben, Ziffern und Satzzeichen</small></li>
+        </ul>
+        <p>Genau diese Verdopplung läufst du im Morsebaum ab: Jeder Punkt und jeder Strich halbiert die Buchstaben, die noch möglich sind.</p>
+
+        <div class="binary-lab">
+          <p class="prompt">Baue ein Byte</p>
+          <p>Acht Bits nebeneinander heißen <strong>Byte</strong>. Jede Stelle ist doppelt so viel wert wie die rechts daneben. Schalte ein paar Bits an, zähle ihre Werte zusammen und sieh, welches Zeichen zu dieser Zahl gehört.</p>
+          <div id="binary-bits" class="binary-bits" role="group" aria-label="Acht Bits, von 128 bis 1"></div>
+          <output id="binary-readout" class="binary-readout" aria-live="polite"></output>
+          <div class="action-controls">
+            <button id="binary-letter-button" class="secondary-button" type="button">Zeig mir einen Buchstaben</button>
+            <button id="binary-clear-button" class="secondary-button" type="button">Alles auf null</button>
+          </div>
+          <p class="keyboard-help">Computer haben sich auf eine gemeinsame Liste geeinigt, welche Zahl welches Zeichen bedeutet. Sie heißt ASCII: <strong>A</strong> ist 65, <strong>B</strong> ist 66 und ein Leerzeichen ist 32.</p>
+        </div>
+
+        <p><strong>Ist Morsecode also Binärcode?</strong> Fast – und der Unterschied lohnt sich. Ein Byte hat immer genau acht Bits, deshalb weiß ein Computer, wo ein Zeichen endet und das nächste beginnt. Morsezeichen sind unterschiedlich lang: <strong>E</strong> hat ein Signal, <strong>Z</strong> hat vier. Darum braucht Morse zusätzlich die Stille dazwischen, die zeigt, wo ein Buchstabe aufhört. Morse benutzt also drei Dinge: Punkt, Strich und Pause.</p>
+        <p><strong>In Dottos Controller</strong> ist wirklich alles Bits. Der Taster-Pin liest 1, solange die Taste offen ist, und 0, während du sie hältst. Jede Farbe entsteht aus tausenden schnellen Einsen und Nullen pro Sekunde. Der Ton geht als Binärzahlen zum Lautsprecher-Verstärker. Auch diese Seite kam als Bits zu dir: Der ESP32 speichert das ganze Spiel als etwa eine Million davon.</p>
+      </div>
     </details>
 
     <details class="story-sources">

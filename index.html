@@ -89,9 +89,9 @@
           <div class="free-key-help-content">
             <p><strong>How to send:</strong> A short press is a dot. A press at or above the dash threshold is a dash. Wait for the letter gap between letters and the word gap between words.</p>
             <div class="timing-controls">
-              <label class="pause-control" for="dash-threshold"><span>Dash from: <output id="dash-threshold-value">250 ms</output></span><input id="dash-threshold" type="range" min="100" max="1000" step="50" value="250"><small>Shorter presses are dots.</small></label>
-              <label class="pause-control" for="letter-pause"><span>Letter gap: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Then the decoder reads a letter.</small></label>
-              <label class="pause-control" for="word-pause"><span>Word gap: <output id="word-pause-value">1200 ms</output></span><input id="word-pause" type="range" min="700" max="5000" step="100" value="1200"><small>Then the decoder adds a space.</small></label>
+              <label class="pause-control" for="dash-threshold"><span>Dash from: <output id="dash-threshold-value">300 ms</output></span><input id="dash-threshold" type="range" min="150" max="1000" step="50" value="300"><small>Shorter presses are dots. Raise this if your dots keep turning into dashes.</small></label>
+              <label class="pause-control" for="letter-pause"><span>Letter gap: <output id="letter-pause-value">600 ms</output></span><input id="letter-pause" type="range" min="500" max="2000" step="100" value="600"><small>Then the decoder reads a letter. It always stays longer than a dash.</small></label>
+              <label class="pause-control" for="word-pause"><span>Word gap: <output id="word-pause-value">1400 ms</output></span><input id="word-pause" type="range" min="1200" max="5000" step="100" value="1400"><small>Then the decoder adds a space. It always stays longer than the letter gap.</small></label>
             </div>
           </div>
         </details>
@@ -180,6 +180,46 @@
     <details class="cheat-sheet">
       <summary>Morse alphabet cheat sheet</summary>
       <div id="alphabet" class="alphabet-grid"></div>
+    </details>
+
+    <details class="binary-lesson">
+      <summary>How computers think: two signals are enough</summary>
+      <div class="binary-content">
+        <p>Dotto’s whole alphabet is built from two signals. That is not a trick to make the game easy — it is the idea every computer in the world runs on.</p>
+        <p>A machine is bad at measuring something exactly, but very good at telling two clearly different states apart. So engineers use exactly two and call them <strong>1</strong> and <strong>0</strong>. One of those choices is a <strong>bit</strong>, short for <em>binary digit</em>.</p>
+        <table class="wire-table binary-table">
+          <thead><tr><th>Where the two states live</th><th>1</th><th>0</th></tr></thead>
+          <tbody>
+            <tr><td>Your Morse key</td><td>pressed</td><td>released</td></tr>
+            <tr><td>A telegraph wire in 1844</td><td>current flowing</td><td>no current</td></tr>
+            <tr><td>A pin on the ESP32</td><td>3.3 V (HIGH)</td><td>0 V (LOW)</td></tr>
+            <tr><td>Memory in a phone or laptop</td><td>charged</td><td>empty</td></tr>
+          </tbody>
+        </table>
+        <p>One bit can only say two things: yes or no, dot or dash, <strong>E</strong> or <strong>T</strong>. But every bit you add <strong>doubles</strong> how much you can say, and that grows fast:</p>
+        <ul class="binary-doubling">
+          <li><strong>1 bit</strong> → 2 messages <small>E and T, the first row of the tree</small></li>
+          <li><strong>2 bits</strong> → 4 <small>I, A, N, M</small></li>
+          <li><strong>3 bits</strong> → 8 <small>S, U, R, W, D, K, G, O</small></li>
+          <li><strong>8 bits</strong> → 256 <small>enough for every letter, digit and punctuation mark</small></li>
+        </ul>
+        <p>That doubling is exactly the walk you take through the Morse tree: each dot or dash halves the letters that are still possible.</p>
+
+        <div class="binary-lab">
+          <p class="prompt">Build a byte</p>
+          <p>Eight bits in a row are called a <strong>byte</strong>. Each place is worth double the one to its right. Switch some bits on, add up their values, and see which character that number stands for.</p>
+          <div id="binary-bits" class="binary-bits" role="group" aria-label="Eight bits, worth 128 down to 1"></div>
+          <output id="binary-readout" class="binary-readout" aria-live="polite"></output>
+          <div class="action-controls">
+            <button id="binary-letter-button" class="secondary-button" type="button">Show me a letter</button>
+            <button id="binary-clear-button" class="secondary-button" type="button">All zeros</button>
+          </div>
+          <p class="keyboard-help">Computers agreed one shared list of which number means which character. It is called ASCII: <strong>A</strong> is 65, <strong>B</strong> is 66, and a space is 32.</p>
+        </div>
+
+        <p><strong>So is Morse code binary?</strong> Almost, and the difference is worth knowing. A byte is always exactly eight bits, so a computer knows where one character ends and the next begins. Morse letters have different lengths — <strong>E</strong> is one signal and <strong>Z</strong> is four — so Morse also needs the silence between signals to show where a letter stops. Morse really uses three things: dot, dash and pause.</p>
+        <p><strong>Inside Dotto’s controller</strong> everything really is bits. The button pin reads 1 while the button is open and 0 while you hold it down. Each colour is made from thousands of fast 1s and 0s per second. The sound travels to the speaker amplifier as binary numbers. Even this page arrived as bits: the ESP32 keeps the whole game as about a million of them.</p>
+      </div>
     </details>
 
     <details class="story-sources">
