@@ -31,6 +31,8 @@ The aim is not to memorise a whole alphabet. The game lets a child discover conn
 | Choosing left/right routes in the Morse tree | A message can be represented with a few symbols and a decision tree. |
 | Holding a key for a dot or dash | A physical action becomes data when a computer applies a rule. |
 | Waiting for a letter to decode | Timing and pauses matter in communication systems. |
+| Flipping bits in the **Build a byte** panel | Binary: two states are the base of all computing, eight of them make a byte, and place values turn that byte into a number and a character. |
+| Comparing a Morse letter with a byte | A fixed-length code needs no separator; a variable-length code such as Morse needs the silence between signals. |
 | Seeing light, hearing sound and watching the game | One input can have several forms of feedback. |
 | Following the history chapters | Inventions are made by teams, experiments and improvement. |
 | Checking one wire or idea at a time | Prediction, observation and revision are how engineers troubleshoot. |
@@ -46,6 +48,8 @@ Make the first win deliberately small: `E` is one dot, `S` is three dots, and `S
 
 Stop while curiosity is still high. In the next session, add one component and repeat the same predict–test–explain rhythm.
 
+If the child asks *why* two signals are enough, open **How computers think: two signals are enough** under the Morse cheat sheet and build one byte together. It needs no hardware, and it is the bridge from Morse to the binary that every computer runs on.
+
 ### Support without taking over
 
 Let the child make the safe choices: select a route, press the checked key, read a pin label aloud, and tick a wire on a paper map. Keep the adult jobs visible too: flashing, checking labels, connecting USB and deciding when it is safe to apply power.
@@ -55,6 +59,7 @@ Useful things to say out loud:
 - “The colour of a wire is not its job; the printed label tells us its job.”
 - “We change one thing, then test. That helps us find the cause.”
 - “A computer follows exact rules; we can read and improve those rules.”
+- “A computer is bad at measuring exactly, but very good at telling two things apart — so it uses just two: 1 and 0.”
 - “`SOS` is an historical distress signal, not a substitute for calling local emergency services or asking an adult for help in a real emergency.”
 
 The game works with touch, keyboard and the physical controller. For a child who prefers less sound, turn off key sounds in **Sound and key settings**. For a child who finds a long press tricky, begin with the screen buttons or keyboard arrows and return to the physical key later.
@@ -86,10 +91,10 @@ Shared behavior is in [`firmware/dottos-dash-common.yaml`](firmware/dottos-dash-
 
 | Target | Use it when | Sound wiring |
 | --- | --- | --- |
-| `dottos-dash-piezo.yaml` | First flash and the normal build | Optional passive piezo on GPIO27 and GND |
-| `dottos-dash-max98357a.yaml` | Using the louder amplifier and small speaker | MAX98357A on GPIO26, GPIO25, GPIO22, GND and `VIN`/5V |
+| `dottos-dash.yaml` | Every build, including the first flash | Optional passive piezo on GPIO27/GND and/or MAX98357A on GPIO26, GPIO25, GPIO22, GND and `VIN`/5V |
 
-Start with the piezo target: it works with no piezo attached. The MAX98357A target is an alternative sound build and requires a reflash.
+The one target works with no sound part connected. Add a piezo, a MAX98357A, or
+both later without reflashing; if both are wired, they play together.
 
 ### First flash and smoke test
 
@@ -97,7 +102,7 @@ Start with the piezo target: it works with no piezo attached. The MAX98357A targ
 2. With no breadboard wiring attached, run:
 
    ```sh
-   esphome run firmware/dottos-dash-piezo.yaml
+   esphome run firmware/dottos-dash.yaml
    ```
 
 3. If this DevKit will not upload automatically, hold **BOOT**, tap **EN**, keep holding BOOT for two seconds, then run the command again.
@@ -117,20 +122,19 @@ No `secrets.yaml` is required by the supplied firmware configurations. The first
 | Passive piezo | GPIO27 / GND | Use a passive, not self-beeping, buzzer. |
 | MAX98357A BCLK / LRC / DIN | GPIO26 / GPIO25 / GPIO22 | Speaker connects to the amplifier's `SPK+`/`SPK-` only. |
 
-For the physical key, a press under 300 ms is a dot and a longer press is a dash. The screen key uses a 250 ms threshold. The letter pause is adjustable from 300 to 2,000 ms and starts at 500 ms; on the hosted game it is saved on the ESP32 too. Green feedback means a recognised letter or number, and red means an invalid sequence.
+The physical key and the screen key share one dash threshold: a press under it is a dot, a longer press is a dash. It is adjustable from 150 to 1,000 ms and starts at 300 ms, which suits most children — raise it if their dots keep coming out as dashes. The letter and word gaps are floored relative to that threshold, so raising it also pushes them up and a letter can never be committed before the next signal could plausibly start. The letter gap starts at 600 ms and the word gap at 1,400 ms; the dash threshold and letter gap are saved on the ESP32 too. Green feedback means a recognised letter or number, and red means an invalid sequence.
 
 ### Where to make changes
 
 - Gameplay copy, Morse routes, accessibility labels and browser timing: [`app.js`](app.js).
 - Visual game: [`index.html`](index.html) and [`style.css`](style.css).
-- GPIO behavior, signals and feedback scripts: [`firmware/dottos-dash-common.yaml`](firmware/dottos-dash-common.yaml). Keep both targets buildable.
+- GPIO behavior, signals and feedback scripts: [`firmware/dottos-dash-common.yaml`](firmware/dottos-dash-common.yaml). Keep the combined target buildable.
 - Adult Wi-Fi setup: [`firmware/wifi_setup_handler.h`](firmware/wifi_setup_handler.h). It validates the SSID/password length and lets ESPHome save the connection.
 
-After a firmware change, test the piezo variant; test the MAX variant too if sound changed:
+After a firmware change, test the combined build with each connected sound part:
 
 ```sh
-esphome run firmware/dottos-dash-piezo.yaml
-esphome run firmware/dottos-dash-max98357a.yaml
+esphome run firmware/dottos-dash.yaml
 ```
 
 For an update sent to another household, compile the *same* target already on their board. They connect to Dotto's Dash, choose **For adults: update firmware**, select the normal OTA `.bin`, and keep power connected until restart. Never give that form a `firmware.factory.bin`.
@@ -163,11 +167,12 @@ No. That is expected. Choose **Stay connected** (or the equivalent), dismiss the
 
 ### Why does the board not appear on our usual Wi-Fi?
 
-By default it creates its own hotspot. Joining a 2.4 GHz home network is optional and is done from the adult form in the hosted game. Then move the phone to the same network and try `http://dottos-dash.local/` (or `http://dottos-dash-max.local/` for the MAX build). If that name is not found, use the board's IP address from the router's device list.
+By default it creates its own hotspot. Joining a 2.4 GHz home network is optional and is done from the adult form in the hosted game. Then move the phone to the same network and try `http://dottos-dash.local/`. If that name is not found, use the board's IP address from the router's device list.
 
 ### Which firmware should we flash?
 
-Start with `dottos-dash-piezo.yaml`, even with no buzzer. Use `dottos-dash-max98357a.yaml` only with the MAX98357A amplifier and small speaker. It replaces the piezo sound build.
+Flash `dottos-dash.yaml`, even with no buzzer. It supports the passive piezo,
+the MAX98357A amplifier and small speaker, or both together without reflashing.
 
 ### The board will not upload. What should we try first?
 
@@ -191,9 +196,8 @@ The browser keeps score, level, story chapter and letter-pause preference in loc
 
 ### Can we share a firmware update safely?
 
-Share only a normal OTA `.bin` built for the same firmware variant. The recipient updates while beside the board, connected to its local network, and keeps power connected until restart. Do not use a factory image in the browser updater or update a board on an untrusted network.
+Share only a normal OTA `.bin` built from `firmware/dottos-dash.yaml`, the single image that covers every sound setup. The recipient updates while beside the board, connected to its local network, and keeps power connected until restart. Do not use a factory image in the browser updater or update a board on an untrusted network.
 
 ### When should we stop instead of troubleshooting?
 
 Immediately stop and unplug if anything is warm, smells unusual, makes an unexpected high-pitched sound, repeatedly disconnects, or causes USB failures. Review wiring with USB disconnected; never “try one more time” while a possible short circuit is powered.
-

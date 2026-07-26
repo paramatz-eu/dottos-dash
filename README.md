@@ -1,6 +1,6 @@
 # Dotto's Dash
 
-[Family companion guide](FAMILY-GUIDE.md) · [Deutsche Anleitung](README.de.md) · [German web game](de/index.html) · [Build lesson](build.html) · [Flash from the browser](flash.html) · [Contributing](CONTRIBUTING.md)
+[Deutsche Anleitung](README.de.md) · [German web game](de/index.html) · [Build lesson](build.html) · [Flash from the browser](flash.html) · [Family companion guide](FAMILY-GUIDE.md) · [Contributing](CONTRIBUTING.md)
 
 > An offline, kid-friendly ESP32 project for learning Morse code with a game,
 > a real key, coloured light and sound.
@@ -9,15 +9,8 @@
 nearby for the USB flashing and wiring. It deliberately has no accounts, no
 PHP server or cloud service. It works fully offline, with an optional home
 Wi-Fi setup for adults.
-
-> [!IMPORTANT]
-> **Starting with a child or sharing adult responsibilities?** Read the
-> [family companion guide](FAMILY-GUIDE.md) first. It covers safety, a relaxed
-> first 25 minutes, privacy, local Wi-Fi, troubleshooting, and the split
-> between child and adult tasks.
-
-The name is the game: Dotto starts as a dot, follows dots and dashes through
-Morse-code routes, and races from one checkpoint to the next.
+ 
+The name is the game: You'll help a friendly character named Dotto on a journey through Morse code history. Dotto starts as a simple dot, and with your help, will deliver messages, explore the Morse tree, and become a master of code.
 
 After flashing, the complete game interface is part of the ESP32 firmware. The
 board creates its own Wi-Fi network and serves the game itself — there is no
@@ -41,8 +34,28 @@ step at a time.
 | Build the electronics with a child | [step-by-step build lesson](build.html) |
 | Flash an ESP32 with no software to install | [flash.html](flash.html), from Chrome or Edge |
 | Flash an ESP32 from the command line | [Flash the ESP32](#2-flash-the-esp32) |
-| Start safely with a child or share adult responsibilities | **[family companion guide](FAMILY-GUIDE.md)** |
+| Share the project between a technical and an educational/safety lead | [family companion guide](FAMILY-GUIDE.md) |
 | Change or improve the project | [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+### What it teaches
+
+Morse code is the way in, not the destination. Two signals and a wire are the
+smallest honest example of how every computer works, so each activity has a
+technical idea underneath it:
+
+| In the project | The idea underneath |
+| --- | --- |
+| Dot and dash, on and off | **Binary**: two clearly different states are all a machine needs, because two states survive noise. One such choice is a **bit**. |
+| Walking down the Morse tree | Each signal halves what is still possible; each added bit doubles what can be said. Eight bits make a **byte**, enough for one character. |
+| The byte builder in the game | Place values (128…1), and the shared **ASCII** list that gives every character a number — `A` is 65, or `01000001`. |
+| Letter and word gaps | Why Morse needs pauses and a byte does not: fixed-size groups need no separator. |
+| Pressing the real key | A GPIO pin reads one bit — HIGH or LOW — and the firmware turns its duration into data. |
+| Colour and sound | PWM is fast 1s and 0s; I2S carries sound to the amplifier as binary numbers. |
+| Building one stage at a time | Predict, change one thing, observe: how engineers actually find a fault. |
+
+The game's **How computers think: two signals are enough** panel covers the
+binary ideas with a byte builder; [BUILD.md](BUILD.md) covers the same ground at
+the pin level.
 
 ### Highlights
 
@@ -102,11 +115,16 @@ message.
 
 In the Morse tree, press **Choose letter** or `Enter` after reaching the intended
 node. `Space` remains only the Morse key. An unfinished route returns to Start
-after 6 seconds without input. The complete map always starts fitted to the
-screen; use **−**, **Fit**, and **+** to inspect branches more closely.
+after 3.5 seconds without input.
 
 The message workshop accepts A–Z, digits and spaces. Key sounds start on by
 default and can be changed under **Sound and key settings**.
+
+Below the Morse alphabet cheat sheet, **How computers think: two signals are
+enough** takes the game's own dot and dash and follows them into computing: two
+states, one bit, and a byte builder where flipping eight bits shows the number,
+the character it stands for and that character's Morse code. It also answers the
+question the game raises — Morse is *nearly* binary, but it needs the pause too.
 
 The game remembers only Dash points, the next challenge and the current history
 chapter in that browser's local storage. On the ESP32 page, its controls talk
@@ -119,8 +137,8 @@ finishes its normal deployment.
 
 ## 2. Flash the ESP32
 
-The first build is intentionally the piezo build. GPIO27 may be left empty, so
-it is the right choice even before a buzzer is added.
+There is one build for every sound setup. It is safe to flash before wiring a
+piezo or MAX98357A; add either sound part later, or connect both.
 
 1. Install [ESPHome](https://esphome.io/guides/getting_started_command_line.html)
    on the adult's computer.
@@ -128,7 +146,7 @@ it is the right choice even before a buzzer is added.
 3. From this project folder, run:
 
    ```sh
-   esphome run firmware/dottos-dash-piezo.yaml
+   esphome run firmware/dottos-dash.yaml
    ```
 
 4. If this particular DevKit does not upload automatically: hold **BOOT**, tap
@@ -160,15 +178,14 @@ At the bottom of the ESP32 game, open **For adults: connect to home Wi-Fi**.
 Enter a 2.4 GHz network name and password, then choose **Save and connect**.
 The ESP32 stores the connection setting itself, rather than writing it into
 this project. Switch the phone to the same home network, then open
-`http://dottos-dash.local/` (or `dottos-dash-max.local` for the MAX98357A
-firmware). If that name does not resolve on the phone,
+`http://dottos-dash.local/`. If that name does not resolve on the phone,
 use the ESP32's IP address from the router's device list. If the home network
 is unavailable, the `Dotto's Dash` hotspot returns after a short wait.
 
 ### Share a later firmware update
 
 The first USB flash installs the browser update tool too. For a later update,
-compile the same variant, send the resulting **OTA** `.bin` file to the person
+compile `firmware/dottos-dash.yaml`, send the resulting **OTA** `.bin` file to the person
 with the board, and have them connect to **Dotto's Dash**. At the bottom of
 the game page, open **For adults: update firmware**, choose that file and wait
 for the ESP32 to restart. Do not use a `firmware.factory.bin`, and do not unplug
@@ -224,16 +241,13 @@ the web game's Morse tree. If the dial feels backwards, swap `CLK` and `DT`.
 | `-` | GND |
 
 Use a **passive** piezo buzzer, not an active self-beeping buzzer. The existing
-`dottos-dash-piezo.yaml` firmware already supports it; reflash is not needed
-when the piezo is added later.
+`dottos-dash.yaml` firmware already supports it; reflash is not needed when the
+piezo is added later.
 
 ### Stage 4b — MAX98357A and a small speaker
 
-For louder sound, use the MAX98357A build instead:
-
-```sh
-esphome run firmware/dottos-dash-max98357a.yaml
-```
+For louder sound, add the MAX98357A to the same build. It can be used instead
+of the piezo or alongside it; with both wired, both play the game sounds.
 
 | MAX98357A pin | Connect to ESP32 |
 | --- | --- |
@@ -250,10 +264,9 @@ are 3.3 V logic and must never receive 5 V.
 ## What is in the box?
 
 ```text
-index.html / style.css / app.js       The web game; these files are embedded in both firmware builds
-firmware/dottos-dash-piezo.yaml    Flash this first; piezo is optional
-firmware/dottos-dash-max98357a.yaml Louder I2S-speaker alternative
-firmware/dottos-dash-common.yaml   Shared learning-pad behaviour
+index.html / style.css / app.js      The web game; these files are embedded in the firmware
+firmware/dottos-dash.yaml            Flash this; supports piezo and MAX98357A together
+firmware/dottos-dash-common.yaml     Shared learning-pad behaviour
 ```
 
 The project intentionally does **not** include a remote-control server. Keeping
@@ -262,14 +275,15 @@ the game local makes it safer, easier to understand and easier to share.
 ## Development
 
 The source web game is plain HTML, CSS and JavaScript. ESPHome embeds
-`style.css` and `app.js` into both firmware variants at compile time. Keep the
-two firmware variants working when changing shared behaviour, and test on real
-hardware before sharing a firmware image. See [CONTRIBUTING.md](CONTRIBUTING.md)
+`style.css` and `app.js` into the firmware at compile time. Keep the combined
+sound build working when changing shared behaviour, and test on real hardware
+before sharing a firmware image. See [CONTRIBUTING.md](CONTRIBUTING.md)
 for the practical checklist.
 
 ## GitHub checklist
 
-Before sharing, flash both firmware choices on real hardware, then commit the
+Before sharing, flash the combined firmware on real hardware with each sound
+part connected, then commit the
 source files (not `.esphome/`, `secrets.yaml` or generated `.bin` files). Add a
 photo of Dotto's finished controller and, if possible, attach tested firmware
 images to a GitHub Release so friends can flash without installing ESPHome.

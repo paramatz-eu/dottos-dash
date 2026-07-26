@@ -23,6 +23,7 @@
         <strong>Build steps</strong>
         <a href="#safety">Safety</a>
         <a href="#parts">Parts</a>
+        <a href="#binary">Ones and zeros</a>
         <a href="#flash">Flash</a>
         <a href="#light">RGB light</a>
         <a href="#button">Morse button</a>
@@ -71,6 +72,38 @@ pause 1.2 seconds = decode a letter</pre>
           <p><strong>GND</strong> means ground: the shared return path for electricity. Components need a shared GND to work together.</p>
         </section>
 
+        <section id="binary" class="lesson-card concept-card">
+          <h2>Ones and zeros: the language under all of it</h2>
+          <p>Before wiring anything, it is worth knowing what a GPIO pin actually reads. It does not measure volts the way a meter does. It answers one question: is this pin nearer 3.3 V or nearer 0 V? Those two answers are called <strong>HIGH</strong> and <strong>LOW</strong>, or <strong>1</strong> and <strong>0</strong>. One such answer is a <strong>bit</strong>, short for <em>binary digit</em>.</p>
+          <p>Two states are all a computer needs, because two states survive interference. A slightly weak or slightly noisy signal is still clearly nearer one end than the other, so it can be passed on perfectly. Telegraph operators found the same thing in 1844: a click either arrived or it did not.</p>
+          <table class="wire-table">
+            <thead><tr><th>In this project</th><th>1 / HIGH</th><th>0 / LOW</th></tr></thead>
+            <tbody>
+              <tr><td>GPIO13 with the internal pull-up</td><td>button open</td><td>button pressed, joined to GND</td></tr>
+              <tr><td>GPIO16 driving the red channel</td><td>red on</td><td>red off</td></tr>
+              <tr><td>Encoder <kbd>CLK</kbd> and <kbd>DT</kbd></td><td>contact open</td><td>contact closed</td></tr>
+            </tbody>
+          </table>
+          <p>One bit alone says very little, so bits are grouped — and each added bit <strong>doubles</strong> how many different things the group can mean.</p>
+          <pre class="wire-diagram">1 bit  →   2 values   0  1
+2 bits →   4 values   00  01  10  11
+3 bits →   8 values
+8 bits → 256 values   = 1 byte = one text character</pre>
+          <p>Computers agreed one shared list of which number means which character, called <strong>ASCII</strong>: <kbd>A</kbd> is 65, or <kbd>01000001</kbd>. The game's <em>Build a byte</em> panel lets you flip those eight bits and see the letter and its Morse code appear.</p>
+          <h3>Where the bits are in your build</h3>
+          <ul>
+            <li><strong>The key:</strong> the firmware reads one bit from GPIO13 over and over and measures how long it stayed 0. Under the dash threshold it is a dot; longer is a dash.</li>
+            <li><strong>The colours:</strong> PWM flips a pin between 1 and 0 thousands of times a second. "Half brightness" means the pin is 1 for half of each tiny slice of time.</li>
+            <li><strong>The sound:</strong> I2S sends the MAX98357A a stream of binary numbers. <kbd>BCLK</kbd> ticks once per bit and <kbd>DIN</kbd> carries the bit itself, so the amplifier knows exactly where each number ends.</li>
+            <li><strong>The firmware:</strong> flashing copies about a megabyte of bytes into the ESP32's memory — the program, the game page and this lesson, all as ones and zeros.</li>
+          </ul>
+          <div class="test-card lesson-card">
+            <h3>Try it</h3>
+            <p>Count on one hand: thumb 1, index 2, middle 4, ring 8, little 16. Each finger is a bit, so one hand counts to 31. Which fingers make 21? Then make your own initials as bytes with the game's byte builder.</p>
+          </div>
+          <details><summary>Is Morse code the same as binary?</summary><p>Almost. Morse has two signals, but its letters are different lengths — <kbd>E</kbd> is one signal and <kbd>Z</kbd> is four — so it needs a third thing: the silence that shows where a letter ends. A byte is always exactly eight bits, so a computer never needs a gap to know where one character stops and the next starts. That fixed size is why the firmware needs a <kbd>Letter Pause</kbd> setting and your laptop does not.</p></details>
+        </section>
+
         <section id="flash" class="lesson-card">
           <span class="step-label">Step 0</span>
           <h2>Flash before wiring</h2>
@@ -78,7 +111,7 @@ pause 1.2 seconds = decode a letter</pre>
             <li>Connect only the ESP32 with USB.</li>
             <li>On the adult's computer, run:</li>
           </ol>
-          <pre class="wire-diagram">esphome run firmware/dottos-dash-piezo.yaml</pre>
+          <pre class="wire-diagram">esphome run firmware/dottos-dash.yaml</pre>
           <ol start="3">
             <li>Unplug USB. Put the ESP32 on the breadboard with its USB socket facing the same way each time.</li>
             <li>Find labels such as <kbd>13</kbd>, <kbd>21</kbd>, <kbd>GND</kbd>, <kbd>3V3</kbd>, and <kbd>VIN</kbd>/<kbd>5V</kbd>. These labels matter—not the breadboard row numbers.</li>
@@ -147,8 +180,7 @@ GND    ───────── RGB common / GND</pre>
 GND    ───────── piezo -</pre>
           <p>Use a <strong>passive</strong> piezo. The firmware makes its tone by changing the GPIO signal thousands of times per second. A passive piezo bends a tiny amount, moves air, and makes sound.</p>
           <h3>Option B: MAX98357A and a small speaker</h3>
-          <p>Use this instead of the piezo for louder sound. Flash the other firmware first.</p>
-          <pre class="wire-diagram">esphome run firmware/dottos-dash-max98357a.yaml</pre>
+          <p>Use this for louder sound. It can be wired alongside the piezo, and both sound parts use the same firmware.</p>
           <table class="wire-table"><thead><tr><th>MAX98357A label</th><th>ESP32 pin</th></tr></thead><tbody><tr><td><kbd>BCLK</kbd></td><td>GPIO26</td></tr><tr><td><kbd>LRC</kbd> / <kbd>WS</kbd></td><td>GPIO25</td></tr><tr><td><kbd>DIN</kbd></td><td>GPIO22</td></tr><tr><td><kbd>GND</kbd></td><td>GND</td></tr><tr><td><kbd>VIN</kbd></td><td>ESP32 <kbd>VIN</kbd> / <kbd>5V</kbd></td></tr><tr><td><kbd>SPK+</kbd>, <kbd>SPK-</kbd></td><td>The two speaker wires only</td></tr></tbody></table>
           <p>The speaker connects only to the amplifier, never directly to an ESP32 pin. <kbd>BCLK</kbd>, <kbd>LRC</kbd>, and <kbd>DIN</kbd> are the three digital I2S sound signals; the MAX98357A turns them into speaker power.</p>
         </section>

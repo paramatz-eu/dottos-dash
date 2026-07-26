@@ -49,7 +49,7 @@ function renderEmbeddedEspGame() {
 
       <section id="free-panel" class="game-panel hidden">
         <div class="mission-card write-card"><p class="prompt">Dottos Tasten-Checkpoint</p><h2>Was sagt Dottos Taste?</h2><p>Sende frei Morse. Nach jeder Pause liest Dottos Decoder den nächsten Buchstaben.</p><p class="prompt">Der Decoder liest:</p><output id="free-message" class="free-message" aria-live="polite">—</output><p id="free-key-status" class="keyboard-help" aria-live="polite">Bereit für deinen ersten Buchstaben.</p></div>
-        <div class="input-card free-key-card"><button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Morse-Taste halten</strong><small>Kurz = Punkt · lang = Strich</small></button><button id="free-clear-button" class="secondary-button" type="button">Neu beginnen</button><p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen.</p><details class="free-key-help"><summary>Hilfe &amp; Timing einstellen</summary><div class="free-key-help-content"><p><strong>So sendest du:</strong> Kurz drücken ist ein Punkt. Ab der Strich-Grenze wird dein Druck ein Strich. Warte die Buchstabenpause zwischen Buchstaben und die Wortpause zwischen Wörtern.</p><div class="timing-controls"><label class="pause-control" for="dash-threshold"><span>Strich ab: <output id="dash-threshold-value">250 ms</output></span><input id="dash-threshold" type="range" min="100" max="1000" step="50" value="250"><small>Kürzere Drucke sind Punkte.</small></label><label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Danach liest der Decoder einen Buchstaben.</small></label><label class="pause-control" for="word-pause"><span>Wortpause: <output id="word-pause-value">1200 ms</output></span><input id="word-pause" type="range" min="700" max="5000" step="100" value="1200"><small>Danach setzt der Decoder ein Leerzeichen.</small></label></div></div></details></div>
+        <div class="input-card free-key-card"><button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Morse-Taste halten</strong><small>Kurz = Punkt · lang = Strich</small></button><button id="free-clear-button" class="secondary-button" type="button">Neu beginnen</button><p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen.</p><details class="free-key-help"><summary>Hilfe &amp; Timing einstellen</summary><div class="free-key-help-content"><p><strong>So sendest du:</strong> Kurz drücken ist ein Punkt. Ab der Strich-Grenze wird dein Druck ein Strich. Warte die Buchstabenpause zwischen Buchstaben und die Wortpause zwischen Wörtern.</p><div class="timing-controls"><label class="pause-control" for="dash-threshold"><span>Strich ab: <output id="dash-threshold-value">300 ms</output></span><input id="dash-threshold" type="range" min="150" max="1000" step="50" value="300"><small>Kürzere Drucke sind Punkte. Stell das höher, wenn aus deinen Punkten Striche werden.</small></label><label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">600 ms</output></span><input id="letter-pause" type="range" min="500" max="2000" step="100" value="600"><small>Danach liest der Decoder einen Buchstaben. Sie bleibt immer länger als ein Strich.</small></label><label class="pause-control" for="word-pause"><span>Wortpause: <output id="word-pause-value">1400 ms</output></span><input id="word-pause" type="range" min="1200" max="5000" step="100" value="1400"><small>Danach setzt der Decoder ein Leerzeichen. Sie bleibt immer länger als die Buchstabenpause.</small></label></div></div></details></div>
       </section>
 
       <section id="create-panel" class="game-panel hidden">
@@ -67,9 +67,20 @@ function renderEmbeddedEspGame() {
       <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
       <section class="progress-card"><div><span class="stat-label">Dash-Punkte</span><strong id="stars">0</strong></div><div><span class="stat-label">Nächster Checkpoint</span><strong id="next-letter">T</strong></div><button id="restart-button" class="secondary-button" type="button">Dash neu starten</button></section>
       <details class="cheat-sheet"><summary>Spickzettel: Morse-Alphabet</summary><div id="alphabet" class="alphabet-grid"></div></details>
-      <section class="make-it-card"><h2>Baue Dottos Controller</h2><p>Die Taste und der Drehgeber senden direkt in dieses Spiel. Ein kurzer Tastendruck ist ein Punkt, ein langer ein Strich. Mit einem Piezo oder MAX98357A hörst du jeden Checkpoint.</p><p><strong>Tipp:</strong> Verbinde zuerst das WLAN <em>Dotto's Dash</em>, dann öffne diese Seite. Internet brauchst du nie.</p><details class="build-guide"><summary>📘 Bauanleitung öffnen</summary><div class="build-guide-content"><p>Diese Kurz-Bauanleitung ist direkt auf dem ESP32 gespeichert und funktioniert deshalb auch ohne Internet.</p><div class="safety-note"><strong>Sicherheit:</strong> Vor jeder Änderung der Kabel USB abziehen. Einen GPIO-Pin nie mit 5 V verbinden.</div><h3>1. Firmware</h3><p>Zuerst die Piezo-Version flashen: <code>esphome run firmware/dottos-dash-piezo.yaml</code>. Die eingebaute <strong>BOOT</strong>-Taste ist danach bereits eine Morse-Taste: kurz = Punkt, lang = Strich. BOOT beim Neustart oder Flashen nicht gedrückt halten.</p><h3>2. RGB-Licht und externer Taster</h3><table class="wire-table"><thead><tr><th>Bauteil</th><th>ESP32</th></tr></thead><tbody><tr><td>RGB-Modul R / G / B</td><td>GPIO16 / GPIO17 / GPIO18</td></tr><tr><td>RGB gemeinsamer Kathoden-Pin</td><td>GND</td></tr><tr><td>Taster, eine Seite</td><td>GPIO13</td></tr><tr><td>Taster, andere Seite</td><td>GND</td></tr></tbody></table><p>Die BOOT-Taste braucht keine Kabel. Der externe Taster bleibt zusätzlich nutzbar.</p><h3>3. Ton</h3><table class="wire-table"><thead><tr><th>Passiver Piezo</th><th>ESP32</th></tr></thead><tbody><tr><td>+</td><td>GPIO27</td></tr><tr><td>-</td><td>GND</td></tr></tbody></table><p>Nur ein <strong>passiver</strong> Piezo erzeugt die Morse-Töne am ESP32. Für Browser-Töne zuerst einmal auf dem Handy in diese Seite tippen; das ist eine Sicherheitsregel des Browsers.</p><h3>4. Drehgeber (optional)</h3><table class="wire-table"><thead><tr><th>Drehgeber</th><th>ESP32</th></tr></thead><tbody><tr><td>CLK / A</td><td>GPIO21</td></tr><tr><td>DT / B</td><td>GPIO19</td></tr><tr><td>SW</td><td>GPIO13</td></tr><tr><td>GND</td><td>GND</td></tr><tr><td>VCC</td><td>3V3</td></tr></tbody></table><p>Links drehen = Punkt, rechts drehen = Strich. Ist es vertauscht, USB abziehen und nur CLK und DT tauschen.</p><h3>Test</h3><p>Ein kurzer Druck muss cyan blinken und einen Punkt senden; ein langer Druck orange und einen Strich. Die einstellbare Buchstabenpause oben beginnt bei 500 ms. Piezo stumm? Prüfen: passiv, an GPIO27 und GND.</p></div></details></section>
+      <details class="binary-lesson"><summary>Wie Computer denken: zwei Signale genügen</summary><div class="binary-content">
+        <p>Dottos ganzes Alphabet besteht aus zwei Signalen. Das ist kein Trick, damit das Spiel leichter wird – es ist genau die Idee, mit der jeder Computer der Welt arbeitet.</p>
+        <p>Eine Maschine kann schlecht genau messen, aber sehr gut zwei deutlich verschiedene Zustände unterscheiden. Darum benutzt die Technik genau zwei und nennt sie <strong>1</strong> und <strong>0</strong>. Eine solche Entscheidung heißt <strong>Bit</strong>, kurz für <em>binary digit</em>, also Binärziffer.</p>
+        <table class="wire-table binary-table"><thead><tr><th>Wo die zwei Zustände stecken</th><th>1</th><th>0</th></tr></thead><tbody><tr><td>Deine Morsetaste</td><td>gedrückt</td><td>losgelassen</td></tr><tr><td>Ein Telegrafendraht von 1844</td><td>Strom fließt</td><td>kein Strom</td></tr><tr><td>Ein Pin am ESP32</td><td>3,3 V (HIGH)</td><td>0 V (LOW)</td></tr><tr><td>Speicher im Handy oder Laptop</td><td>geladen</td><td>leer</td></tr></tbody></table>
+        <p>Ein Bit kann nur zwei Dinge sagen: ja oder nein, Punkt oder Strich, <strong>E</strong> oder <strong>T</strong>. Aber jedes weitere Bit <strong>verdoppelt</strong>, wie viel du sagen kannst – und das wird schnell riesig:</p>
+        <ul class="binary-doubling"><li><strong>1 Bit</strong> → 2 Nachrichten <small>E und T, die erste Reihe im Baum</small></li><li><strong>2 Bits</strong> → 4 <small>I, A, N, M</small></li><li><strong>3 Bits</strong> → 8 <small>S, U, R, W, D, K, G, O</small></li><li><strong>8 Bits</strong> → 256 <small>genug für alle Buchstaben, Ziffern und Satzzeichen</small></li></ul>
+        <p>Genau diese Verdopplung läufst du im Morsebaum ab: Jeder Punkt und jeder Strich halbiert die Buchstaben, die noch möglich sind.</p>
+        <div class="binary-lab"><p class="prompt">Baue ein Byte</p><p>Acht Bits nebeneinander heißen <strong>Byte</strong>. Jede Stelle ist doppelt so viel wert wie die rechts daneben. Schalte ein paar Bits an, zähle ihre Werte zusammen und sieh, welches Zeichen zu dieser Zahl gehört.</p><div id="binary-bits" class="binary-bits" role="group" aria-label="Acht Bits, von 128 bis 1"></div><output id="binary-readout" class="binary-readout" aria-live="polite"></output><div class="action-controls"><button id="binary-letter-button" class="secondary-button" type="button">Zeig mir einen Buchstaben</button><button id="binary-clear-button" class="secondary-button" type="button">Alles auf null</button></div><p class="keyboard-help">Computer haben sich auf eine gemeinsame Liste geeinigt, welche Zahl welches Zeichen bedeutet. Sie heißt ASCII: <strong>A</strong> ist 65, <strong>B</strong> ist 66 und ein Leerzeichen ist 32.</p></div>
+        <p><strong>Ist Morsecode also Binärcode?</strong> Fast – und der Unterschied lohnt sich. Ein Byte hat immer genau acht Bits, deshalb weiß ein Computer, wo ein Zeichen endet und das nächste beginnt. Morsezeichen sind unterschiedlich lang: <strong>E</strong> hat ein Signal, <strong>Z</strong> hat vier. Darum braucht Morse zusätzlich die Stille dazwischen, die zeigt, wo ein Buchstabe aufhört. Morse benutzt also drei Dinge: Punkt, Strich und Pause.</p>
+        <p><strong>In Dottos Controller</strong> ist wirklich alles Bits. Der Taster-Pin liest 1, solange die Taste offen ist, und 0, während du sie hältst. Jede Farbe entsteht aus tausenden schnellen Einsen und Nullen pro Sekunde. Der Ton geht als Binärzahlen zum Lautsprecher-Verstärker. Auch diese Seite kam als Bits zu dir: Der ESP32 speichert das ganze Spiel als etwa eine Million davon.</p>
+      </div></details>
+      <section class="make-it-card"><h2>Baue Dottos Controller</h2><p>Die Taste und der Drehgeber senden direkt in dieses Spiel. Ein kurzer Tastendruck ist ein Punkt, ein langer ein Strich. Mit einem Piezo oder MAX98357A hörst du jeden Checkpoint.</p><p><strong>Tipp:</strong> Verbinde zuerst das WLAN <em>Dotto's Dash</em>, dann öffne diese Seite. Internet brauchst du nie.</p><details class="build-guide"><summary>📘 Bauanleitung öffnen</summary><div class="build-guide-content"><p>Diese Kurz-Bauanleitung ist direkt auf dem ESP32 gespeichert und funktioniert deshalb auch ohne Internet.</p><div class="safety-note"><strong>Sicherheit:</strong> Vor jeder Änderung der Kabel USB abziehen. Einen GPIO-Pin nie mit 5 V verbinden.</div><h3>1. Firmware</h3><p>Zuerst die Firmware flashen: <code>esphome run firmware/dottos-dash.yaml</code>. Ein einziges Image deckt Piezo und MAX98357A ab. Die eingebaute <strong>BOOT</strong>-Taste ist danach bereits eine Morse-Taste: kurz = Punkt, lang = Strich. BOOT beim Neustart oder Flashen nicht gedrückt halten.</p><h3>2. RGB-Licht und externer Taster</h3><table class="wire-table"><thead><tr><th>Bauteil</th><th>ESP32</th></tr></thead><tbody><tr><td>RGB-Modul R / G / B</td><td>GPIO16 / GPIO17 / GPIO18</td></tr><tr><td>RGB gemeinsamer Kathoden-Pin</td><td>GND</td></tr><tr><td>Taster, eine Seite</td><td>GPIO13</td></tr><tr><td>Taster, andere Seite</td><td>GND</td></tr></tbody></table><p>Die BOOT-Taste braucht keine Kabel. Der externe Taster bleibt zusätzlich nutzbar.</p><h3>3. Ton</h3><table class="wire-table"><thead><tr><th>Passiver Piezo</th><th>ESP32</th></tr></thead><tbody><tr><td>+</td><td>GPIO27</td></tr><tr><td>-</td><td>GND</td></tr></tbody></table><p>Nur ein <strong>passiver</strong> Piezo erzeugt die Morse-Töne am ESP32. Für Browser-Töne zuerst einmal auf dem Handy in diese Seite tippen; das ist eine Sicherheitsregel des Browsers.</p><h3>4. Drehgeber (optional)</h3><table class="wire-table"><thead><tr><th>Drehgeber</th><th>ESP32</th></tr></thead><tbody><tr><td>CLK / A</td><td>GPIO21</td></tr><tr><td>DT / B</td><td>GPIO19</td></tr><tr><td>SW</td><td>GPIO13</td></tr><tr><td>GND</td><td>GND</td></tr><tr><td>VCC</td><td>3V3</td></tr></tbody></table><p>Links drehen = Punkt, rechts drehen = Strich. Ist es vertauscht, USB abziehen und nur CLK und DT tauschen.</p><h3>Test</h3><p>Ein kurzer Druck muss cyan blinken und einen Punkt senden; ein langer Druck orange und einen Strich. Die einstellbare Buchstabenpause oben beginnt bei 500 ms. Piezo stumm? Prüfen: passiv, an GPIO27 und GND.</p></div></details></section>
       <details class="family-guide"><summary>Für Erwachsene: Familienleitfaden</summary><div class="family-guide-content"><p>Beginnt mit dem Spiel und ergänzt den Controller Stück für Stück. Eine funktionierende BOOT-Taste ist bereits ein vollständiges Projekt.</p><h3>Vor dem Einschalten</h3><ul><li>Eine erwachsene Person sollte die Platine flashen und die Verkabelung prüfen.</li><li>Vor jeder Änderung der Kabel USB abziehen und niemals 5 V mit einem ESP32-GPIO-Pin verbinden.</li><li>Wird die Platine heiß, riecht ungewöhnlich, startet ständig neu oder trennt die Verbindung: USB abziehen.</li></ul><h3>Eine entspannte erste Runde</h3><ol><li>Das Spiel zunächst ohne Hardware erkunden.</li><li><strong>E</strong> (Punkt), <strong>T</strong> (Strich) und dann <strong>SOS</strong> ausprobieren.</li><li>Nach der Erwachsenen-Prüfung die eingebaute BOOT-Taste des ESP32 testen.</li><li>Licht, Ton, Taste oder Drehgeber erst für das nächste Experiment ergänzen.</li></ol><h3>Privatsphäre und WLAN</h3><p>Das Spiel hat kein Konto, keine Analyse, keinen Cloud-Dienst und keinen Chat. Das lokale WLAN heißt <strong>Dotto’s Dash</strong>; das Passwort lautet <strong>dottodash</strong>. Internet wird nicht benötigt. Die optionale Heim-WLAN-Einrichtung ist eine Aufgabe für Erwachsene und gehört nur in ein vertrauenswürdiges Netzwerk.</p></div></details>
-      <details class="wifi-card"><summary>Für Erwachsene: Mit Heim-WLAN verbinden</summary><div class="wifi-content"><p>Optional: Der ESP32 kann sich mit eurem 2,4-GHz-Heim-WLAN verbinden. Danach das Handy ebenfalls mit diesem WLAN verbinden und <strong>http://dottos-dash.local</strong> öffnen (bei der MAX98357A-Version: <strong>dottos-dash-max.local</strong>). Falls das nicht klappt, die IP-Adresse in der Geräteliste des Routers nachsehen.</p><p>Das Passwort wird nur an diesen ESP32 über das passwortgeschützte Dotto's-Dash-WLAN gesendet und nicht im Projekt gespeichert. Bei einem offenen WLAN das Passwortfeld leer lassen.</p><form id="wifi-setup-form" class="wifi-setup-form"><label class="write-label" for="wifi-ssid">WLAN-Name</label><input id="wifi-ssid" class="custom-message" type="text" maxlength="32" autocomplete="off" placeholder="Mein WLAN" required><label class="write-label" for="wifi-password">WLAN-Passwort</label><input id="wifi-password" class="custom-message" type="password" maxlength="63" autocomplete="current-password"><button id="wifi-connect-button" class="primary-button" type="submit">WLAN speichern &amp; verbinden</button></form><p id="wifi-setup-status" class="keyboard-help" aria-live="polite">Dottos Controller bleibt auch ohne Heim-WLAN nutzbar.</p></div></details>
+      <details class="wifi-card"><summary>Für Erwachsene: Mit Heim-WLAN verbinden</summary><div class="wifi-content"><p>Optional: Der ESP32 kann sich mit eurem 2,4-GHz-Heim-WLAN verbinden. Danach das Handy ebenfalls mit diesem WLAN verbinden und <strong>http://dottos-dash.local</strong> öffnen. Falls das nicht klappt, die IP-Adresse in der Geräteliste des Routers nachsehen.</p><p>Das Passwort wird nur an diesen ESP32 über das passwortgeschützte Dotto's-Dash-WLAN gesendet und nicht im Projekt gespeichert. Bei einem offenen WLAN das Passwortfeld leer lassen.</p><form id="wifi-setup-form" class="wifi-setup-form"><label class="write-label" for="wifi-ssid">WLAN-Name</label><input id="wifi-ssid" class="custom-message" type="text" maxlength="32" autocomplete="off" placeholder="Mein WLAN" required><label class="write-label" for="wifi-password">WLAN-Passwort</label><input id="wifi-password" class="custom-message" type="password" maxlength="63" autocomplete="current-password"><button id="wifi-connect-button" class="primary-button" type="submit">WLAN speichern &amp; verbinden</button></form><p id="wifi-setup-status" class="keyboard-help" aria-live="polite">Dottos Controller bleibt auch ohne Heim-WLAN nutzbar.</p></div></details>
       <details class="ota-card"><summary>Für Erwachsene: Firmware aktualisieren</summary><div class="ota-content"><p>Nur eine normale OTA-Firmware-Datei mit <code>.bin</code> auswählen – niemals eine <code>factory.bin</code>. Während des Hochladens den ESP32 eingeschaltet lassen. Danach startet er selbst neu.</p><form id="ota-update-form" action="/update" method="post" enctype="multipart/form-data"><label class="write-label" for="ota-firmware">Neue Firmware-Datei</label><input id="ota-firmware" class="ota-file-input" name="update" type="file" accept=".bin,application/octet-stream" required><button id="ota-install-button" class="primary-button" type="submit">Firmware installieren</button><progress id="ota-progress" class="ota-progress" max="100" value="0" hidden aria-describedby="ota-status"></progress><p id="ota-status" class="ota-status" role="status" aria-live="polite">Wähle eine OTA-Datei aus, um den Namen und den Fortschritt zu sehen.</p></form></div></details>
     </main><footer>Dotto läuft mit Neugier, Punkten und Strichen. ● —</footer>`;
 }
@@ -101,15 +112,29 @@ const LEVELS = [
 ];
 const language = document.documentElement.lang.toLowerCase().startsWith('de') ? 'de' : 'en';
 const espHosted = document.body.dataset.espHosted === 'true';
-const DEFAULT_DASH_THRESHOLD_MS = 250;
-const MIN_DASH_THRESHOLD_MS = 100;
+// All Morse timing grows out of one unit: a dash is three units, so the dot/dash
+// decision sits at two, a letter gap is three and a word gap is seven. Children
+// key much slower and far less evenly than that ideal, so the defaults here are
+// deliberately generous — the dash threshold starts at 300 ms because a
+// ten-year-old's "short" tap often runs past 250 ms and would read as a dash.
+//
+// The two gaps are floored *relative to* the dash threshold rather than being
+// independent knobs. Without that, raising the threshold to 1000 ms while the
+// letter gap sat at 300 ms committed the letter long before the next dash could
+// begin, which made the decoder look broken.
+const DEFAULT_DASH_THRESHOLD_MS = 300;
+const MIN_DASH_THRESHOLD_MS = 150;
 const MAX_DASH_THRESHOLD_MS = 1000;
-const DEFAULT_CHARACTER_PAUSE_MS = 500;
+const DEFAULT_CHARACTER_PAUSE_MS = 600;
 const MIN_CHARACTER_PAUSE_MS = 300;
 const MAX_CHARACTER_PAUSE_MS = 2000;
-const DEFAULT_WORD_PAUSE_MS = 1200;
+const DEFAULT_WORD_PAUSE_MS = 1400;
 const MIN_WORD_PAUSE_MS = 700;
 const MAX_WORD_PAUSE_MS = 5000;
+// A letter gap must outlast the longest press that is still one signal, and a
+// word gap must outlast the pause that already ended a letter.
+const CHARACTER_PAUSE_PER_THRESHOLD = 1.5;
+const WORD_PAUSE_PER_CHARACTER_PAUSE = 2;
 const TREE_IDLE_RESET_MS = 6000;
 const TEXT = {
   en: {
@@ -167,6 +192,13 @@ const TEXT = {
     treeRouteProgress: (depth) => `Step ${depth} of 5`,
     treeStagePrompt: (letter) => `Find ${letter}. Choose a turn.`,
     ariaTree: 'Morse code tree. Dot branches go left and dash branches go right.',
+    binaryBitLabel: (place, on) => `Bit worth ${place}, currently ${on ? 1 : 0}`,
+    binaryLetter: (value, letter, code) => `= ${value} = the letter ${letter}, which is ${code} in Morse`,
+    binaryDigit: (value, digit, code) => `= ${value} = the digit ${digit}, which is ${code} in Morse`,
+    binarySmall: (value, letter, capital) => `= ${value} = a small ${letter}. Computers give it a different number from ${capital}.`,
+    binarySpace: (value) => `= ${value} = the space between two words`,
+    binarySign: (value, sign) => `= ${value} = the sign ${sign}`,
+    binaryNothing: (value) => `= ${value} = no character Dotto can show. Try another byte!`,
   },
   de: {
     treeMission: (number, total, message, position) => `Route ${number} von ${total} · ${message} · Buchstabe ${position} von ${message.length}`,
@@ -223,6 +255,13 @@ const TEXT = {
     treeRouteProgress: (depth) => `Schritt ${depth} von 5`,
     treeStagePrompt: (letter) => `Finde ${letter}. Wähle eine Richtung.`,
     ariaTree: 'Morsebaum. Punkt-Äste gehen nach links, Strich-Äste nach rechts.',
+    binaryBitLabel: (place, on) => `Bit mit dem Wert ${place}, gerade ${on ? 1 : 0}`,
+    binaryLetter: (value, letter, code) => `= ${value} = der Buchstabe ${letter}, in Morse ${code}`,
+    binaryDigit: (value, digit, code) => `= ${value} = die Ziffer ${digit}, in Morse ${code}`,
+    binarySmall: (value, letter, capital) => `= ${value} = ein kleines ${letter}. Computer geben ihm eine andere Zahl als ${capital}.`,
+    binarySpace: (value) => `= ${value} = das Leerzeichen zwischen zwei Wörtern`,
+    binarySign: (value, sign) => `= ${value} = das Zeichen ${sign}`,
+    binaryNothing: (value) => `= ${value} = kein Zeichen, das Dotto zeigen kann. Probiere ein anderes Byte!`,
   },
 }[language];
 
@@ -450,6 +489,7 @@ let levelIndex = Number(localStorage.getItem('dottos-dash-level') || 0);
 let letterIndex = 0;
 let stars = Number(localStorage.getItem('dottos-dash-stars') || 0);
 let audioContext;
+let audioPrimed = false;
 let liveKeyTone;
 let morseKeyDownAt = 0;
 let freeKeyDownAt = 0;
@@ -478,24 +518,36 @@ function normaliseDashThreshold(value) {
   const roundedValue = Number.isFinite(numericValue) ? Math.round(numericValue / 50) * 50 : DEFAULT_DASH_THRESHOLD_MS;
   return Math.min(MAX_DASH_THRESHOLD_MS, Math.max(MIN_DASH_THRESHOLD_MS, roundedValue));
 }
+// Both floors are rounded to the slider's own 100 ms step so the handle can
+// always sit exactly on its minimum instead of one unreachable notch below it.
+function characterPauseFloor() {
+  const derived = Math.ceil(dashThresholdMs * CHARACTER_PAUSE_PER_THRESHOLD / 100) * 100;
+  return Math.min(MAX_CHARACTER_PAUSE_MS, Math.max(MIN_CHARACTER_PAUSE_MS, derived));
+}
+function wordPauseFloor() {
+  const derived = Math.ceil(characterPauseMs * WORD_PAUSE_PER_CHARACTER_PAUSE / 100) * 100;
+  return Math.min(MAX_WORD_PAUSE_MS, Math.max(MIN_WORD_PAUSE_MS, derived));
+}
 function normaliseCharacterPause(value) {
   const numericValue = Number(value);
   const roundedValue = Number.isFinite(numericValue) ? Math.round(numericValue / 100) * 100 : DEFAULT_CHARACTER_PAUSE_MS;
-  return Math.min(MAX_CHARACTER_PAUSE_MS, Math.max(MIN_CHARACTER_PAUSE_MS, roundedValue));
+  return Math.min(MAX_CHARACTER_PAUSE_MS, Math.max(characterPauseFloor(), roundedValue));
 }
 function normaliseWordPause(value) {
   const numericValue = Number(value);
   const roundedValue = Number.isFinite(numericValue) ? Math.round(numericValue / 100) * 100 : DEFAULT_WORD_PAUSE_MS;
-  return Math.min(MAX_WORD_PAUSE_MS, Math.max(Math.max(MIN_WORD_PAUSE_MS, characterPauseMs + 100), roundedValue));
+  return Math.min(MAX_WORD_PAUSE_MS, Math.max(wordPauseFloor(), roundedValue));
 }
 function setDashThreshold(value) {
   dashThresholdMs = normaliseDashThreshold(value);
   dashThresholdInput.value = String(dashThresholdMs);
   dashThresholdValueEl.textContent = `${dashThresholdMs} ms`;
   localStorage.setItem('dottos-dash-dash-threshold', String(dashThresholdMs));
+  setCharacterPause(characterPauseMs);
 }
 function setCharacterPause(value) {
   characterPauseMs = normaliseCharacterPause(value);
+  letterPauseInput.min = String(characterPauseFloor());
   letterPauseInput.value = String(characterPauseMs);
   letterPauseValueEl.textContent = `${characterPauseMs} ms`;
   localStorage.setItem('dottos-dash-letter-pause', String(characterPauseMs));
@@ -503,7 +555,7 @@ function setCharacterPause(value) {
 }
 function setWordPause(value) {
   wordPauseMs = normaliseWordPause(value);
-  wordPauseInput.min = String(Math.max(MIN_WORD_PAUSE_MS, characterPauseMs + 100));
+  wordPauseInput.min = String(wordPauseFloor());
   wordPauseInput.value = String(wordPauseMs);
   wordPauseValueEl.textContent = `${wordPauseMs} ms`;
   localStorage.setItem('dottos-dash-word-pause', String(wordPauseMs));
@@ -525,6 +577,9 @@ function getAudioContext() {
   if (audioContext.state === 'suspended') void audioContext.resume();
   return audioContext;
 }
+// A context that has only just started still reports currentTime 0 for a few
+// milliseconds; scheduling a hair ahead keeps that first tone from being missed.
+function soonestToneStart(context) { return context.currentTime + .01; }
 function playTone(context, startsAt, duration, dash) {
   const oscillator = context.createOscillator();
   const gain = context.createGain();
@@ -541,10 +596,33 @@ function beep(dash = false, force = false) {
   if (!force && !soundToggle.checked) return;
   const context = getAudioContext();
   if (!context) return;
-  playTone(context, context.currentTime, dash ? .18 : .07, dash);
+  playTone(context, soonestToneStart(context), dash ? .18 : .07, dash);
+}
+// A browser only lets an AudioContext start from inside a user gesture, and
+// resume() is asynchronous — a context can still be 'suspended' when the click
+// that created it plays its tone. So keep trying on every gesture until the
+// context really is running, rather than giving up after the first one. The
+// silent primer gets the audio clock moving so the first real dot is not
+// swallowed while the context is still starting up.
+const AUDIO_UNLOCK_EVENTS = ['pointerdown', 'touchstart', 'keydown'];
+function primeBrowserAudio(context) {
+  if (audioPrimed) return;
+  audioPrimed = true;
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  gain.gain.value = 0;
+  oscillator.connect(gain).connect(context.destination);
+  oscillator.start();
+  oscillator.stop(context.currentTime + .05);
 }
 function unlockBrowserAudio() {
-  if (soundToggle?.checked) getAudioContext();
+  const context = getAudioContext();
+  if (!context) return stopBrowserAudioUnlock();
+  primeBrowserAudio(context);
+  if (context.state === 'running') stopBrowserAudioUnlock();
+}
+function stopBrowserAudioUnlock() {
+  for (const type of AUDIO_UNLOCK_EVENTS) document.removeEventListener(type, unlockBrowserAudio, { capture: true });
 }
 function startMorseKeyTone() {
   if (!soundToggle.checked || liveKeyTone) return;
@@ -552,7 +630,7 @@ function startMorseKeyTone() {
   if (!context) return;
   const oscillator = context.createOscillator();
   const gain = context.createGain();
-  const startsAt = context.currentTime;
+  const startsAt = soonestToneStart(context);
   oscillator.frequency.value = 680;
   gain.gain.setValueAtTime(.001, startsAt);
   gain.gain.exponentialRampToValueAtTime(.08, startsAt + .012);
@@ -1432,18 +1510,93 @@ window.addEventListener('blur', () => {
 });
 soundToggle.addEventListener('change', unlockBrowserAudio);
 dashThresholdInput.addEventListener('input', () => setDashThreshold(dashThresholdInput.value));
-dashThresholdInput.addEventListener('change', setDashThresholdOnHardware);
+// Raising the threshold can drag the letter gap up with it, so the board has to
+// hear about both or its decoder drifts out of step with the page's.
+dashThresholdInput.addEventListener('change', () => { setDashThresholdOnHardware(); setCharacterPauseOnHardware(); });
 letterPauseInput.addEventListener('input', () => setCharacterPause(letterPauseInput.value));
 letterPauseInput.addEventListener('change', setCharacterPauseOnHardware);
 wordPauseInput.addEventListener('input', () => setWordPause(wordPauseInput.value));
 if (wifiSetupForm) wifiSetupForm.addEventListener('submit', configureHomeWifi);
 if (otaFileInput) otaFileInput.addEventListener('change', showOtaFileSelection);
 if (otaUpdateForm) otaUpdateForm.addEventListener('submit', uploadFirmware);
-document.addEventListener('pointerdown', unlockBrowserAudio, { once: true, passive: true });
+for (const type of AUDIO_UNLOCK_EVENTS) document.addEventListener(type, unlockBrowserAudio, { capture: true, passive: true });
 function buildAlphabet() {
   $('alphabet').innerHTML = Object.entries(LETTERS).sort(([a], [b]) => a.localeCompare(b)).map(([letter, code]) => `<div class="alphabet-item"><strong>${letter}</strong><span>${spacedVisualCode(code)}</span></div>`).join('');
 }
+
+// The byte builder under the cheat sheet. Morse's two signals are the same idea
+// as a bit, so the readout answers in the game's own terms: a number, the
+// character it stands for, and that character's Morse code. The bit buttons are
+// built once and then updated in place, so keyboard focus survives a click.
+const BINARY_PLACES = [128, 64, 32, 16, 8, 4, 2, 1];
+const binaryBitsEl = $('binary-bits');
+const binaryReadoutEl = $('binary-readout');
+const binaryBitsTextEl = document.createElement('span');
+const binaryMeaningEl = document.createElement('span');
+let binaryValue = 0;
+let binaryBitButtons = [];
+
+function binaryMeaning(value) {
+  const character = String.fromCharCode(value);
+  if (LETTERS[character]) {
+    const code = spacedVisualCode(LETTERS[character]);
+    return character >= '0' && character <= '9'
+      ? TEXT.binaryDigit(value, character, code)
+      : TEXT.binaryLetter(value, character, code);
+  }
+  if (value === 32) return TEXT.binarySpace(value);
+  if (LETTERS[character.toUpperCase()]) return TEXT.binarySmall(value, character, character.toUpperCase());
+  if (value > 32 && value < 127) return TEXT.binarySign(value, character);
+  return TEXT.binaryNothing(value);
+}
+
+function updateBinaryLab() {
+  binaryBitButtons.forEach((button, index) => {
+    const on = (binaryValue >> (7 - index)) & 1;
+    button.classList.toggle('is-on', on === 1);
+    button.setAttribute('aria-pressed', on === 1 ? 'true' : 'false');
+    button.setAttribute('aria-label', TEXT.binaryBitLabel(BINARY_PLACES[index], on === 1));
+    button.firstElementChild.textContent = on;
+  });
+  const bits = binaryValue.toString(2).padStart(8, '0');
+  binaryBitsTextEl.textContent = `${bits.slice(0, 4)} ${bits.slice(4)}`;
+  binaryMeaningEl.textContent = binaryMeaning(binaryValue);
+}
+
+function setBinaryValue(value) {
+  binaryValue = ((Math.trunc(value) % 256) + 256) % 256;
+  updateBinaryLab();
+}
+
+function buildBinaryLab() {
+  binaryBitsTextEl.className = 'binary-bits-text';
+  binaryMeaningEl.className = 'binary-meaning';
+  binaryReadoutEl.append(binaryBitsTextEl, binaryMeaningEl);
+  binaryBitButtons = BINARY_PLACES.map((place, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'binary-bit';
+    const bit = document.createElement('strong');
+    const placeLabel = document.createElement('small');
+    placeLabel.textContent = String(place);
+    button.append(bit, placeLabel);
+    button.addEventListener('click', () => setBinaryValue(binaryValue ^ (1 << (7 - index))));
+    return button;
+  });
+  binaryBitsEl.append(...binaryBitButtons);
+  // E is the game's first checkpoint and one dot in Morse, so it is the friendliest byte to open on.
+  setBinaryValue('E'.charCodeAt(0));
+}
+$('binary-letter-button').addEventListener('click', () => {
+  const characters = Object.keys(LETTERS);
+  let next = binaryValue;
+  while (next === binaryValue) next = characters[Math.floor(Math.random() * characters.length)].charCodeAt(0);
+  setBinaryValue(next);
+});
+$('binary-clear-button').addEventListener('click', () => setBinaryValue(0));
+
 buildAlphabet();
+buildBinaryLab();
 setDashThreshold(dashThresholdMs);
 setCharacterPause(characterPauseMs);
 updateMission();

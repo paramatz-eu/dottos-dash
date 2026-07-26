@@ -43,16 +43,50 @@ Eine erwachsene Person sollte flashen und die Kabel prüfen, bevor Strom angesch
 | Taster | Eine echte Morse-Taste. | Stufe 2 |
 | Drehgeber-Modul | Morsecode durch Drehen eingeben. | Stufe 3 |
 | Passiver Piezo-Summer | Macht leise elektronische Töne. | Stufe 4A |
-| MAX98357A + kleiner 4–8-Ω-Lautsprecher | Lautere Alternative. | Stufe 4B statt 4A |
+| MAX98357A + kleiner 4–8-Ω-Lautsprecher | Lautere Alternative. | Stufe 4B, auf Wunsch zusätzlich zu 4A |
 
 `GND` heißt **Masse**. Das ist der gemeinsame Rückweg für Strom. Bauteile können nur zusammenarbeiten, wenn sie Masse mit dem ESP32 teilen.
+
+## Einsen und Nullen: die Sprache unter allem
+
+Ein GPIO-Pin misst keine Volt wie ein Messgerät. Er beantwortet nur eine Frage: Ist dieser Pin näher an 3,3 V oder näher an 0 V? Diese zwei Antworten heißen **HIGH** und **LOW** oder **1** und **0**. Eine solche Antwort ist ein **Bit**, kurz für *binary digit*, also Binärziffer.
+
+Zwei Zustände genügen einem Computer, weil zwei Zustände Störungen überstehen. Ein etwas schwaches oder verrauschtes Signal ist immer noch deutlich näher an einem der beiden Enden und lässt sich sauber weitergeben. Genau das merkten schon die Telegrafisten 1844: Ein Klick kam an oder eben nicht.
+
+| In diesem Projekt | 1 / HIGH | 0 / LOW |
+| --- | --- | --- |
+| GPIO13 mit internem Pull-up | Taster offen | Taster gedrückt, mit GND verbunden |
+| GPIO16 für den roten Kanal | Rot an | Rot aus |
+| Drehgeber `CLK` und `DT` | Kontakt offen | Kontakt geschlossen |
+
+Ein einzelnes Bit sagt wenig, deshalb werden Bits gruppiert – und jedes zusätzliche Bit **verdoppelt**, wie viele verschiedene Dinge die Gruppe bedeuten kann:
+
+```text
+1 Bit  →   2 Werte   0  1
+2 Bits →   4 Werte   00  01  10  11
+3 Bits →   8 Werte
+8 Bits → 256 Werte   = 1 Byte = ein Textzeichen
+```
+
+Computer haben sich auf eine gemeinsame Liste geeinigt, welche Zahl welches Zeichen bedeutet. Sie heißt **ASCII**: `A` ist 65, also `01000001`. Im Spiel schaltest du unter **Baue ein Byte** diese acht Bits um und siehst den Buchstaben mit seinem Morsecode.
+
+Wo die Bits in diesem Aufbau stecken:
+
+- **Die Taste:** Die Firmware liest immer wieder ein Bit von GPIO13 und misst, wie lange es 0 war. Unter der Strich-Grenze ist es ein Punkt, länger ein Strich.
+- **Die Farben:** PWM schaltet einen Pin tausende Male pro Sekunde zwischen 1 und 0. „Halb hell“ heißt: Der Pin ist in jedem winzigen Zeitabschnitt zur Hälfte 1.
+- **Der Ton:** I2S schickt dem MAX98357A eine Folge von Binärzahlen. `BCLK` tickt einmal pro Bit und `DIN` trägt das Bit selbst – so weiß der Verstärker genau, wo eine Zahl endet.
+- **Die Firmware:** Beim Flashen wird etwa ein Megabyte an Bytes in den Speicher des ESP32 kopiert: das Programm, die Spielseite und diese Anleitung, alles als Einsen und Nullen.
+
+**Ist Morsecode dasselbe wie Binärcode?** Fast. Morse hat zwei Signale, aber seine Buchstaben sind verschieden lang – `E` hat ein Signal, `Z` hat vier. Darum braucht Morse noch etwas Drittes: die Stille, die zeigt, wo ein Buchstabe endet. Ein Byte hat immer genau acht Bits; ein Computer braucht also keine Pause, um Zeichen zu trennen. Deshalb hat die Firmware eine Einstellung `Letter Pause` und ein Laptop nicht.
+
+**Probier es aus:** Zähl an einer Hand – Daumen 1, Zeigefinger 2, Mittelfinger 4, Ringfinger 8, kleiner Finger 16. Jeder Finger ist ein Bit, eine Hand zählt also bis 31. Welche Finger ergeben 21?
 
 ## Vor dem Verkabeln: flashen und Pins finden
 
 1. Zuerst die Anfänger-Firmware flashen, während außer USB noch nichts angeschlossen ist:
 
    ```sh
-   esphome run firmware/dottos-dash-piezo.yaml
+   esphome run firmware/dottos-dash.yaml
    ```
 
 2. USB abziehen.
@@ -168,7 +202,7 @@ Ein Drehgeber meldet keinen Winkel wie ein Kompass. Er erzeugt zwei Klick-Signal
 
 ## Stufe 4A: passiver Piezo-Summer
 
-Die Piezo-Firmware wurde schon am Anfang geflasht. Ein **passiver** Piezo braucht ein wechselndes elektrisches Signal für einen Ton; genau das erzeugt dieses Projekt. Ein aktiver Summer macht seinen einzelnen Ton selbst und ist hier nicht das empfohlene Teil.
+Die schon am Anfang geflashte Firmware unterstützt den Piezo. Ein **passiver** Piezo braucht ein wechselndes elektrisches Signal für einen Ton; genau das erzeugt dieses Projekt. Ein aktiver Summer macht seinen einzelnen Ton selbst und ist hier nicht das empfohlene Teil.
 
 | Piezo-Pin | ESP32-Pin |
 | --- | --- |
@@ -186,13 +220,11 @@ Nach dem erneuten Anschließen sollte die Startmelodie erklingen. Punkte machen 
 
 Das Programm wackelt GPIO27 viele tausend Male pro Sekunde. Die Piezo-Keramik biegt sich jedes Mal ein winziges Stück und bewegt Luft – so entsteht Ton. Mehr Wackler pro Sekunde bedeuten einen höheren Ton, längeres Wackeln einen längeren Morse-Strich.
 
-## Stufe 4B: MAX98357A als Lautsprecher-Alternative
+## Stufe 4B: MAX98357A als Lautsprecher
 
-Diese Stufe ist **statt** des Piezos für lauteren Klang. Vor dem Testen die andere Firmware flashen:
-
-```sh
-esphome run firmware/dottos-dash-max98357a.yaml
-```
+Diese Stufe sorgt für lauteren Klang. Sie nutzt dieselbe Firmware wie der Piezo
+und kann **zusätzlich** verkabelt werden; wenn beide angeschlossen sind, spielen
+beide jeden Spielton.
 
 | MAX98357A-Beschriftung | ESP32-Pin |
 | --- | --- |
@@ -225,6 +257,6 @@ Bei einem kleinen Lautsprecher am USB-Strom des ESP32 nur mäßige Lautstärke n
 1. `E` (`.`), `T` (`-`) und dann `SOS` (`... --- ...`) senden.
 2. Vor dem Drücken die Lichtfarbe vorhersagen und dann die Vermutung testen.
 3. Die Richtung des Drehgebers erst auf Papier umdrehen: Welche zwei Kabel müssten getauscht werden?
-4. Mit einer erwachsenen Person [die gemeinsame Firmware](firmware/dottos-dash-common.yaml) öffnen. `GPIO13` suchen und dann die Pause von 1200 ms. Diese Einstellungen machen aus einem einfachen Taster eine Morse-Taste.
+4. Mit einer erwachsenen Person [die gemeinsame Firmware](firmware/dottos-dash-common.yaml) öffnen. `GPIO13` suchen und dann `Dash Threshold` (300 ms) und `Letter Pause` (600 ms). Diese Einstellungen machen aus einem einfachen Taster eine Morse-Taste: Die erste entscheidet, wie lang ein Druck sein muss, damit er als Strich zählt, die zweite, wie lang eine Pause sein muss, bevor der Buchstabe gelesen wird.
 
 Jeder gelungene Test ist ein kleines Forschungsexperiment: Vermutung aufstellen, nur eine Sache ändern, Ergebnis beobachten und aufschreiben.

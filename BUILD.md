@@ -41,16 +41,50 @@ An adult should handle flashing and check wiring before power is connected.
 | Momentary push button | A real Morse key. | Stage 2 |
 | Rotary encoder module | A twisty Morse input. | Stage 3 |
 | Passive piezo buzzer | Makes quiet electronic beeps. | Stage 4A |
-| MAX98357A + small 4–8 Ω speaker | Louder sound alternative. | Stage 4B instead of 4A |
+| MAX98357A + small 4–8 Ω speaker | Louder sound alternative. | Stage 4B, optionally alongside 4A |
 
 `GND` means **ground**: the shared return path for electricity. Components can only communicate when they share ground with the ESP32.
+
+## Ones and zeros: the language under all of it
+
+A GPIO pin does not measure volts the way a meter does. It answers one question: is this pin nearer 3.3 V or nearer 0 V? Those two answers are called **HIGH** and **LOW**, or **1** and **0**. One such answer is a **bit**, short for *binary digit*.
+
+Two states are all a computer needs, because two states survive interference. A slightly weak or noisy signal is still clearly nearer one end than the other, so it can be passed on perfectly. Telegraph operators found the same thing in 1844: a click either arrived or it did not.
+
+| In this project | 1 / HIGH | 0 / LOW |
+| --- | --- | --- |
+| GPIO13 with the internal pull-up | Button open | Button pressed, joined to GND |
+| GPIO16 driving the red channel | Red on | Red off |
+| Encoder `CLK` and `DT` | Contact open | Contact closed |
+
+One bit alone says very little, so bits are grouped—and each added bit **doubles** how many different things the group can mean:
+
+```text
+1 bit  →   2 values   0  1
+2 bits →   4 values   00  01  10  11
+3 bits →   8 values
+8 bits → 256 values   = 1 byte = one text character
+```
+
+Computers agreed one shared list of which number means which character, called **ASCII**: `A` is 65, or `01000001`. The game's **Build a byte** panel flips those eight bits and shows the letter with its Morse code.
+
+Where the bits are in this build:
+
+- **The key:** the firmware reads one bit from GPIO13 over and over and measures how long it stayed 0. Under the dash threshold it is a dot; longer is a dash.
+- **The colours:** PWM flips a pin between 1 and 0 thousands of times a second. "Half brightness" means the pin is 1 for half of each tiny slice of time.
+- **The sound:** I2S sends the MAX98357A a stream of binary numbers. `BCLK` ticks once per bit and `DIN` carries the bit itself, so the amplifier knows exactly where each number ends.
+- **The firmware:** flashing copies about a megabyte of bytes into the ESP32's memory—the program, the game page and this lesson, all as ones and zeros.
+
+**Is Morse code the same as binary?** Almost. Morse has two signals, but its letters are different lengths—`E` is one signal and `Z` is four—so it needs a third thing: the silence that shows where a letter ends. A byte is always exactly eight bits, so a computer never needs a gap to know where one character stops and the next starts. That fixed size is why the firmware needs a `Letter Pause` setting and a laptop does not.
+
+**Try it:** count on one hand—thumb 1, index 2, middle 4, ring 8, little 16. Each finger is a bit, so one hand counts to 31. Which fingers make 21?
 
 ## Before wiring: flash and identify the pins
 
 1. Flash the beginner firmware while nothing except USB is attached:
 
    ```sh
-   esphome run firmware/dottos-dash-piezo.yaml
+   esphome run firmware/dottos-dash.yaml
    ```
 
 2. Unplug USB.
@@ -164,7 +198,7 @@ An encoder does not report an angle like a compass. It sends two clicking signal
 
 ## Stage 4A: passive piezo buzzer
 
-Use the piezo firmware already flashed in the first step. A **passive** piezo needs a changing electrical signal to make a note; that is exactly what this project creates. An active buzzer makes its own single tone and is not the recommended part here.
+The firmware already flashed in the first step supports this. A **passive** piezo needs a changing electrical signal to make a note; that is exactly what this project creates. An active buzzer makes its own single tone and is not the recommended part here.
 
 | Piezo pin | ESP32 pin |
 | --- | --- |
@@ -182,13 +216,10 @@ After reconnecting USB, the startup tune should play. Dots make short high beeps
 
 The program wiggles GPIO27 thousands of times per second. The piezo ceramic bends a tiny amount each time, moving air and making sound. More wiggles per second means a higher note; a longer wiggle makes a longer Morse mark.
 
-## Stage 4B: MAX98357A speaker alternative
+## Stage 4B: MAX98357A speaker
 
-Choose this **instead of** the piezo stage when a louder sound is wanted. Flash the other firmware before testing it:
-
-```sh
-esphome run firmware/dottos-dash-max98357a.yaml
-```
+Add this for louder sound. It uses the same firmware as the piezo and can be
+wired **with** the piezo; when both are connected, both play each game sound.
 
 | MAX98357A label | ESP32 pin |
 | --- | --- |
@@ -212,8 +243,8 @@ For a small speaker powered from the ESP32 USB connection, keep the volume modes
 | Button always acts pressed | On a four-leg button, move one wire to the opposite side of the centre gap. |
 | Button does nothing | Check that it joins GPIO13 to GND, not GPIO13 to 3V3. |
 | Encoder turns the wrong way | Swap GPIO21 and GPIO19 with USB unplugged. |
-| Piezo is silent | Check it is passive and on GPIO27/GND; reflash the piezo build if needed. |
-| MAX98357A is silent | Check the MAX firmware was flashed and the speaker is on `SPK+`/`SPK-`, not ESP32 pins. |
+| Piezo is silent | Check it is passive and on GPIO27/GND; reflash the combined build if needed. |
+| MAX98357A is silent | Check its wiring and that the speaker is on `SPK+`/`SPK-`, not ESP32 pins. |
 | Board resets or becomes warm | Unplug now. Look for a short circuit or 5 V on a GPIO before reconnecting. |
 
 ## Invent your own experiment
@@ -221,6 +252,6 @@ For a small speaker powered from the ESP32 USB connection, keep the volume modes
 1. Send `E` (`.`), `T` (`-`), then `SOS` (`... --- ...`).
 2. Predict the light colour before pressing the button, then test your guess.
 3. Swap the encoder direction on paper first: which two wires should change?
-4. Open [the shared firmware](firmware/dottos-dash-common.yaml) with an adult. Find `GPIO13`, then find the 1200 ms pause. Those settings turn a simple switch into a Morse key.
+4. Open [the shared firmware](firmware/dottos-dash-common.yaml) with an adult. Find `GPIO13`, then find `Dash Threshold` (300 ms) and `Letter Pause` (600 ms). Those settings turn a simple switch into a Morse key: the first decides how long a press has to be to count as a dash, the second how long a rest has to be before the letter is read.
 
 Every successful test is a tiny scientific experiment: make a prediction, change one thing, observe the result, and write down what happened.
