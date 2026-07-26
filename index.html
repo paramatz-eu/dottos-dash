@@ -37,7 +37,8 @@
         <div class="story-copy">
           <p id="story-period" class="story-period">Before electric telegraphs · The problem</p>
           <h3 id="story-title">A message could not outrun a horse</h3>
-          <p id="story-text">Letters travelled with riders and ships. Signal flags and towers were quicker, but people had to see the next station. Inventors wanted a message that could travel through a wire.</p>
+          <p id="story-text">Imagine needing to tell someone in another town that a ship had arrived, a family member was safe, or the weather was changing. Letters travelled with riders and ships, so the news could take days or weeks. Signal flags and towers were quicker, but each station had to see the next one. Inventors wanted a message that could travel farther than eyes could see.</p>
+          <div class="story-detail"><strong id="story-detail-title">How a wire can carry a message</strong><p id="story-detail">A battery supplies electricity; a key opens and closes the circuit; a receiver at the far end notices each change. Those two states—on and off—can make a pattern. The clever part is agreeing what the pattern means.</p></div>
           <div class="story-people"><span aria-hidden="true">💭</span><p><strong id="story-people-title">The big question</strong><span id="story-people-text">Could electricity carry an idea farther than eyes could see?</span></p></div>
         </div>
         <aside class="story-mission">
@@ -64,9 +65,8 @@
         </div>
       </details>
       <details class="play-settings">
-        <summary>Sound and key settings</summary>
+        <summary>Sound settings</summary>
         <label class="sound-toggle"><input id="sound-toggle" type="checkbox" checked> Key sounds</label>
-        <label class="pause-control" for="letter-pause"><span>Letter pause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>After this pause, the next letter starts.</small></label>
       </details>
     </section>
 
@@ -83,7 +83,18 @@
       <div class="input-card free-key-card">
         <button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Hold the Morse key</strong><small>Short = dot · long = dash</small></button>
         <button id="free-clear-button" class="secondary-button" type="button">Start over</button>
-        <p class="keyboard-help">Hold Space on a keyboard, press this key on a touch screen, or use the real button. Pause to decode a letter.</p>
+        <p class="keyboard-help">Hold Space on a keyboard, press this key on a touch screen, or use the real button.</p>
+        <details class="free-key-help">
+          <summary>Help and timing settings</summary>
+          <div class="free-key-help-content">
+            <p><strong>How to send:</strong> A short press is a dot. A press at or above the dash threshold is a dash. Wait for the letter gap between letters and the word gap between words.</p>
+            <div class="timing-controls">
+              <label class="pause-control" for="dash-threshold"><span>Dash from: <output id="dash-threshold-value">250 ms</output></span><input id="dash-threshold" type="range" min="100" max="1000" step="50" value="250"><small>Shorter presses are dots.</small></label>
+              <label class="pause-control" for="letter-pause"><span>Letter gap: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Then the decoder reads a letter.</small></label>
+              <label class="pause-control" for="word-pause"><span>Word gap: <output id="word-pause-value">1200 ms</output></span><input id="word-pause" type="range" min="700" max="5000" step="100" value="1200"><small>Then the decoder adds a space.</small></label>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -138,7 +149,7 @@
         <button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Choose letter ↵</button>
         <button id="tree-reset-button" class="secondary-button" type="button">Reset</button>
       </div>
-      <p class="tree-mobile-tip">Swipe sideways to explore the tree. Pinch with two fingers to zoom.</p>
+      <p class="tree-mobile-tip">The complete map fits below. Zoom in to inspect a branch.</p>
       <div id="morse-tree" class="tree-wrap" tabindex="0"></div>
     </section>
 
@@ -181,6 +192,29 @@
       <p>Add an ESP32 button, turn the encoder for dots and dashes, and make every checkpoint light up and beep.</p>
       <a href="build.html">Open the step-by-step build lesson →</a>
     </section>
+
+    <details class="family-guide">
+      <summary>For grown-ups: family guide</summary>
+      <div class="family-guide-content">
+        <p>Start with the game, then add the controller one safe piece at a time. A working BOOT button is already a complete project.</p>
+        <h3>Before switching on</h3>
+        <ul>
+          <li>An adult should flash the board and check the wiring.</li>
+          <li>Unplug USB before changing wires, and never connect 5 V to an ESP32 GPIO pin.</li>
+          <li>Stop and unplug if the board gets hot, smells unusual, resets repeatedly, or disconnects.</li>
+        </ul>
+        <h3>A relaxed first session</h3>
+        <ol>
+          <li>Explore the game with no hardware.</li>
+          <li>Try <strong>E</strong> (dot), <strong>T</strong> (dash), then <strong>SOS</strong>.</li>
+          <li>After the adult check, try the ESP32’s built-in BOOT key.</li>
+          <li>Add light, sound, a button, or a dial only when you are ready for the next experiment.</li>
+        </ol>
+        <h3>Privacy and Wi-Fi</h3>
+        <p>The game has no account, analytics, cloud service, or chat. The ESP32’s local network is <strong>Dotto’s Dash</strong>; its password is <strong>dottodash</strong>. It does not need internet. Treat the optional home-Wi-Fi form as an adult setup task, and use only a trusted network.</p>
+        <p><a href="build.html">Build and troubleshooting lesson →</a> · <a href="flash.html">Flash an ESP32 from the browser →</a></p>
+      </div>
+    </details>
   </main>
   <footer>Dotto runs on curiosity, dots and dashes. ● —</footer>
   <script src="app.js"></script>

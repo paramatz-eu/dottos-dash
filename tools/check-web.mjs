@@ -22,7 +22,11 @@ const ESP_ONLY_IDS = new Set([
   'wifi-password',
   'wifi-connect-button',
   'wifi-setup-status',
+  'ota-update-form',
   'ota-firmware',
+  'ota-install-button',
+  'ota-progress',
+  'ota-status',
 ]);
 
 const problems = [];
@@ -98,6 +102,7 @@ if (undeclaredEspExtras.length) {
 //             lowercasing the identity and collapsing punctuation to spaces.
 const COUPLED_ENTITIES = [
   { name: 'Letter Pause', domain: 'number', rest: true, sse: 'letter pause' },
+  { name: 'Dash Threshold', domain: 'number', rest: true, sse: 'dash threshold' },
   { name: 'Web Dot', domain: 'button', rest: true },
   { name: 'Web Dash', domain: 'button', rest: true },
   { name: 'Morse Event', domain: 'text_sensor', sse: 'morse event' },

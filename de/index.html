@@ -37,7 +37,8 @@
         <div class="story-copy">
           <p id="story-period" class="story-period">Vor elektrischen Telegrafen · Das Problem</p>
           <h3 id="story-title">Eine Nachricht war nicht schneller als ein Pferd</h3>
-          <p id="story-text">Briefe reisten mit Reitern und Schiffen. Signalflaggen und Türme waren schneller, aber man musste die nächste Station sehen können. Erfinder wollten Nachrichten durch einen Draht schicken.</p>
+          <p id="story-text">Stell dir vor, du müsstest einer Person in der nächsten Stadt sagen: Ein Schiff ist angekommen, jemand aus der Familie ist sicher oder das Wetter ändert sich. Briefe reisten mit Reitern und Schiffen; die Nachricht konnte Tage oder Wochen unterwegs sein. Signalflaggen und Türme waren schneller, aber jede Station musste die nächste sehen können. Erfinder suchten nach einer Nachricht, die weiter reiste als unsere Augen sehen.</p>
+          <div class="story-detail"><strong id="story-detail-title">Wie ein Draht eine Nachricht tragen kann</strong><p id="story-detail">Eine Batterie liefert Strom, eine Taste öffnet und schließt den Stromkreis, und ein Empfänger am anderen Ende bemerkt jede Änderung. Aus den zwei Zuständen – an und aus – kann ein Muster entstehen. Der clevere Teil ist die gemeinsame Bedeutung dieses Musters.</p></div>
           <div class="story-people"><span aria-hidden="true">💭</span><p><strong id="story-people-title">Die große Frage</strong><span id="story-people-text">Kann Elektrizität eine Idee weiter tragen, als unsere Augen sehen können?</span></p></div>
         </div>
         <aside class="story-mission">
@@ -64,9 +65,8 @@
         </div>
       </details>
       <details class="play-settings">
-        <summary>Ton und Tasten-Einstellungen</summary>
+        <summary>Ton-Einstellungen</summary>
         <label class="sound-toggle"><input id="sound-toggle" type="checkbox" checked> Tasten-Töne</label>
-        <label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Nach dieser Pause beginnt der nächste Buchstabe.</small></label>
       </details>
     </section>
 
@@ -83,7 +83,18 @@
       <div class="input-card free-key-card">
         <button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Morse-Taste halten</strong><small>Kurz = Punkt · lang = Strich</small></button>
         <button id="free-clear-button" class="secondary-button" type="button">Neu beginnen</button>
-        <p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen. Pause macht einen Buchstaben daraus.</p>
+        <p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen.</p>
+        <details class="free-key-help">
+          <summary>Hilfe &amp; Timing einstellen</summary>
+          <div class="free-key-help-content">
+            <p><strong>So sendest du:</strong> Kurz drücken ist ein Punkt. Ab der Strich-Grenze wird dein Druck ein Strich. Warte die Buchstabenpause zwischen Buchstaben und die Wortpause zwischen Wörtern.</p>
+            <div class="timing-controls">
+              <label class="pause-control" for="dash-threshold"><span>Strich ab: <output id="dash-threshold-value">250 ms</output></span><input id="dash-threshold" type="range" min="100" max="1000" step="50" value="250"><small>Kürzere Drucke sind Punkte.</small></label>
+              <label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Danach liest der Decoder einen Buchstaben.</small></label>
+              <label class="pause-control" for="word-pause"><span>Wortpause: <output id="word-pause-value">1200 ms</output></span><input id="word-pause" type="range" min="700" max="5000" step="100" value="1200"><small>Danach setzt der Decoder ein Leerzeichen.</small></label>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -138,7 +149,7 @@
         <button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Buchstaben wählen ↵</button>
         <button id="tree-reset-button" class="secondary-button" type="button">Neu beginnen</button>
       </div>
-      <p class="tree-mobile-tip">Wische seitlich durch den Baum. Mit zwei Fingern kannst du zoomen.</p>
+      <p class="tree-mobile-tip">Die ganze Karte passt unten ins Bild. Zoome hinein, um einen Ast anzusehen.</p>
       <div id="morse-tree" class="tree-wrap" tabindex="0"></div>
     </section>
 
@@ -181,6 +192,29 @@
       <p>Ergänze die ESP32-Taste, den Drehgeber für Punkte und Striche und einen Piezo oder Lautsprecher für jeden Checkpoint.</p>
       <a href="build.html">Schritt-für-Schritt-Bauanleitung öffnen →</a>
     </section>
+
+    <details class="family-guide">
+      <summary>Für Erwachsene: Familienleitfaden</summary>
+      <div class="family-guide-content">
+        <p>Beginnt mit dem Spiel und ergänzt den Controller dann Stück für Stück. Eine funktionierende BOOT-Taste ist bereits ein vollständiges Projekt.</p>
+        <h3>Vor dem Einschalten</h3>
+        <ul>
+          <li>Eine erwachsene Person sollte die Platine flashen und die Verkabelung prüfen.</li>
+          <li>Vor jeder Änderung der Kabel USB abziehen und niemals 5 V mit einem ESP32-GPIO-Pin verbinden.</li>
+          <li>Wird die Platine heiß, riecht ungewöhnlich, startet ständig neu oder trennt die Verbindung: USB abziehen.</li>
+        </ul>
+        <h3>Eine entspannte erste Runde</h3>
+        <ol>
+          <li>Das Spiel zunächst ohne Hardware erkunden.</li>
+          <li><strong>E</strong> (Punkt), <strong>T</strong> (Strich) und dann <strong>SOS</strong> ausprobieren.</li>
+          <li>Nach der Erwachsenen-Prüfung die eingebaute BOOT-Taste des ESP32 testen.</li>
+          <li>Licht, Ton, Taste oder Drehgeber erst für das nächste Experiment ergänzen.</li>
+        </ol>
+        <h3>Privatsphäre und WLAN</h3>
+        <p>Das Spiel hat kein Konto, keine Analyse, keinen Cloud-Dienst und keinen Chat. Das lokale WLAN des ESP32 heißt <strong>Dotto’s Dash</strong>, das Passwort lautet <strong>dottodash</strong>. Internet wird nicht benötigt. Die optionale Heim-WLAN-Einrichtung ist eine Aufgabe für Erwachsene und gehört nur in ein vertrauenswürdiges Netzwerk.</p>
+        <p><a href="build.html">Bauanleitung und Fehlersuche →</a> · <a href="flash.html">ESP32 im Browser flashen →</a></p>
+      </div>
+    </details>
   </main>
   <footer>Dotto läuft mit Neugier, Punkten und Strichen. ● —</footer>
   <script src="../app.js"></script>

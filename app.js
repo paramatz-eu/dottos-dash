@@ -34,7 +34,7 @@ function renderEmbeddedEspGame() {
           <li><button class="story-step" type="button" data-story-chapter="4"><span>5</span><strong>Ein Weltcode</strong><small>1865–1906</small></button></li>
         </ol>
         <article class="story-card" aria-live="polite">
-          <div class="story-copy"><p id="story-period" class="story-period">Vor elektrischen Telegrafen · Das Problem</p><h3 id="story-title">Eine Nachricht war nicht schneller als ein Pferd</h3><p id="story-text">Briefe reisten mit Reitern und Schiffen. Signalflaggen und Türme waren schneller, aber man musste die nächste Station sehen können. Erfinder wollten Nachrichten durch einen Draht schicken.</p><div class="story-people"><span aria-hidden="true">💭</span><p><strong id="story-people-title">Die große Frage</strong><span id="story-people-text">Kann Elektrizität eine Idee weiter tragen, als unsere Augen sehen können?</span></p></div></div>
+          <div class="story-copy"><p id="story-period" class="story-period">Vor elektrischen Telegrafen · Das Problem</p><h3 id="story-title">Eine Nachricht war nicht schneller als ein Pferd</h3><p id="story-text">Stell dir vor, du müsstest einer Person in der nächsten Stadt sagen: Ein Schiff ist angekommen, jemand aus der Familie ist sicher oder das Wetter ändert sich. Briefe reisten mit Reitern und Schiffen; die Nachricht konnte Tage oder Wochen unterwegs sein. Signalflaggen und Türme waren schneller, aber jede Station musste die nächste sehen können. Erfinder suchten nach einer Nachricht, die weiter reiste als unsere Augen sehen.</p><div class="story-detail"><strong id="story-detail-title">Wie ein Draht eine Nachricht tragen kann</strong><p id="story-detail">Eine Batterie liefert Strom, eine Taste öffnet und schließt den Stromkreis, und ein Empfänger am anderen Ende bemerkt jede Änderung. Aus den zwei Zuständen – an und aus – kann ein Muster entstehen. Der clevere Teil ist die gemeinsame Bedeutung dieses Musters.</p></div><div class="story-people"><span aria-hidden="true">💭</span><p><strong id="story-people-title">Die große Frage</strong><span id="story-people-text">Kann Elektrizität eine Idee weiter tragen, als unsere Augen sehen können?</span></p></div></div>
           <aside class="story-mission"><p class="eyebrow">Deine Kapitel-Aufgabe</p><h3 id="story-mission-title">Baue ein winziges Alphabet</h3><p id="story-mission-text">Beginne mit nur zwei Signalen. Ein Punkt geht nach links, ein Strich nach rechts. Führe Dotto zum nächsten Buchstaben.</p><p class="story-lesson-link">Probiere es gleich darunter aus ↓</p></aside>
         </article>
         <nav class="story-controls" aria-label="Zwischen den Kapiteln wechseln"><button id="story-back" class="secondary-button" type="button">← Früheres Kapitel</button><strong id="story-position">Kapitel 1 von 5</strong><button id="story-next" class="primary-button" type="button">Nächstes Kapitel →</button></nav>
@@ -44,12 +44,12 @@ function renderEmbeddedEspGame() {
           <button class="mode-button" type="button" data-mode="receive" data-story-target="3" aria-pressed="false"><span aria-hidden="true">👂</span><strong>Klicks hören</strong><small>Hören und auswählen</small></button>
           <button class="mode-button" type="button" data-mode="create" data-story-target="4" aria-pressed="false"><span aria-hidden="true">✎</span><strong>Nachricht senden</strong><small>Sehen, hören, senden</small></button>
         </div></details>
-        <details class="play-settings"><summary>Ton und Tasten-Einstellungen</summary><label class="sound-toggle"><input id="sound-toggle" type="checkbox" checked> Browser-Töne</label><label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Nach dieser Pause beginnt der nächste Buchstabe.</small></label></details>
+        <details class="play-settings"><summary>Ton-Einstellungen</summary><label class="sound-toggle"><input id="sound-toggle" type="checkbox" checked> Browser-Töne</label></details>
       </section>
 
       <section id="free-panel" class="game-panel hidden">
         <div class="mission-card write-card"><p class="prompt">Dottos Tasten-Checkpoint</p><h2>Was sagt Dottos Taste?</h2><p>Sende frei Morse. Nach jeder Pause liest Dottos Decoder den nächsten Buchstaben.</p><p class="prompt">Der Decoder liest:</p><output id="free-message" class="free-message" aria-live="polite">—</output><p id="free-key-status" class="keyboard-help" aria-live="polite">Bereit für deinen ersten Buchstaben.</p></div>
-        <div class="input-card free-key-card"><button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Morse-Taste halten</strong><small>Kurz = Punkt · lang = Strich</small></button><button id="free-clear-button" class="secondary-button" type="button">Neu beginnen</button><p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen. Pause macht einen Buchstaben daraus.</p></div>
+        <div class="input-card free-key-card"><button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Morse-Taste halten</strong><small>Kurz = Punkt · lang = Strich</small></button><button id="free-clear-button" class="secondary-button" type="button">Neu beginnen</button><p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen.</p><details class="free-key-help"><summary>Hilfe &amp; Timing einstellen</summary><div class="free-key-help-content"><p><strong>So sendest du:</strong> Kurz drücken ist ein Punkt. Ab der Strich-Grenze wird dein Druck ein Strich. Warte die Buchstabenpause zwischen Buchstaben und die Wortpause zwischen Wörtern.</p><div class="timing-controls"><label class="pause-control" for="dash-threshold"><span>Strich ab: <output id="dash-threshold-value">250 ms</output></span><input id="dash-threshold" type="range" min="100" max="1000" step="50" value="250"><small>Kürzere Drucke sind Punkte.</small></label><label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Danach liest der Decoder einen Buchstaben.</small></label><label class="pause-control" for="word-pause"><span>Wortpause: <output id="word-pause-value">1200 ms</output></span><input id="word-pause" type="range" min="700" max="5000" step="100" value="1200"><small>Danach setzt der Decoder ein Leerzeichen.</small></label></div></div></details></div>
       </section>
 
       <section id="create-panel" class="game-panel hidden">
@@ -59,7 +59,7 @@ function renderEmbeddedEspGame() {
 
       <section id="tree-panel" class="game-panel">
         <div class="tree-intro"><div><p id="tree-mission" class="mission-count"></p><h2>Führe Dotto zu <span id="tree-word" class="tree-word">E</span></h2><p>Finde den nächsten Buchstaben: <strong id="tree-target">E</strong>. Gehe mit einem Punkt nach links oder mit einem Strich nach rechts. Danach den Buchstaben wählen.</p></div><div id="tree-status" class="tree-status" aria-live="polite"></div></div>
-        <div class="tree-controls" aria-label="Steuerung für den Morsebaum"><button id="tree-dot-button" class="signal-button dot" type="button">← Punkt</button><button id="tree-dash-button" class="signal-button dash" type="button">Strich →</button><button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Buchstaben wählen ↵</button><button id="tree-reset-button" class="secondary-button" type="button">Neu beginnen</button></div><p class="tree-mobile-tip">Wische seitlich durch den Baum. Mit zwei Fingern kannst du zoomen.</p><div id="morse-tree" class="tree-wrap" tabindex="0"></div>
+        <div class="tree-controls" aria-label="Steuerung für den Morsebaum"><button id="tree-dot-button" class="signal-button dot" type="button">← Punkt</button><button id="tree-dash-button" class="signal-button dash" type="button">Strich →</button><button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Buchstaben wählen ↵</button><button id="tree-reset-button" class="secondary-button" type="button">Neu beginnen</button></div><p class="tree-mobile-tip">Die ganze Karte passt unten ins Bild. Zoome hinein, um einen Ast anzusehen.</p><div id="morse-tree" class="tree-wrap" tabindex="0"></div>
       </section>
 
       <section id="receive-panel" class="receive-panel hidden"><div class="listen-card"><p id="receive-mission" class="mission-count"></p><h2>Was hat Dotto gehört?</h2><p>Starte das Signal, höre genau zu und wähle Dottos Nachricht.</p><div class="listen-controls"><button id="play-button" class="primary-button" type="button">▶ Morsecode abspielen</button><button id="replay-button" class="secondary-button" type="button">Noch einmal</button></div></div><div class="answer-card"><p class="prompt">Was bedeutet der Code?</p><div id="answer-options" class="answer-options" aria-live="polite"></div></div></section>
@@ -68,8 +68,9 @@ function renderEmbeddedEspGame() {
       <section class="progress-card"><div><span class="stat-label">Dash-Punkte</span><strong id="stars">0</strong></div><div><span class="stat-label">Nächster Checkpoint</span><strong id="next-letter">T</strong></div><button id="restart-button" class="secondary-button" type="button">Dash neu starten</button></section>
       <details class="cheat-sheet"><summary>Spickzettel: Morse-Alphabet</summary><div id="alphabet" class="alphabet-grid"></div></details>
       <section class="make-it-card"><h2>Baue Dottos Controller</h2><p>Die Taste und der Drehgeber senden direkt in dieses Spiel. Ein kurzer Tastendruck ist ein Punkt, ein langer ein Strich. Mit einem Piezo oder MAX98357A hörst du jeden Checkpoint.</p><p><strong>Tipp:</strong> Verbinde zuerst das WLAN <em>Dotto's Dash</em>, dann öffne diese Seite. Internet brauchst du nie.</p><details class="build-guide"><summary>📘 Bauanleitung öffnen</summary><div class="build-guide-content"><p>Diese Kurz-Bauanleitung ist direkt auf dem ESP32 gespeichert und funktioniert deshalb auch ohne Internet.</p><div class="safety-note"><strong>Sicherheit:</strong> Vor jeder Änderung der Kabel USB abziehen. Einen GPIO-Pin nie mit 5 V verbinden.</div><h3>1. Firmware</h3><p>Zuerst die Piezo-Version flashen: <code>esphome run firmware/dottos-dash-piezo.yaml</code>. Die eingebaute <strong>BOOT</strong>-Taste ist danach bereits eine Morse-Taste: kurz = Punkt, lang = Strich. BOOT beim Neustart oder Flashen nicht gedrückt halten.</p><h3>2. RGB-Licht und externer Taster</h3><table class="wire-table"><thead><tr><th>Bauteil</th><th>ESP32</th></tr></thead><tbody><tr><td>RGB-Modul R / G / B</td><td>GPIO16 / GPIO17 / GPIO18</td></tr><tr><td>RGB gemeinsamer Kathoden-Pin</td><td>GND</td></tr><tr><td>Taster, eine Seite</td><td>GPIO13</td></tr><tr><td>Taster, andere Seite</td><td>GND</td></tr></tbody></table><p>Die BOOT-Taste braucht keine Kabel. Der externe Taster bleibt zusätzlich nutzbar.</p><h3>3. Ton</h3><table class="wire-table"><thead><tr><th>Passiver Piezo</th><th>ESP32</th></tr></thead><tbody><tr><td>+</td><td>GPIO27</td></tr><tr><td>-</td><td>GND</td></tr></tbody></table><p>Nur ein <strong>passiver</strong> Piezo erzeugt die Morse-Töne am ESP32. Für Browser-Töne zuerst einmal auf dem Handy in diese Seite tippen; das ist eine Sicherheitsregel des Browsers.</p><h3>4. Drehgeber (optional)</h3><table class="wire-table"><thead><tr><th>Drehgeber</th><th>ESP32</th></tr></thead><tbody><tr><td>CLK / A</td><td>GPIO21</td></tr><tr><td>DT / B</td><td>GPIO19</td></tr><tr><td>SW</td><td>GPIO13</td></tr><tr><td>GND</td><td>GND</td></tr><tr><td>VCC</td><td>3V3</td></tr></tbody></table><p>Links drehen = Punkt, rechts drehen = Strich. Ist es vertauscht, USB abziehen und nur CLK und DT tauschen.</p><h3>Test</h3><p>Ein kurzer Druck muss cyan blinken und einen Punkt senden; ein langer Druck orange und einen Strich. Die einstellbare Buchstabenpause oben beginnt bei 500 ms. Piezo stumm? Prüfen: passiv, an GPIO27 und GND.</p></div></details></section>
+      <details class="family-guide"><summary>Für Erwachsene: Familienleitfaden</summary><div class="family-guide-content"><p>Beginnt mit dem Spiel und ergänzt den Controller Stück für Stück. Eine funktionierende BOOT-Taste ist bereits ein vollständiges Projekt.</p><h3>Vor dem Einschalten</h3><ul><li>Eine erwachsene Person sollte die Platine flashen und die Verkabelung prüfen.</li><li>Vor jeder Änderung der Kabel USB abziehen und niemals 5 V mit einem ESP32-GPIO-Pin verbinden.</li><li>Wird die Platine heiß, riecht ungewöhnlich, startet ständig neu oder trennt die Verbindung: USB abziehen.</li></ul><h3>Eine entspannte erste Runde</h3><ol><li>Das Spiel zunächst ohne Hardware erkunden.</li><li><strong>E</strong> (Punkt), <strong>T</strong> (Strich) und dann <strong>SOS</strong> ausprobieren.</li><li>Nach der Erwachsenen-Prüfung die eingebaute BOOT-Taste des ESP32 testen.</li><li>Licht, Ton, Taste oder Drehgeber erst für das nächste Experiment ergänzen.</li></ol><h3>Privatsphäre und WLAN</h3><p>Das Spiel hat kein Konto, keine Analyse, keinen Cloud-Dienst und keinen Chat. Das lokale WLAN heißt <strong>Dotto’s Dash</strong>; das Passwort lautet <strong>dottodash</strong>. Internet wird nicht benötigt. Die optionale Heim-WLAN-Einrichtung ist eine Aufgabe für Erwachsene und gehört nur in ein vertrauenswürdiges Netzwerk.</p></div></details>
       <details class="wifi-card"><summary>Für Erwachsene: Mit Heim-WLAN verbinden</summary><div class="wifi-content"><p>Optional: Der ESP32 kann sich mit eurem 2,4-GHz-Heim-WLAN verbinden. Danach das Handy ebenfalls mit diesem WLAN verbinden und <strong>http://dottos-dash.local</strong> öffnen (bei der MAX98357A-Version: <strong>dottos-dash-max.local</strong>). Falls das nicht klappt, die IP-Adresse in der Geräteliste des Routers nachsehen.</p><p>Das Passwort wird nur an diesen ESP32 über das passwortgeschützte Dotto's-Dash-WLAN gesendet und nicht im Projekt gespeichert. Bei einem offenen WLAN das Passwortfeld leer lassen.</p><form id="wifi-setup-form" class="wifi-setup-form"><label class="write-label" for="wifi-ssid">WLAN-Name</label><input id="wifi-ssid" class="custom-message" type="text" maxlength="32" autocomplete="off" placeholder="Mein WLAN" required><label class="write-label" for="wifi-password">WLAN-Passwort</label><input id="wifi-password" class="custom-message" type="password" maxlength="63" autocomplete="current-password"><button id="wifi-connect-button" class="primary-button" type="submit">WLAN speichern &amp; verbinden</button></form><p id="wifi-setup-status" class="keyboard-help" aria-live="polite">Dottos Controller bleibt auch ohne Heim-WLAN nutzbar.</p></div></details>
-      <details class="ota-card"><summary>Für Erwachsene: Firmware aktualisieren</summary><div class="ota-content"><p>Nur eine normale OTA-Firmware-Datei mit <code>.bin</code> auswählen – niemals eine <code>factory.bin</code>. Während des Hochladens den ESP32 eingeschaltet lassen. Danach startet er selbst neu.</p><form action="/update" method="post" enctype="multipart/form-data"><label class="write-label" for="ota-firmware">Neue Firmware-Datei</label><input id="ota-firmware" class="ota-file-input" name="update" type="file" accept=".bin,application/octet-stream" required><button class="primary-button" type="submit">Firmware installieren</button></form></div></details>
+      <details class="ota-card"><summary>Für Erwachsene: Firmware aktualisieren</summary><div class="ota-content"><p>Nur eine normale OTA-Firmware-Datei mit <code>.bin</code> auswählen – niemals eine <code>factory.bin</code>. Während des Hochladens den ESP32 eingeschaltet lassen. Danach startet er selbst neu.</p><form id="ota-update-form" action="/update" method="post" enctype="multipart/form-data"><label class="write-label" for="ota-firmware">Neue Firmware-Datei</label><input id="ota-firmware" class="ota-file-input" name="update" type="file" accept=".bin,application/octet-stream" required><button id="ota-install-button" class="primary-button" type="submit">Firmware installieren</button><progress id="ota-progress" class="ota-progress" max="100" value="0" hidden aria-describedby="ota-status"></progress><p id="ota-status" class="ota-status" role="status" aria-live="polite">Wähle eine OTA-Datei aus, um den Namen und den Fortschritt zu sehen.</p></form></div></details>
     </main><footer>Dotto läuft mit Neugier, Punkten und Strichen. ● —</footer>`;
 }
 
@@ -100,11 +101,16 @@ const LEVELS = [
 ];
 const language = document.documentElement.lang.toLowerCase().startsWith('de') ? 'de' : 'en';
 const espHosted = document.body.dataset.espHosted === 'true';
-const DOT_THRESHOLD_MS = 250;
+const DEFAULT_DASH_THRESHOLD_MS = 250;
+const MIN_DASH_THRESHOLD_MS = 100;
+const MAX_DASH_THRESHOLD_MS = 1000;
 const DEFAULT_CHARACTER_PAUSE_MS = 500;
 const MIN_CHARACTER_PAUSE_MS = 300;
 const MAX_CHARACTER_PAUSE_MS = 2000;
-const TREE_IDLE_RESET_MS = 3500;
+const DEFAULT_WORD_PAUSE_MS = 1200;
+const MIN_WORD_PAUSE_MS = 700;
+const MAX_WORD_PAUSE_MS = 5000;
+const TREE_IDLE_RESET_MS = 6000;
 const TEXT = {
   en: {
     treeMission: (number, total, message, position) => `Route ${number} of ${total} · ${message} · letter ${position} of ${message.length}`,
@@ -145,6 +151,21 @@ const TEXT = {
     welcome: 'Dotto is at the start line. Reach E with one dot.',
     listening: 'Listen carefully…',
     start: 'Start', path: 'Dotto’s path', letter: 'Letter', dot: 'Dot', dash: 'Dash',
+    treeStageLabel: 'Dotto’s route controls',
+    treeAt: 'Dotto is here',
+    treeChoose: 'Choose letter',
+    treeReset: 'Reset',
+    treeDotHint: 'go left',
+    treeDashHint: 'go right',
+    treeMapHint: 'The complete map fits below. Zoom in to inspect a branch.',
+    treeMapTitle: 'Full Morse map',
+    treeRouteTitle: 'Build the route',
+    treeGoal: 'Goal',
+    treeFit: 'Fit',
+    treeZoomOut: 'Zoom out',
+    treeZoomIn: 'Zoom in',
+    treeRouteProgress: (depth) => `Step ${depth} of 5`,
+    treeStagePrompt: (letter) => `Find ${letter}. Choose a turn.`,
     ariaTree: 'Morse code tree. Dot branches go left and dash branches go right.',
   },
   de: {
@@ -186,6 +207,21 @@ const TEXT = {
     welcome: 'Dotto steht an der Startlinie. Erreiche E mit einem Punkt.',
     listening: 'Hör genau zu…',
     start: 'Start', path: 'Dottos Weg', letter: 'Buchstabe', dot: 'Punkt', dash: 'Strich',
+    treeStageLabel: 'Steuerung für Dottos Route',
+    treeAt: 'Dotto ist hier',
+    treeChoose: 'Buchstaben wählen',
+    treeReset: 'Neu beginnen',
+    treeDotHint: 'nach links',
+    treeDashHint: 'nach rechts',
+    treeMapHint: 'Die ganze Karte passt unten ins Bild. Zoome hinein, um einen Ast anzusehen.',
+    treeMapTitle: 'Vollständiger Morsebaum',
+    treeRouteTitle: 'Baue den Weg',
+    treeGoal: 'Ziel',
+    treeFit: 'Einpassen',
+    treeZoomOut: 'Verkleinern',
+    treeZoomIn: 'Vergrößern',
+    treeRouteProgress: (depth) => `Schritt ${depth} von 5`,
+    treeStagePrompt: (letter) => `Finde ${letter}. Wähle eine Richtung.`,
     ariaTree: 'Morsebaum. Punkt-Äste gehen nach links, Strich-Äste nach rechts.',
   },
 }[language];
@@ -195,7 +231,9 @@ const STORY_CHAPTERS = {
     {
       period: 'Before electric telegraphs · The problem',
       title: 'A message could not outrun a horse',
-      text: 'Letters travelled with riders and ships. Signal flags and towers were quicker, but people had to see the next station. Inventors wanted a message that could travel through a wire.',
+      text: 'Imagine needing to tell someone in another town that a ship had arrived, a family member was safe, or the weather was changing. Letters travelled with riders and ships, so the news could take days or weeks. Signal flags and towers were quicker, but each station had to see the next one. Inventors wanted a message that could travel farther than eyes could see.',
+      detailTitle: 'How a wire can carry a message',
+      detail: 'A telegraph does not send letters through a wire. A battery supplies electricity; a key opens and closes the circuit; a receiver at the far end notices each change. Those two states—on and off—can make a pattern. The clever part is agreeing what the pattern means.',
       peopleTitle: 'The big question',
       people: 'Could electricity carry an idea farther than eyes could see?',
       missionTitle: 'Make a tiny alphabet',
@@ -205,7 +243,9 @@ const STORY_CHAPTERS = {
     {
       period: 'The 1830s · The team',
       title: 'A painter gathers a team',
-      text: 'Samuel Morse was a painter who pursued an electric telegraph—but he did not solve it alone. Leonard Gale helped with the science, using earlier electromagnet work by Joseph Henry. Alfred Vail brought money, tools, and mechanical skill.',
+      text: 'Samuel Morse was a painter, not a lone wizard with one perfect idea. He began pursuing an electric telegraph in the 1830s, then found people whose knowledge filled the gaps. Leonard Gale helped with the science, drawing on earlier electromagnet experiments by Joseph Henry. Alfred Vail brought money, tools, a workshop at his family’s iron works, and the skill to make a fragile demonstration into a machine.',
+      detailTitle: 'Why the team mattered',
+      detail: 'A long wire weakens an electric signal. Henry had shown that an electromagnet could turn a small electrical effect into a strong movement. Gale helped Morse use batteries, wire, and electromagnets more effectively; later telegraph lines used relay stations to pass a fresh signal onward. Big inventions often need connected ideas, not just one inventor.',
       peopleTitle: 'Four different strengths',
       people: 'Morse led the project, Gale understood the science, Henry’s experiments showed what electromagnets could do, and Vail made the machine practical.',
       missionTitle: 'Give every letter a route',
@@ -215,7 +255,9 @@ const STORY_CHAPTERS = {
     {
       period: 'From 1837 · The key and code',
       title: 'Alfred Vail helps make the idea practical',
-      text: 'Morse’s early plan used numbers and a codebook. During Morse and Vail’s collaboration, Vail improved the machinery and helped shape a simpler alphabetic code. A key closed the electric circuit; an electromagnet at the other end marked moving paper.',
+      text: 'Morse’s early plan used numbers: an operator would send a number, then look it up in a codebook. That was slow. During their collaboration, Morse and Vail developed machinery and a more direct alphabetic code, so a trained operator could send letters themselves. Pressing a key closed the circuit. At the far end, an electromagnet pulled an arm that made marks on a moving paper strip.',
+      detailTitle: 'Turn time into code',
+      detail: 'A quick press made a short mark; a longer press made a long mark. Gaps separated signals, letters, and words. That is why a Morse key feels like an instrument: its rhythm carries information. Dotto uses International Morse, the later international version with regular dots and dashes; the original American Morse system was a little different.',
       peopleTitle: 'The workshop teammate',
       people: 'Vail saw Morse’s demonstration in 1837 and joined the project. His family’s iron works gave the team a place and tools to build.',
       missionTitle: 'Become the telegraph key',
@@ -225,7 +267,9 @@ const STORY_CHAPTERS = {
     {
       period: '1843–1844 · The first public line',
       title: 'Forty miles, one stubborn wire',
-      text: 'Congress funded a line from Washington to Baltimore. The team first buried the wire, but poor insulation made it fail, so they put it on poles. On 24 May 1844, Morse sent “What hath God wrought?” to Vail in Baltimore. A reply proved it had arrived.',
+      text: 'In 1843, the United States Congress funded an experimental line between Washington and Baltimore—about forty miles (64 kilometres). The first plan put wire underground in lead pipes, but the insulation failed. Instead, the team strung separate wires on wooden poles, a solution that became a familiar part of the landscape. On 24 May 1844, Morse sent “What hath God wrought?” to Vail in Baltimore. Vail’s reply showed that the message had really crossed the distance.',
+      detailTitle: 'From marks to music',
+      detail: 'Copper wire has resistance, so very long lines need careful wiring and, later, relay stations. At first operators read marks on paper. They soon noticed that the electromagnet’s arm made recognisable clicks, and skilled operators learned to read the rhythm by ear—often faster than reading the paper. That is the listening skill you are about to try.',
       peopleTitle: 'A message with many helpers',
       people: 'Annie Ellsworth suggested the words. Morse sent them from Washington, and Vail received and returned them from Baltimore.',
       missionTitle: 'Hear what came through the wire',
@@ -235,7 +279,9 @@ const STORY_CHAPTERS = {
     {
       period: '1865–1906 · A world code',
       title: 'One code had to work for everyone',
-      text: 'Telegraph networks crossed borders, so countries needed shared rules. In 1865, delegates agreed to use Morse code and instruments for international service. At a 1906 radio conference, SOS became the international distress signal: · · · — — — · · ·.',
+      text: 'Soon wires crossed borders and even reached under oceans. A message is only useful if the next operator can understand it, so countries needed shared rules about equipment, timing, and code. Delegates created the International Telegraph Union in 1865 and agreed on arrangements for international telegraph service. Radio later carried the same dot-and-dash idea without a wire, allowing ships and shore stations to speak across the sea.',
+      detailTitle: 'Why SOS is so easy to recognise',
+      detail: 'The 1906 International Radiotelegraph Conference chose three dots, three dashes, and three dots as the distress signal, for use from 1908: ···———···. It is one continuous signal—there are no letter gaps—and its rhythm cuts through noise. It was not originally short for “Save Our Souls”; the pattern itself was what mattered.',
       peopleTitle: 'From a team to the world',
       people: 'Engineers, operators, governments, and ship radio crews kept adapting the system so strangers could understand one another.',
       missionTitle: 'Send a message across the world',
@@ -247,7 +293,9 @@ const STORY_CHAPTERS = {
     {
       period: 'Vor elektrischen Telegrafen · Das Problem',
       title: 'Eine Nachricht war nicht schneller als ein Pferd',
-      text: 'Briefe reisten mit Reitern und Schiffen. Signalflaggen und Türme waren schneller, aber man musste die nächste Station sehen können. Erfinder wollten Nachrichten durch einen Draht schicken.',
+      text: 'Stell dir vor, du müsstest einer Person in der nächsten Stadt sagen: Ein Schiff ist angekommen, jemand aus der Familie ist sicher oder das Wetter ändert sich. Briefe reisten mit Reitern und Schiffen; die Nachricht konnte Tage oder Wochen unterwegs sein. Signalflaggen und Türme waren schneller, aber jede Station musste die nächste sehen können. Erfinder suchten nach einer Nachricht, die weiter reiste als unsere Augen sehen.',
+      detailTitle: 'Wie ein Draht eine Nachricht tragen kann',
+      detail: 'Ein Telegraf schickt keine Buchstaben durch den Draht. Eine Batterie liefert Strom, eine Taste öffnet und schließt den Stromkreis, und ein Empfänger am anderen Ende bemerkt jede Änderung. Aus den zwei Zuständen – an und aus – kann ein Muster entstehen. Der clevere Teil ist die gemeinsame Bedeutung dieses Musters.',
       peopleTitle: 'Die große Frage',
       people: 'Kann Elektrizität eine Idee weiter tragen, als unsere Augen sehen können?',
       missionTitle: 'Baue ein winziges Alphabet',
@@ -257,7 +305,9 @@ const STORY_CHAPTERS = {
     {
       period: 'Die 1830er-Jahre · Das Team',
       title: 'Ein Maler versammelt ein Team',
-      text: 'Samuel Morse war Maler und arbeitete an einem elektrischen Telegrafen – aber nicht allein. Leonard Gale half bei der Wissenschaft und nutzte frühere Elektromagnet-Versuche von Joseph Henry. Alfred Vail brachte Geld, Werkzeuge und handwerkliches Können mit.',
+      text: 'Samuel Morse war Maler, kein einsamer Zauberer mit einer perfekten Idee. In den 1830er-Jahren arbeitete er an einem elektrischen Telegrafen und fand Menschen, deren Wissen die Lücken füllte. Leonard Gale half bei der Wissenschaft und nutzte frühere Elektromagnet-Versuche von Joseph Henry. Alfred Vail brachte Geld, Werkzeuge, eine Werkstatt in der Eisenhütte seiner Familie und das Geschick mit, aus einer empfindlichen Vorführung eine Maschine zu machen.',
+      detailTitle: 'Warum das Team wichtig war',
+      detail: 'Auf einem langen Draht wird ein elektrisches Signal schwächer. Henry hatte gezeigt, dass ein Elektromagnet aus einem kleinen elektrischen Effekt eine starke Bewegung machen kann. Gale half Morse, Batterien, Draht und Elektromagnete besser einzusetzen; spätere Telegrafenleitungen nutzten Relaisstationen, die ein neues Signal weitergaben. Große Erfindungen brauchen oft verbundene Ideen, nicht nur eine Person.',
       peopleTitle: 'Vier verschiedene Stärken',
       people: 'Morse leitete das Projekt, Gale verstand die Wissenschaft, Henrys Versuche zeigten, was Elektromagnete konnten, und Vail machte die Maschine praktisch.',
       missionTitle: 'Gib jedem Buchstaben einen Weg',
@@ -267,7 +317,9 @@ const STORY_CHAPTERS = {
     {
       period: 'Ab 1837 · Die Taste und der Code',
       title: 'Alfred Vail macht die Idee praktisch',
-      text: 'Morses erster Plan arbeitete mit Zahlen und einem Codebuch. In der Zusammenarbeit von Morse und Vail verbesserte Vail die Maschine und half bei einem einfacheren Buchstabencode. Eine Taste schloss den Stromkreis; am anderen Ende zeichnete ein Elektromagnet auf Papier.',
+      text: 'Morses erster Plan arbeitete mit Zahlen: Ein Telegrafist hätte eine Zahl gesendet und sie dann in einem Codebuch nachgeschlagen. Das war langsam. In ihrer Zusammenarbeit entwickelten Morse und Vail die Maschine und einen direkteren Buchstabencode weiter, sodass geübte Telegrafisten Buchstaben selbst senden konnten. Ein Druck auf die Taste schloss den Stromkreis. Am anderen Ende zog ein Elektromagnet einen Arm an, der Zeichen auf einen laufenden Papierstreifen machte.',
+      detailTitle: 'Aus Zeit wird ein Code',
+      detail: 'Ein kurzer Druck machte ein kurzes Zeichen, ein längerer ein langes. Pausen trennten Signale, Buchstaben und Wörter. Darum fühlt sich eine Telegrafentaste wie ein Instrument an: Ihr Rhythmus trägt Information. Dotto nutzt den internationalen Morsecode, die spätere Weltversion mit regelmäßigen Punkten und Strichen; der ursprüngliche amerikanische Morsecode war etwas anders.',
       peopleTitle: 'Der Teamkollege in der Werkstatt',
       people: 'Vail sah Morses Vorführung 1837 und stieg in das Projekt ein. Die Eisenhütte seiner Familie gab dem Team Platz und Werkzeuge zum Bauen.',
       missionTitle: 'Werde selbst zur Telegrafentaste',
@@ -277,7 +329,9 @@ const STORY_CHAPTERS = {
     {
       period: '1843–1844 · Die erste öffentliche Leitung',
       title: 'Vierzig Meilen und ein störrischer Draht',
-      text: 'Der US-Kongress bezahlte eine Leitung von Washington nach Baltimore. Zuerst wurde der Draht vergraben, doch schlechte Isolierung ließ ihn ausfallen. Also kam er auf Masten. Am 24. Mai 1844 sendete Morse „What hath God wrought?“ an Vail in Baltimore. Eine Antwort bewies: Es hatte funktioniert.',
+      text: '1843 bezahlte der US-Kongress eine Versuchsstrecke zwischen Washington und Baltimore – etwa vierzig Meilen oder 64 Kilometer. Der erste Plan verlegte Draht unter der Erde in Bleirohren, doch die Isolierung versagte. Also spannte das Team einzelne Drähte auf hölzerne Masten; bald prägten solche Leitungen die Landschaft. Am 24. Mai 1844 sendete Morse „What hath God wrought?“ an Vail in Baltimore. Vails Antwort zeigte: Die Nachricht hatte die Strecke wirklich überquert.',
+      detailTitle: 'Von Papierzeichen zu Musik',
+      detail: 'Kupferdraht hat Widerstand. Für sehr lange Leitungen braucht man deshalb sorgfältige Verbindungen und später Relaisstationen. Zuerst lasen Telegrafisten Zeichen auf Papier. Bald merkten sie, dass der Arm des Elektromagneten erkennbare Klicks machte, und geübte Menschen lasen den Rhythmus mit den Ohren – oft schneller als das Papier. Genau dieses Hören probierst du gleich aus.',
       peopleTitle: 'Eine Nachricht mit vielen Helfern',
       people: 'Annie Ellsworth schlug die Worte vor. Morse sendete sie aus Washington; Vail empfing und beantwortete sie in Baltimore.',
       missionTitle: 'Höre, was durch den Draht kam',
@@ -287,7 +341,9 @@ const STORY_CHAPTERS = {
     {
       period: '1865–1906 · Ein Weltcode',
       title: 'Ein Code musste für alle funktionieren',
-      text: 'Telegrafennetze überquerten Grenzen. Deshalb brauchten Länder gemeinsame Regeln. 1865 einigten sich Delegierte auf Morsecode und passende Geräte für internationale Verbindungen. Auf einer Funkkonferenz wurde 1906 SOS zum internationalen Notsignal: · · · — — — · · ·.',
+      text: 'Bald überquerten Drähte Grenzen und erreichten sogar Meeresböden. Eine Nachricht hilft nur, wenn der nächste Telegrafist sie versteht. Deshalb brauchten Länder gemeinsame Regeln für Geräte, Zeitabstände und Code. Delegierte gründeten 1865 die Internationale Telegraphenunion und vereinbarten Regeln für den internationalen Telegrafendienst. Später trug Funk dieselbe Punkt-Strich-Idee ohne Draht über das Meer, sodass Schiffe und Küstenstationen miteinander sprechen konnten.',
+      detailTitle: 'Warum SOS so gut zu erkennen ist',
+      detail: 'Die Internationale Funkkonferenz von 1906 wählte drei Punkte, drei Striche und drei Punkte als Notsignal, gültig ab 1908: ···———···. Es ist ein durchgehendes Signal – ohne Buchstabenpausen – und sein Rhythmus fällt auch im Lärm auf. SOS war ursprünglich keine Abkürzung für „Save Our Souls“; wichtig war das Muster selbst.',
       peopleTitle: 'Vom Team hinaus in die Welt',
       people: 'Ingenieure, Telegrafisten, Regierungen und Funker auf Schiffen entwickelten das System weiter, damit Fremde einander verstehen konnten.',
       missionTitle: 'Sende eine Nachricht um die Welt',
@@ -321,19 +377,53 @@ const treeTargetEl = $('tree-target');
 const treeMissionEl = $('tree-mission');
 const treeStatusEl = $('tree-status');
 const treeEl = $('morse-tree');
+treeStatusEl.setAttribute('aria-atomic', 'true');
+const treeMobileTipEl = document.querySelector('.tree-mobile-tip');
+const treeStageEl = document.createElement('div');
+treeStageEl.className = 'tree-stage';
+treeStageEl.setAttribute('role', 'group');
+treeStageEl.setAttribute('aria-label', TEXT.treeStageLabel);
+(treeMobileTipEl || treeEl).before(treeStageEl);
+const treeMapToolbarEl = document.createElement('div');
+treeMapToolbarEl.className = 'tree-map-toolbar';
+treeMapToolbarEl.innerHTML = `
+  <div class="tree-map-heading">
+    <span class="tree-map-icon" aria-hidden="true">🌿</span>
+    <span><strong>${TEXT.treeMapTitle}</strong><small><i class="tree-legend-line dot"></i>${TEXT.dot} ← <i class="tree-legend-line dash"></i>${TEXT.dash} →</small></span>
+  </div>
+  <div class="tree-map-actions" role="group" aria-label="${TEXT.treeMapTitle}">
+    <button class="tree-map-tool" type="button" data-tree-zoom="out" aria-label="${TEXT.treeZoomOut}">−</button>
+    <output class="tree-map-zoom" data-tree-zoom-output aria-live="polite">100%</output>
+    <button class="tree-map-tool tree-map-fit" type="button" data-tree-zoom="fit">${TEXT.treeFit}</button>
+    <button class="tree-map-tool" type="button" data-tree-zoom="in" aria-label="${TEXT.treeZoomIn}">+</button>
+  </div>`;
+(treeMobileTipEl || treeEl).before(treeMapToolbarEl);
+treeEl.removeAttribute('tabindex');
+if (treeMobileTipEl) treeMobileTipEl.textContent = TEXT.treeMapHint;
 const receiveMissionEl = $('receive-mission');
 const answerOptionsEl = $('answer-options');
 const soundToggle = $('sound-toggle');
+const dashThresholdInput = $('dash-threshold');
+const dashThresholdValueEl = $('dash-threshold-value');
 const letterPauseInput = $('letter-pause');
 const letterPauseValueEl = $('letter-pause-value');
+const wordPauseInput = $('word-pause');
+const wordPauseValueEl = $('word-pause-value');
 const hardwareStatusEl = $('hardware-status');
 const wifiSetupForm = $('wifi-setup-form');
 const wifiSsidInput = $('wifi-ssid');
 const wifiPasswordInput = $('wifi-password');
 const wifiSetupStatusEl = $('wifi-setup-status');
+const otaUpdateForm = $('ota-update-form');
+const otaFileInput = $('ota-firmware');
+const otaInstallButton = $('ota-install-button');
+const otaProgressEl = $('ota-progress');
+const otaStatusEl = $('ota-status');
 const storyPeriodEl = $('story-period');
 const storyTitleEl = $('story-title');
 const storyTextEl = $('story-text');
+const storyDetailTitleEl = $('story-detail-title');
+const storyDetailEl = $('story-detail');
 const storyPeopleTitleEl = $('story-people-title');
 const storyPeopleTextEl = $('story-people-text');
 const storyMissionTitleEl = $('story-mission-title');
@@ -348,6 +438,12 @@ let freeInput = '';
 let freeMessage = '';
 let translatorMessage = '';
 let treePath = '';
+let treeCentred = false;
+let treeLastMovePath = '';
+let treeNotice = '';
+let treeNoticeKind = 'info';
+let treeResizeTimer;
+let treeMapZoom = 1;
 let writingMessage = '';
 let writingIndex = 0;
 let levelIndex = Number(localStorage.getItem('dottos-dash-level') || 0);
@@ -358,13 +454,16 @@ let liveKeyTone;
 let morseKeyDownAt = 0;
 let freeKeyDownAt = 0;
 let inputPauseTimer;
+let wordPauseTimer;
 let treePauseTimer;
 let hardwareEventSource;
 let hardwareEventsReady = false;
 let lastHardwareEvent = 0;
 let pendingHardwareSignals = 0;
 let hardwareKeyIsDown = false;
+let dashThresholdMs = normaliseDashThreshold(Number(localStorage.getItem('dottos-dash-dash-threshold') ?? DEFAULT_DASH_THRESHOLD_MS));
 let characterPauseMs = normaliseCharacterPause(Number(localStorage.getItem('dottos-dash-letter-pause') ?? DEFAULT_CHARACTER_PAUSE_MS));
+let wordPauseMs = normaliseWordPause(Number(localStorage.getItem('dottos-dash-word-pause') ?? DEFAULT_WORD_PAUSE_MS));
 let storyChapter = Number(localStorage.getItem('dottos-dash-story-chapter') || 0);
 
 if (!Number.isInteger(levelIndex) || levelIndex < 0 || levelIndex >= LEVELS.length) levelIndex = 0;
@@ -374,16 +473,40 @@ if (!Number.isInteger(storyChapter) || storyChapter < 0 || storyChapter >= STORY
 function level() { return LEVELS[levelIndex]; }
 function currentLetter() { return level().message[letterIndex]; }
 function currentWritingLetter() { return writingMessage[writingIndex]; }
+function normaliseDashThreshold(value) {
+  const numericValue = Number(value);
+  const roundedValue = Number.isFinite(numericValue) ? Math.round(numericValue / 50) * 50 : DEFAULT_DASH_THRESHOLD_MS;
+  return Math.min(MAX_DASH_THRESHOLD_MS, Math.max(MIN_DASH_THRESHOLD_MS, roundedValue));
+}
 function normaliseCharacterPause(value) {
   const numericValue = Number(value);
   const roundedValue = Number.isFinite(numericValue) ? Math.round(numericValue / 100) * 100 : DEFAULT_CHARACTER_PAUSE_MS;
   return Math.min(MAX_CHARACTER_PAUSE_MS, Math.max(MIN_CHARACTER_PAUSE_MS, roundedValue));
+}
+function normaliseWordPause(value) {
+  const numericValue = Number(value);
+  const roundedValue = Number.isFinite(numericValue) ? Math.round(numericValue / 100) * 100 : DEFAULT_WORD_PAUSE_MS;
+  return Math.min(MAX_WORD_PAUSE_MS, Math.max(Math.max(MIN_WORD_PAUSE_MS, characterPauseMs + 100), roundedValue));
+}
+function setDashThreshold(value) {
+  dashThresholdMs = normaliseDashThreshold(value);
+  dashThresholdInput.value = String(dashThresholdMs);
+  dashThresholdValueEl.textContent = `${dashThresholdMs} ms`;
+  localStorage.setItem('dottos-dash-dash-threshold', String(dashThresholdMs));
 }
 function setCharacterPause(value) {
   characterPauseMs = normaliseCharacterPause(value);
   letterPauseInput.value = String(characterPauseMs);
   letterPauseValueEl.textContent = `${characterPauseMs} ms`;
   localStorage.setItem('dottos-dash-letter-pause', String(characterPauseMs));
+  setWordPause(wordPauseMs);
+}
+function setWordPause(value) {
+  wordPauseMs = normaliseWordPause(value);
+  wordPauseInput.min = String(Math.max(MIN_WORD_PAUSE_MS, characterPauseMs + 100));
+  wordPauseInput.value = String(wordPauseMs);
+  wordPauseValueEl.textContent = `${wordPauseMs} ms`;
+  localStorage.setItem('dottos-dash-word-pause', String(wordPauseMs));
 }
 function visualCode(code) { return code.replace(/\./g, '·').replace(/-/g, '—'); }
 function spacedVisualCode(code) { return visualCode(code).split('').join(' '); }
@@ -470,12 +593,117 @@ function playMorse(message) {
 function feedback(message, type = 'info') {
   feedbackEl.textContent = message;
   feedbackEl.className = `feedback ${type}`;
+  if (mode === 'tree') {
+    treeNotice = message;
+    treeNoticeKind = type;
+    updateTreeStatus();
+    renderTreeStage();
+  }
 }
 function setHardwareStatus(message) {
   if (hardwareStatusEl) hardwareStatusEl.textContent = message;
 }
 function setWifiSetupStatus(message) {
   if (wifiSetupStatusEl) wifiSetupStatusEl.textContent = message;
+}
+function setOtaStatus(message, state = 'info') {
+  if (!otaStatusEl) return;
+  otaStatusEl.textContent = message;
+  otaStatusEl.className = `ota-status ${state}`;
+}
+function formatFileSize(bytes) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+function otaFileProblem(file) {
+  if (!file) return 'Wähle zuerst eine Firmware-Datei aus.';
+  const name = file.name.toLowerCase();
+  if (!name.endsWith('.bin')) return 'Die Datei muss auf .bin enden.';
+  if (name.includes('factory')) return 'Das ist eine Factory-Datei. Bitte die Datei mit „-ota.bin“ auswählen.';
+  if (file.size === 0) return 'Die ausgewählte Datei ist leer. Bitte die OTA-Datei erneut herunterladen.';
+  return '';
+}
+function setOtaBusy(busy) {
+  if (otaFileInput) otaFileInput.disabled = busy;
+  if (otaInstallButton) otaInstallButton.disabled = busy;
+}
+function showOtaFileSelection() {
+  const file = otaFileInput?.files?.[0];
+  const problem = otaFileProblem(file);
+  if (otaProgressEl) otaProgressEl.hidden = true;
+  if (problem) return setOtaStatus(problem, file ? 'error' : 'info');
+  setOtaStatus(`Bereit: ${file.name} (${formatFileSize(file.size)}). Beim Installieren wird die Datei zum ESP32 übertragen.`, 'ready');
+}
+function waitForOtaRestart() {
+  const startedAt = Date.now();
+  const retry = () => {
+    window.setTimeout(async () => {
+      try {
+        const response = await fetch('/', { cache: 'no-store' });
+        if (!response.ok) throw new Error('ESP32 did not answer');
+        setOtaStatus('Fertig: Der ESP32 antwortet wieder. Die Seite wird mit der neuen Firmware neu geladen …', 'success');
+        window.setTimeout(() => window.location.reload(), 1200);
+      } catch {
+        if (Date.now() - startedAt < 60000) {
+          setOtaStatus('Schritt 3 von 3: Der ESP32 startet neu. Warte auf die Verbindung …', 'info');
+          retry();
+        } else {
+          setOtaStatus('Die Datei wurde angenommen, aber der ESP32 antwortet noch nicht. Warte noch etwas und öffne diese Seite erneut. Nicht den Strom trennen.', 'error');
+          setOtaBusy(false);
+        }
+      }
+    }, 2000);
+  };
+  retry();
+}
+function uploadFirmware(event) {
+  event.preventDefault();
+  const file = otaFileInput?.files?.[0];
+  const problem = otaFileProblem(file);
+  if (problem) return setOtaStatus(problem, 'error');
+
+  setOtaBusy(true);
+  if (otaProgressEl) {
+    otaProgressEl.hidden = false;
+    otaProgressEl.value = 0;
+  }
+  setOtaStatus(`Schritt 1 von 3: ${file.name} wird zum ESP32 übertragen …`, 'info');
+  const request = new XMLHttpRequest();
+  let uploadFinished = false;
+  request.open('POST', otaUpdateForm.action, true);
+  request.upload.addEventListener('progress', (progress) => {
+    if (!progress.lengthComputable) return;
+    const percent = Math.round((progress.loaded / progress.total) * 100);
+    if (otaProgressEl) otaProgressEl.value = percent;
+    setOtaStatus(`Schritt 1 von 3: Datei wird übertragen: ${percent}% (${formatFileSize(progress.loaded)} von ${formatFileSize(progress.total)}).`, 'info');
+    uploadFinished = percent === 100;
+  });
+  request.addEventListener('load', () => {
+    if (request.status < 200 || request.status >= 300) {
+      setOtaStatus(`Der ESP32 hat die Datei abgelehnt (HTTP ${request.status}). Prüfe, ob es die passende OTA-Datei für dieses Modell ist.`, 'error');
+      return setOtaBusy(false);
+    }
+    if (!request.responseText.includes('Update Successful')) {
+      setOtaStatus('Der ESP32 konnte diese Firmware nicht installieren. Prüfe, ob es die passende OTA-Datei (nicht Factory) für dieses Modell ist.', 'error');
+      return setOtaBusy(false);
+    }
+    if (otaProgressEl) otaProgressEl.value = 100;
+    setOtaStatus('Schritt 2 von 3: Datei angekommen. Der ESP32 prüft und schreibt die Firmware; die Seite darf kurz nicht antworten.', 'info');
+    waitForOtaRestart();
+  });
+  request.addEventListener('error', () => {
+    if (uploadFinished) {
+      setOtaStatus('Schritt 2 von 3: Die Übertragung ist abgeschlossen. Der ESP32 startet wahrscheinlich schon neu …', 'info');
+      return waitForOtaRestart();
+    }
+    setOtaStatus('Die Datei konnte nicht vollständig zum ESP32 übertragen werden. Prüfe, ob du noch mit „Dotto’s Dash“ verbunden bist, und versuche es erneut.', 'error');
+    setOtaBusy(false);
+  });
+  request.addEventListener('abort', () => {
+    setOtaStatus('Das Firmware-Update wurde abgebrochen. Die alte Firmware sollte weiterlaufen; versuche es bei stabiler WLAN-Verbindung erneut.', 'error');
+    setOtaBusy(false);
+  });
+  request.send(new FormData(otaUpdateForm));
 }
 async function configureHomeWifi(event) {
   event.preventDefault();
@@ -502,12 +730,25 @@ function setCharacterPauseOnHardware() {
     if (!response.ok) throw new Error('Letter pause request failed');
   }).catch(() => setHardwareStatus('Die Buchstabenpause konnte nicht auf dem ESP32 gespeichert werden.'));
 }
+function setDashThresholdOnHardware() {
+  if (!espHosted) return;
+  fetch(`/number/${encodeURIComponent('Dash Threshold')}/set?value=${dashThresholdMs}`, { method: 'POST' }).then((response) => {
+    if (!response.ok) throw new Error('Dash threshold request failed');
+  }).catch(() => setHardwareStatus('Die Strich-Grenze konnte nicht auf dem ESP32 gespeichert werden.'));
+}
 function syncCharacterPauseFromHardware() {
   if (!espHosted) return;
   fetch(`/number/${encodeURIComponent('Letter Pause')}`).then((response) => {
     if (!response.ok) throw new Error('Letter pause request failed');
     return response.json();
   }).then((payload) => setCharacterPause(payload.state)).catch(() => {});
+}
+function syncDashThresholdFromHardware() {
+  if (!espHosted) return;
+  fetch(`/number/${encodeURIComponent('Dash Threshold')}`).then((response) => {
+    if (!response.ok) throw new Error('Dash threshold request failed');
+    return response.json();
+  }).then((payload) => setDashThreshold(payload.state)).catch(() => {});
 }
 function sendSignalToHardware(signal) {
   if (!espHosted) return;
@@ -525,6 +766,7 @@ function connectEspHardware() {
   if (!espHosted || !window.EventSource) return;
   setHardwareStatus('Verbunden mit Dottos Controller. Taste auf dem ESP32 oder hier auf dem Bildschirm.');
   syncCharacterPauseFromHardware();
+  syncDashThresholdFromHardware();
   hardwareEventSource = new EventSource('/events');
   hardwareEventSource.addEventListener('state', (event) => {
     let payload;
@@ -535,11 +777,16 @@ function connectEspHardware() {
       setCharacterPause(payload.state);
       return;
     }
+    if (readableIdentity.includes('dash threshold')) {
+      setDashThreshold(payload.state);
+      return;
+    }
     if (readableIdentity.includes('morse key')) {
       if (!hardwareEventsReady) return;
       const pressed = ['on', 'true', '1'].includes(String(payload.state || '').toLowerCase());
       if (pressed && !hardwareKeyIsDown) {
         hardwareKeyIsDown = true;
+        pauseFreeTimersForKeyDown();
         startMorseKeyTone();
       } else if (!pressed && hardwareKeyIsDown) {
         hardwareKeyIsDown = false;
@@ -579,6 +826,11 @@ function updateFreeMode() {
   if (freeKeyStatusEl) {
     freeKeyStatusEl.textContent = freeInput ? TEXT.freeKeyListening : (freeMessage ? TEXT.freeKeyNext : TEXT.freeKeyReady);
   }
+}
+function pauseFreeTimersForKeyDown() {
+  if (mode !== 'free') return;
+  window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
 }
 function morseForText(message) {
   return message.split(' ').map((word) => word.split('').map((letter) => spacedVisualCode(LETTERS[letter])).join('   ')).join('     /     ');
@@ -645,6 +897,7 @@ function updateMission() {
   nextLetterEl.textContent = LEVELS[(levelIndex + 1) % LEVELS.length].message;
   starsEl.textContent = stars;
   treePath = '';
+  treeLastMovePath = '';
   buildReceiveOptions();
   renderTree();
 }
@@ -654,13 +907,16 @@ function scheduleWriteFinish() {
 }
 function scheduleFreeFinish() {
   window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
   inputPauseTimer = window.setTimeout(checkFreeInput, characterPauseMs);
+  wordPauseTimer = window.setTimeout(finishFreeWord, wordPauseMs);
 }
 function scheduleTreeReset() {
   window.clearTimeout(treePauseTimer);
   treePauseTimer = window.setTimeout(() => {
     if (!treePath) return;
     treePath = '';
+    treeLastMovePath = '';
     renderTree();
     feedback(TEXT.treeTimedOut, 'info');
   }, TREE_IDLE_RESET_MS);
@@ -735,8 +991,14 @@ function checkFreeInput() {
   }
   updateFreeMode();
 }
+function finishFreeWord() {
+  if (freeInput || !freeMessage || freeMessage.endsWith(' ')) return;
+  freeMessage += ' ';
+  updateFreeMode();
+}
 function clearFreePractice() {
   window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
   freeInput = '';
   freeMessage = '';
   updateFreeMode();
@@ -746,6 +1008,7 @@ function startFreePointerKey(event) {
   if (event.button !== undefined && event.button !== 0) return;
   event.preventDefault();
   if (freeKeyDownAt) return;
+  pauseFreeTimersForKeyDown();
   freeKeyDownAt = performance.now();
   freeKeyButton.classList.add('is-down');
   freeKeyButton.setPointerCapture?.(event.pointerId);
@@ -758,7 +1021,7 @@ function finishFreePointerKey(event, cancelled = false) {
   freeKeyDownAt = 0;
   freeKeyButton.classList.remove('is-down');
   stopMorseKeyTone();
-  if (!cancelled) recordSignal(duration < DOT_THRESHOLD_MS ? '.' : '-', true);
+  if (!cancelled) recordSignal(duration < dashThresholdMs ? '.' : '-', true);
 }
 function playTranslation() {
   if (!translatorMessage) return feedback(TEXT.translateNoMessage, 'info');
@@ -767,6 +1030,8 @@ function playTranslation() {
 function moveTree(signal, playSound = true) {
   if (treePath.length >= 5) return feedback(TEXT.bottom, 'info');
   treePath += signal;
+  treeLastMovePath = treePath;
+  treeNotice = '';
   if (playSound) beep(signal === '-');
   renderTree();
   scheduleTreeReset();
@@ -776,6 +1041,7 @@ function chooseTreeLetter() {
   if (!treePath) return feedback(TEXT.chooseTreeFirst, 'info');
   const letter = MORSE[treePath];
   treePath = '';
+  treeLastMovePath = '';
   renderTree();
   if (!letter) return feedback(TEXT.emptyBranch, 'try');
   if (letter === currentLetter()) advanceFromSentLetter(letter);
@@ -791,15 +1057,86 @@ function checkReceivedAnswer(answer) {
   saveProgress();
   updateMission();
 }
+const TREE_VIEWBOX_WIDTH = 1200;
+const TREE_VIEWBOX_HEIGHT = 730;
+const TREE_TOP = 78;
+const TREE_LEVEL_GAP = 126;
 function nodeForPath(path) { return MORSE[path] || ''; }
+function treeNodeRadius(depth) { return [38, 32, 27, 22, 17, 13][depth] || 13; }
 function position(path) {
   const depth = path.length;
   const index = parseInt(path.replace(/\./g, '0').replace(/-/g, '1') || '0', 2);
-  return { x: 1200 * (index + .5) / (2 ** depth), y: 80 + depth * 118 };
+  const sidePadding = 22;
+  return {
+    x: sidePadding + (TREE_VIEWBOX_WIDTH - sidePadding * 2) * (index + .5) / (2 ** depth),
+    y: TREE_TOP + depth * TREE_LEVEL_GAP,
+  };
+}
+function updateTreeStatus() {
+  const shownPath = treePath ? visualCode(treePath) : TEXT.start;
+  const selected = MORSE[treePath] || '—';
+  const notice = treeNotice ? `<span class="tree-status-notice ${treeNoticeKind}">${treeNotice}</span>` : '';
+  treeStatusEl.className = `tree-status ${treeNotice ? `has-notice ${treeNoticeKind}` : ''}`;
+  treeStatusEl.innerHTML = `<span class="tree-status-route">${TEXT.path}: <strong>${shownPath}</strong><br>${TEXT.letter}: <strong>${selected}</strong></span>${notice}`;
+}
+function renderTreeStage() {
+  const shownPath = treePath ? visualCode(treePath) : TEXT.start;
+  const selected = MORSE[treePath] || '—';
+  const currentLabel = selected === '—' ? TEXT.start : selected;
+  const routeSlots = Array.from({ length: 5 }, (_, index) => {
+    const signal = treePath[index];
+    const direction = signal === '.' ? 'dot' : signal === '-' ? 'dash' : '';
+    return `<span class="tree-stage-slot ${signal ? `is-filled ${direction}` : ''}">${signal ? visualCode(signal) : '○'}</span>`;
+  }).join('');
+  const notice = treeNotice || TEXT.treeStagePrompt(currentLetter());
+  treeStageEl.innerHTML = `
+    <div class="tree-stage-heading">
+      <span><small>${TEXT.treeRouteTitle}</small><strong>${TEXT.treeStagePrompt(currentLetter())}</strong></span>
+      <span class="tree-stage-goal">${TEXT.treeGoal} <strong>${currentLetter()}</strong></span>
+    </div>
+    <div class="tree-focus-board">
+      <div class="tree-focus-current">
+        <span class="tree-focus-dotto" aria-hidden="true"><i></i><i></i></span>
+        <span class="tree-focus-node">${currentLabel}</span>
+        <small>${TEXT.treeAt} · ${shownPath}</small>
+      </div>
+      <div class="tree-focus-fork" aria-hidden="true"><i></i><i></i></div>
+      <div class="tree-stage-turns">
+        <button class="tree-stage-turn dot" type="button" data-tree-stage-signal="."><span>← ${TEXT.dot}</span><strong>·</strong><small>${TEXT.treeDotHint}</small></button>
+        <button class="tree-stage-turn dash" type="button" data-tree-stage-signal="-"><span>${TEXT.dash} →</span><strong>—</strong><small>${TEXT.treeDashHint}</small></button>
+      </div>
+    </div>
+    <div class="tree-stage-route">
+      <span>${TEXT.treeRouteProgress(treePath.length)}</span>
+      <div class="tree-stage-trail" aria-hidden="true">${routeSlots}</div>
+    </div>
+    <div class="tree-stage-actions">
+      <button class="primary-button" type="button" data-tree-stage-action="choose" ${treePath ? '' : 'disabled'}>${TEXT.treeChoose} <span aria-hidden="true">↵</span></button>
+      <button class="secondary-button" type="button" data-tree-stage-action="reset" ${treePath ? '' : 'disabled'}>↺ ${TEXT.treeReset}</button>
+    </div>
+    <p class="tree-stage-notice ${treeNoticeKind}" aria-hidden="true">${notice}</p>`;
+}
+function applyTreeMapZoom(centre = true) {
+  const svg = treeEl.querySelector('svg');
+  if (svg) svg.style.setProperty('--tree-map-width', `${treeMapZoom * 100}%`);
+  treeEl.classList.toggle('is-fit', treeMapZoom === 1);
+  const output = treeMapToolbarEl.querySelector('[data-tree-zoom-output]');
+  const zoomOutButton = treeMapToolbarEl.querySelector('[data-tree-zoom="out"]');
+  const zoomInButton = treeMapToolbarEl.querySelector('[data-tree-zoom="in"]');
+  if (output) output.textContent = `${Math.round(treeMapZoom * 100)}%`;
+  if (zoomOutButton) zoomOutButton.disabled = treeMapZoom <= 1;
+  if (zoomInButton) zoomInButton.disabled = treeMapZoom >= 3.5;
+  if (treeMapZoom === 1) treeEl.scrollTo({ left: 0, top: 0, behavior: 'auto' });
+  else if (centre) window.requestAnimationFrame(centreTreeOnCurrentNode);
+}
+function setTreeMapZoom(value) {
+  treeMapZoom = Math.min(3.5, Math.max(1, Math.round(value * 2) / 2));
+  treeCentred = false;
+  applyTreeMapZoom();
 }
 function renderTree() {
-  const paths = [];
-  for (let depth = 0; depth <= 5; depth++) {
+  const paths = [''];
+  for (let depth = 1; depth <= 5; depth++) {
     for (let index = 0; index < 2 ** depth; index++) {
       paths.push(index.toString(2).padStart(depth, '0').replace(/0/g, '.').replace(/1/g, '-'));
     }
@@ -807,28 +1144,68 @@ function renderTree() {
   const links = paths.filter(Boolean).map((path) => {
     const parent = position(path.slice(0, -1));
     const child = position(path);
+    const parentRadius = treeNodeRadius(path.length - 1);
+    const childRadius = treeNodeRadius(path.length);
+    const startY = parent.y + parentRadius;
+    const endY = child.y - childRadius;
+    const middleY = (startY + endY) / 2;
     const kind = path[path.length - 1] === '.' ? 'dot-link' : 'dash-link';
     const active = treePath.startsWith(path) ? 'active-link' : '';
-    return `<line class="tree-link ${kind} ${active}" x1="${parent.x}" y1="${parent.y + 28}" x2="${child.x}" y2="${child.y - 24}"/>`;
+    const newest = path === treeLastMovePath ? 'newest-link' : '';
+    return `<path class="tree-link ${kind} ${active} ${newest}" d="M ${parent.x} ${startY} C ${parent.x} ${middleY}, ${child.x} ${middleY}, ${child.x} ${endY}"/>`;
   }).join('');
   const nodes = paths.map((path) => {
     const point = position(path);
     const depth = path.length;
     const letter = nodeForPath(path);
-    const radius = Math.max(13, 33 - depth * 4);
+    const radius = treeNodeRadius(depth);
     const current = path === treePath ? 'current' : '';
     const empty = !letter && path ? 'empty' : '';
+    const target = letter && letter === currentLetter() ? 'target' : '';
     const label = path ? letter : TEXT.start;
-    const size = path ? Math.max(11, 20 - depth * 2) : 20;
-    return `<g class="tree-node ${current} ${empty}"><circle cx="${point.x}" cy="${point.y}" r="${radius}"/><text x="${point.x}" y="${point.y + size * .35}" font-size="${size}">${label}</text></g>`;
+    const root = path ? '' : 'root';
+    const size = path ? Math.max(12, 21 - depth * 1.8) : 16;
+    const dotto = current ? `<g class="tree-dotto-marker" transform="translate(${point.x} ${point.y - radius - 18})" aria-hidden="true"><circle class="tree-marker-halo" r="16"/><circle class="tree-marker-body" r="10"/><circle class="tree-marker-shine" cx="-3" cy="-3" r="2.5"/></g>` : '';
+    const targetRing = target ? `<circle class="tree-target-ring" cx="${point.x}" cy="${point.y}" r="${radius + 8}"/>` : '';
+    return `<g class="tree-node ${root} ${current} ${target} ${empty}">${targetRing}<circle class="tree-node-disc" cx="${point.x}" cy="${point.y}" r="${radius}"/><text x="${point.x}" y="${point.y + size * .35}" font-size="${size}">${label}</text>${dotto}</g>`;
   }).join('');
-  const shownPath = treePath ? visualCode(treePath) : TEXT.start;
-  const selected = MORSE[treePath] || '—';
-  treeStatusEl.innerHTML = `${TEXT.path}: <strong>${shownPath}</strong><br>${TEXT.letter}: <strong>${selected}</strong>`;
-  treeEl.innerHTML = `<svg class="morse-tree-svg" viewBox="0 0 1200 700" role="img" aria-label="${TEXT.ariaTree}">
+  updateTreeStatus();
+  renderTreeStage();
+  treeEl.innerHTML = `<svg class="morse-tree-svg" viewBox="0 0 ${TREE_VIEWBOX_WIDTH} ${TREE_VIEWBOX_HEIGHT}" preserveAspectRatio="xMidYMin meet" role="img" aria-label="${TEXT.ariaTree}">
     <defs><marker id="tree-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z"/></marker></defs>
-    <text class="tree-label" x="160" y="31">← ${TEXT.dot}</text><text class="tree-label" x="965" y="31">${TEXT.dash} →</text>${links}${nodes}
+    ${links}${nodes}
   </svg>`;
+  applyTreeMapZoom(false);
+  centreTreeOnCurrentNode();
+}
+/* At 100% the complete map fits the viewport. Higher zoom levels scroll in both
+   directions and follow Dotto, while the compact route board stays usable. */
+function centreTreeOnCurrentNode() {
+  const svg = treeEl.querySelector('svg');
+  if (!svg) return;
+  const overflowX = treeEl.scrollWidth - treeEl.clientWidth;
+  const overflowY = treeEl.scrollHeight - treeEl.clientHeight;
+  if (overflowX <= 0 && overflowY <= 0) return;
+  const bounds = svg.getBoundingClientRect();
+  const scaleX = bounds.width / TREE_VIEWBOX_WIDTH;
+  const scaleY = bounds.height / TREE_VIEWBOX_HEIGHT;
+  const current = position(treePath);
+  const left = current.x * scaleX - treeEl.clientWidth / 2;
+  const top = current.y * scaleY - treeEl.clientHeight / 2;
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  treeEl.scrollTo({
+    left: Math.max(0, Math.min(overflowX, left)),
+    top: Math.max(0, Math.min(overflowY, top)),
+    behavior: treeCentred && !reduceMotion ? 'smooth' : 'auto',
+  });
+  treeCentred = true;
+}
+function resetTree() {
+  window.clearTimeout(treePauseTimer);
+  treePath = '';
+  treeLastMovePath = '';
+  renderTree();
+  feedback(TEXT.reset, 'info');
 }
 function setMode(nextMode) {
   morseKeyDownAt = 0;
@@ -846,6 +1223,7 @@ function setMode(nextMode) {
     button.setAttribute('aria-pressed', String(active));
   });
   window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
   window.clearTimeout(treePauseTimer);
   const modeMessage = {
     tree: TEXT.treeMode,
@@ -858,6 +1236,7 @@ function setMode(nextMode) {
   if (mode === 'create') updateWritingMode();
   if (mode === 'free') updateFreeMode();
   if (mode === 'create') updateTranslation();
+  if (mode === 'tree') { treeCentred = false; centreTreeOnCurrentNode(); }
 }
 function showStoryChapter(nextChapter) {
   const index = Number(nextChapter);
@@ -867,6 +1246,8 @@ function showStoryChapter(nextChapter) {
   storyPeriodEl.textContent = chapter.period;
   storyTitleEl.textContent = chapter.title;
   storyTextEl.textContent = chapter.text;
+  storyDetailTitleEl.textContent = chapter.detailTitle;
+  storyDetailEl.textContent = chapter.detail;
   storyPeopleTitleEl.textContent = chapter.peopleTitle;
   storyPeopleTextEl.textContent = chapter.people;
   storyMissionTitleEl.textContent = chapter.missionTitle;
@@ -925,7 +1306,27 @@ $('play-translation-button').addEventListener('click', playTranslation);
 $('tree-dot-button').addEventListener('click', () => recordSignal('.'));
 $('tree-dash-button').addEventListener('click', () => recordSignal('-'));
 $('tree-confirm-button').addEventListener('click', chooseTreeLetter);
-$('tree-reset-button').addEventListener('click', () => { window.clearTimeout(treePauseTimer); treePath = ''; renderTree(); feedback(TEXT.reset, 'info'); });
+$('tree-reset-button').addEventListener('click', resetTree);
+treeStageEl.addEventListener('click', (event) => {
+  const signalButton = event.target.closest('[data-tree-stage-signal]');
+  if (signalButton) {
+    const signal = signalButton.dataset.treeStageSignal;
+    recordSignal(signal);
+    window.requestAnimationFrame(() => treeStageEl.querySelector(`[data-tree-stage-signal="${signal}"]`)?.focus());
+    return;
+  }
+  const actionButton = event.target.closest('[data-tree-stage-action]');
+  if (!actionButton) return;
+  if (actionButton.dataset.treeStageAction === 'choose') chooseTreeLetter();
+  if (actionButton.dataset.treeStageAction === 'reset') resetTree();
+});
+treeMapToolbarEl.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-tree-zoom]');
+  if (!button) return;
+  if (button.dataset.treeZoom === 'out') setTreeMapZoom(treeMapZoom - .5);
+  if (button.dataset.treeZoom === 'in') setTreeMapZoom(treeMapZoom + .5);
+  if (button.dataset.treeZoom === 'fit') setTreeMapZoom(1);
+});
 $('play-button').addEventListener('click', () => playMorse(level().message));
 $('replay-button').addEventListener('click', () => playMorse(level().message));
 answerOptionsEl.addEventListener('click', (event) => {
@@ -934,6 +1335,7 @@ answerOptionsEl.addEventListener('click', (event) => {
 });
 $('restart-button').addEventListener('click', () => {
   window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
   window.clearTimeout(treePauseTimer);
   morseKeyDownAt = 0;
   freeKeyDownAt = 0;
@@ -965,8 +1367,10 @@ window.addEventListener('keydown', (event) => {
   if (event.target.matches?.('input, textarea')) return;
   const nativeControl = event.target.closest?.('button, input, a, select, textarea, summary');
   if (event.code === 'Space') {
+    if (nativeControl) return;
     event.preventDefault();
     if ((mode === 'tree' || mode === 'create' || mode === 'free') && !event.repeat && !morseKeyDownAt) {
+      pauseFreeTimersForKeyDown();
       morseKeyDownAt = performance.now();
       startMorseKeyTone();
     }
@@ -981,6 +1385,8 @@ window.addEventListener('keydown', (event) => {
     event.preventDefault();
     if (mode === 'tree') {
       treePath = treePath.slice(0, -1);
+      treeLastMovePath = '';
+      treeNotice = '';
       renderTree();
       if (treePath) scheduleTreeReset();
       else window.clearTimeout(treePauseTimer);
@@ -992,13 +1398,23 @@ window.addEventListener('keydown', (event) => {
       freeInput = freeInput.slice(0, -1);
       updateFreeMode();
       if (freeInput) scheduleFreeFinish();
+      else {
+        window.clearTimeout(inputPauseTimer);
+        window.clearTimeout(wordPauseTimer);
+      }
     }
   }
   else if (event.key.toLowerCase() === 'r' && mode === 'tree') {
-    window.clearTimeout(treePauseTimer);
-    treePath = '';
-    renderTree();
+    resetTree();
   }
+});
+window.addEventListener('resize', () => {
+  window.clearTimeout(treeResizeTimer);
+  treeResizeTimer = window.setTimeout(() => {
+    if (mode !== 'tree') return;
+    treeCentred = false;
+    centreTreeOnCurrentNode();
+  }, 120);
 });
 window.addEventListener('keyup', (event) => {
   if (event.code !== 'Space' || !morseKeyDownAt) return;
@@ -1006,7 +1422,7 @@ window.addEventListener('keyup', (event) => {
   const duration = performance.now() - morseKeyDownAt;
   morseKeyDownAt = 0;
   stopMorseKeyTone();
-  recordSignal(duration < DOT_THRESHOLD_MS ? '.' : '-', true);
+  recordSignal(duration < dashThresholdMs ? '.' : '-', true);
 });
 window.addEventListener('blur', () => {
   morseKeyDownAt = 0;
@@ -1015,14 +1431,20 @@ window.addEventListener('blur', () => {
   stopMorseKeyTone();
 });
 soundToggle.addEventListener('change', unlockBrowserAudio);
+dashThresholdInput.addEventListener('input', () => setDashThreshold(dashThresholdInput.value));
+dashThresholdInput.addEventListener('change', setDashThresholdOnHardware);
 letterPauseInput.addEventListener('input', () => setCharacterPause(letterPauseInput.value));
 letterPauseInput.addEventListener('change', setCharacterPauseOnHardware);
+wordPauseInput.addEventListener('input', () => setWordPause(wordPauseInput.value));
 if (wifiSetupForm) wifiSetupForm.addEventListener('submit', configureHomeWifi);
+if (otaFileInput) otaFileInput.addEventListener('change', showOtaFileSelection);
+if (otaUpdateForm) otaUpdateForm.addEventListener('submit', uploadFirmware);
 document.addEventListener('pointerdown', unlockBrowserAudio, { once: true, passive: true });
 function buildAlphabet() {
   $('alphabet').innerHTML = Object.entries(LETTERS).sort(([a], [b]) => a.localeCompare(b)).map(([letter, code]) => `<div class="alphabet-item"><strong>${letter}</strong><span>${spacedVisualCode(code)}</span></div>`).join('');
 }
 buildAlphabet();
+setDashThreshold(dashThresholdMs);
 setCharacterPause(characterPauseMs);
 updateMission();
 updateWritingMode();
