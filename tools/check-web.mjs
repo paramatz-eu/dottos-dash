@@ -5,7 +5,7 @@
 //
 // Run with: node tools/check-web.mjs
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -135,7 +135,14 @@ for (const entity of COUPLED_ENTITIES) {
   }
 }
 
-// 5. Those SSE filters are substring matches, so a newly added entity can silently
+// 5. Every page at the root is published in German too. Shipping one without its
+//    translation strands half the audience on a dead link.
+for (const page of ['index.html', 'build.html', 'flash.html']) {
+  const german = join(root, 'de', page);
+  if (!existsSync(german)) fail(`de/${page} is missing — every root page needs its German counterpart.`);
+}
+
+// 6. Those SSE filters are substring matches, so a newly added entity can silently
 //    steal another one's events. Every firmware entity must match at most the
 //    filter it is supposed to match.
 const sseFilters = [...new Set(COUPLED_ENTITIES.filter((e) => e.sse).map((e) => e.sse))];

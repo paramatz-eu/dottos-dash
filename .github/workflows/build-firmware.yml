@@ -63,9 +63,10 @@ jobs:
 
           # Put the useful flash images directly at the artifact root, without
           # hidden .pioenvs directories that mobile file managers may conceal.
+          # The esp-idf framework produces exactly these two images: a factory
+          # image for the first USB install, an OTA image for later updates.
           copy_named 'firmware.factory.bin' "$target-factory.bin"
           copy_named 'firmware.ota.bin'     "$target-ota.bin"
-          copy_named 'firmware.bin'         "$target-firmware.bin"
 
           # Ensure at least one flashable image was collected.
           find "$out" -maxdepth 1 -type f -name '*.bin' -print -quit | grep -q .

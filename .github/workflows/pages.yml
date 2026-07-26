@@ -1,0 +1,119 @@
+name: Publish the web game
+
+# Publishes the browser game and the flashing page to GitHub Pages.
+#
+# Firmware binaries are taken from the latest GitHub Release rather than
+# recompiled here. That is deliberate: the flashing page should only ever offer
+# a build that was tested on real hardware, and Pages then serves the images
+# from its own origin so the browser flasher needs no cross-origin access.
+# Until the first release exists, the site deploys without them and the flashing
+# page says so.
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish; queue at most one more behind it.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Assemble the site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Check the game before publishing it
+        run: |
+          node --check app.js
+          node tools/check-web.mjs
+
+      - name: Copy the site
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p site/firmware
+          cp index.html build.html flash.html style.css app.js site/
+          mkdir -p site/de
+          cp de/index.html de/build.html de/flash.html site/de/
+
+      - name: Add firmware from the latest release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Drafts are not downloadable by anyone else, so they must not be
+          # advertised on the flashing page.
+          tag="$(gh release list --limit 1 --exclude-drafts --json tagName --jq '.[0].tagName // empty')"
+
+          if [ -z "$tag" ]; then
+            echo "No release found. Publishing the game without the firmware images."
+            echo '{"tag": null}' > site/firmware/release.json
+            exit 0
+          fi
+
+          echo "Using release $tag"
+          # gh exits non-zero when a release carries no matching asset. That is a
+          # legitimate state, so handle it rather than failing the whole deploy.
+          gh release download "$tag" --dir site/firmware --pattern '*-factory.bin' --clobber || true
+
+          if ! ls site/firmware/*-factory.bin >/dev/null 2>&1; then
+            echo "::warning::Release $tag has no *-factory.bin asset. Publishing without the firmware images."
+            echo '{"tag": null}' > site/firmware/release.json
+            exit 0
+          fi
+
+          # A manifest per variant, next to its image so the relative path in it
+          # resolves on Pages. Offset 0 is correct for an ESPHome factory image,
+          # which already contains the bootloader and partition table.
+          for variant in piezo max98357a; do
+            bin="dottos-dash-$variant-factory.bin"
+            if [ ! -f "site/firmware/$bin" ]; then
+              echo "::warning::$bin is missing from release $tag; its install button will not work."
+              continue
+            fi
+            cat > "site/firmware/dottos-dash-$variant.manifest.json" <<JSON
+          {
+            "name": "Dotto's Dash",
+            "version": "$tag",
+            "new_install_prompt_erase": true,
+            "builds": [
+              {
+                "chipFamily": "ESP32",
+                "parts": [{ "path": "$bin", "offset": 0 }]
+              }
+            ]
+          }
+          JSON
+          done
+
+          printf '{"tag": "%s"}\n' "$tag" > site/firmware/release.json
+          ls -lh site/firmware
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

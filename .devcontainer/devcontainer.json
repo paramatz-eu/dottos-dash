@@ -1,0 +1,28 @@
+{
+  "name": "Dotto's Dash",
+  // Pinned to the exact image .github/workflows/build-firmware.yml compiles with,
+  // so a local compile cannot drift from what CI produces. Bump both together.
+  "image": "ghcr.io/esphome/esphome:2026.7.2",
+  // The image's entrypoint starts the ESPHome dashboard; keep the container idle
+  // so VS Code owns the session and `esphome` is used from the terminal.
+  "overrideCommand": true,
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "22" },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "redhat.vscode-yaml",
+        "ms-vscode.live-server",
+        "GitHub.vscode-pull-request-github"
+      ],
+      "settings": {
+        "files.eol": "\n"
+      }
+    }
+  },
+  // The web game is static, so a plain server is enough to preview it.
+  "forwardPorts": [8000],
+  "postCreateCommand": "esphome version && node --version"
+}

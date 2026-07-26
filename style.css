@@ -291,3 +291,27 @@ footer { padding: 1.5rem; color: #5b6580; text-align: center; font-weight: 700; 
   .component-grid, .word-list { grid-template-columns: 1fr; }
   .flow-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Browser flashing page (flash.html / de/flash.html). Unlike the rest of the
+   project this page needs the internet, so it deliberately looks a little more
+   like a utility than like the game. */
+.flash-layout { display: grid; gap: 1.1rem; max-width: 52rem; }
+.flash-card { padding: 1.35rem; border: 3px solid var(--line); border-radius: 1.3rem; background: white; box-shadow: 0 6px 0 #e9ecf8; }
+.flash-card h2 { margin: .2rem 0 .7rem; color: var(--navy); font-size: clamp(1.35rem, 3.6vw, 1.9rem); }
+.flash-card h3 { margin: 0 0 .3rem; color: var(--purple); }
+.flash-card p { line-height: 1.55; }
+.flash-steps { margin: .6rem 0; padding-left: 1.3rem; }
+.flash-steps li { margin-bottom: .5rem; line-height: 1.55; }
+.flash-choice { display: flex; flex-wrap: wrap; gap: .9rem; align-items: center; justify-content: space-between; margin: .9rem 0; padding: 1rem; border: 2px solid var(--line); border-radius: 1rem; background: var(--soft); }
+.flash-choice > div { flex: 1 1 18rem; }
+.flash-choice p { margin: .3rem 0 0; font-size: .96rem; }
+.flash-tag { margin-left: .4rem; padding: .18rem .5rem; border-radius: 99rem; background: var(--mint); color: var(--ink); font-size: .72rem; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; vertical-align: middle; }
+.flash-unsupported { display: block; max-width: 18rem; color: #8d2942; font-weight: 700; font-size: .92rem; }
+.flash-release { margin: 0 0 .8rem; font-weight: 700; color: var(--navy); }
+.flash-release[data-state="none"] { padding: .75rem; border-radius: .75rem; background: #fff8e6; color: #7a5600; }
+
+@media (max-width: 720px) {
+  .flash-card { padding: 1rem; }
+  .flash-choice { flex-direction: column; align-items: stretch; }
+  .flash-unsupported { max-width: none; }
+}

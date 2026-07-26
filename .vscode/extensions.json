@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    // YAML schema support and validation for the ESPHome firmware files.
+    "redhat.vscode-yaml",
+    // Preview index.html / de/index.html with auto-refresh, without a build step.
+    "ms-vscode.live-server",
+    // Review pull requests and Actions runs without leaving the editor.
+    "GitHub.vscode-pull-request-github",
+    // Open this repository in the pinned ESPHome container, locally or in Codespaces.
+    "ms-vscode-remote.remote-containers"
+  ]
+}

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Die Dotto's-Dash-Firmware direkt aus dem Browser auf einen ESP32 installieren.">
+  <title>Dotto’s Dash flashen</title>
+  <link rel="stylesheet" href="../style.css">
+  <!-- Anders als das Spiel kann diese Seite nicht offline arbeiten: Sie lädt die
+       Firmware und spricht über WebSerial mit der Platine. Nur deshalb ist hier
+       ein Skript von einem CDN in Ordnung – sonst nirgends im Projekt. -->
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+</head>
+<body>
+  <main class="page build-page">
+    <header class="hero">
+      <a class="build-back" href="index.html">← Zurück zu Dotto’s Dash</a>
+      <p class="language-link"><a href="../flash.html">English</a></p>
+      <p class="eyebrow">Dotto auf eine echte Platine bringen</p>
+      <h1>Den ESP32 aus dem Browser flashen</h1>
+      <p class="hero-copy">Nichts zu installieren, kein ESPHome nötig. Die Platine mit einem USB-Kabel an diesen Computer stecken, einen Knopf drücken und warten.</p>
+      <p class="offline-badge">Erwachsene Person für USB · Chrome oder Edge am Computer · Ab 10 Jahren</p>
+    </header>
+
+    <div class="flash-layout">
+      <section class="flash-card">
+        <p class="eyebrow">Vor dem Start</p>
+        <h2>Drei Dinge prüfen</h2>
+        <ol class="flash-steps">
+          <li><strong>Chrome oder Edge am Computer benutzen.</strong> Firefox und Safari können nicht mit einer USB-Platine sprechen, Handys gar nicht. Das Handy kommt erst später zum Spielen dazu.</li>
+          <li><strong>Ein Daten-USB-Kabel benutzen.</strong> Manche Kabel übertragen nur Strom. Wenn die Platine nie in der Liste auftaucht, ist meist ein reines Ladekabel schuld.</li>
+          <li><strong>Die Version zum eigenen Tonteil wählen.</strong> Wer noch keinen Ton verkabelt hat, nimmt die Piezo-Version — sie passt auch, wenn an GPIO27 noch nichts angeschlossen ist.</li>
+        </ol>
+        <div class="safety-note">
+          <strong>Sicherheit:</strong> Vor jeder Änderung an den Kabeln USB abziehen und niemals 5&nbsp;V an einen GPIO-Pin des ESP32 legen. Die Platine während der ganzen Installation eingesteckt lassen; ein Abziehen mittendrin kann sie ohne funktionierende Firmware zurücklassen.
+        </div>
+      </section>
+
+      <section class="flash-card">
+        <p class="eyebrow">Schritt 1</p>
+        <h2>Version auswählen</h2>
+
+        <p id="flash-release" class="flash-release" data-release="../firmware/release.json" aria-live="polite"></p>
+
+        <div id="flash-builds">
+        <div class="flash-choice">
+          <div>
+            <h3>Piezo-Summer <span class="flash-tag">Hier anfangen</span></h3>
+            <p>Die empfohlene erste Version. Sie funktioniert mit einem passiven Piezo an GPIO27 — und auch ganz ohne angeschlossenes Tonteil.</p>
+          </div>
+          <esp-web-install-button manifest="../firmware/dottos-dash-piezo.manifest.json">
+            <button class="primary-button" slot="activate">Verbinden und installieren</button>
+            <span slot="unsupported" class="flash-unsupported">Dieser Browser kann keine Platine flashen. Die Seite in Chrome oder Edge am Computer öffnen.</span>
+            <span slot="not-allowed" class="flash-unsupported">Flashen braucht eine sichere Verbindung (https). Bitte die veröffentlichte Seite statt einer lokalen Datei öffnen.</span>
+          </esp-web-install-button>
+        </div>
+
+        <div class="flash-choice">
+          <div>
+            <h3>MAX98357A-Verstärker</h3>
+            <p>Nur wählen, wenn wirklich ein MAX98357A und ein kleiner Lautsprecher verkabelt sind. Diese Version benutzt andere Pins — die falsche Wahl lässt euch ohne Ton zurück.</p>
+          </div>
+          <esp-web-install-button manifest="../firmware/dottos-dash-max98357a.manifest.json">
+            <button class="secondary-button" slot="activate">Verbinden und installieren</button>
+            <span slot="unsupported" class="flash-unsupported">Dieser Browser kann keine Platine flashen. Die Seite in Chrome oder Edge am Computer öffnen.</span>
+            <span slot="not-allowed" class="flash-unsupported">Flashen braucht eine sichere Verbindung (https). Bitte die veröffentlichte Seite statt einer lokalen Datei öffnen.</span>
+          </esp-web-install-button>
+        </div>
+        </div>
+
+        <p class="keyboard-help">Ein Fenster fragt nach dem seriellen Anschluss. Ist die Liste leer, zuerst ein anderes USB-Kabel oder einen anderen Anschluss probieren. Taucht die Platine immer noch nicht auf: <strong>BOOT</strong> halten, kurz <strong>EN</strong> tippen, BOOT noch zwei Sekunden halten, loslassen und es erneut versuchen.</p>
+      </section>
+
+      <section class="flash-card">
+        <p class="eyebrow">Schritt 2</p>
+        <h2>Spielen</h2>
+        <p>Nach der Installation startet die Platine neu und macht ihr eigenes WLAN mit dem Namen <strong>Dotto's Dash</strong> und dem Passwort <strong>dottodash</strong>.</p>
+        <ol class="flash-steps">
+          <li>Mit Handy, Tablet oder Computer in dieses WLAN gehen.</li>
+          <li><strong>http://192.168.4.1/</strong> öffnen — genau so, mit <code>http://</code> und nicht <code>https://</code>.</li>
+          <li>Das ganze Spiel kommt von der Platine selbst. Ab hier wird kein Internet mehr gebraucht.</li>
+        </ol>
+        <p class="keyboard-help">Bei Android steht am WLAN vielleicht <em>Kein Internet</em>. Dann <strong>Verbunden bleiben</strong> wählen, den Hinweis schließen und die Adresse in Chrome öffnen.</p>
+        <p>Die eingebaute <strong>BOOT</strong>-Taste ist sofort eine Morse-Taste — es gibt also schon etwas zum Ausprobieren, bevor irgendetwas verkabelt ist. Licht, Taster, Drehgeber und Ton kommen Schritt für Schritt in der <a href="build.html">Bauanleitung</a> dazu.</p>
+      </section>
+
+      <section class="flash-card">
+        <p class="eyebrow">Später</p>
+        <h2>Aktualisieren ohne Kabel</h2>
+        <p>Nur die erste Installation braucht USB. Für eine spätere Version ins WLAN <strong>Dotto's Dash</strong> gehen, das Spiel öffnen und unten <strong>Für Erwachsene: Firmware aktualisieren</strong> benutzen. Dort eine <code>-ota.bin</code> auswählen — niemals eine <code>-factory.bin</code>.</p>
+        <p class="keyboard-help">Wer die Platine aktualisiert, muss in ihrer Nähe sein. Das ist Absicht: Die Platine ist nie aus dem Internet erreichbar.</p>
+      </section>
+    </div>
+  </main>
+  <footer>Dotto läuft mit Neugier, Punkten und Strichen. ● —</footer>
+
+  <script>
+    // Das Deployment schreibt firmware/release.json. Install-Knöpfe anzubieten,
+    // die auf noch nicht vorhandene Dateien zeigen, kostet nur Zeit — deshalb
+    // hier lieber deutlich sagen, dass es noch keine Firmware gibt.
+    (function () {
+      var status = document.getElementById('flash-release');
+      var builds = document.getElementById('flash-builds');
+      if (!status || !builds) return;
+      fetch(status.dataset.release, { cache: 'no-store' })
+        .then(function (response) { return response.ok ? response.json() : Promise.reject(); })
+        .then(function (release) {
+          if (release && release.tag) {
+            status.textContent = 'Firmware-Version ' + release.tag + ', gebaut und auf echter Hardware getestet.';
+            return;
+          }
+          throw new Error('no release');
+        })
+        .catch(function () {
+          status.dataset.state = 'none';
+          status.textContent = 'Es gibt noch keine veröffentlichte Firmware, also lässt sich von dieser Seite noch nichts installieren. Das Spiel oben funktioniert trotzdem in jedem Browser.';
+          builds.hidden = true;
+        });
+    })();
+  </script>
+</body>
+</html>

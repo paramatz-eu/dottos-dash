@@ -5,9 +5,16 @@
 secrets.yaml
 *.bin
 
+# Local Python environment for the optional ESPHome install
+.venv/
+
 # Operating-system and editor noise
 .DS_Store
 Thumbs.db
-.vscode/
-.claude/settings.local.json
 __pycache__/
+.claude/settings.local.json
+
+# Personal editor settings stay local, but the shared extension
+# recommendations are part of the project.
+.vscode/*
+!.vscode/extensions.json

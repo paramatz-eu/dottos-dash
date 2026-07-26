@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Install the Dotto's Dash firmware on an ESP32 straight from your browser.">
+  <title>Flash Dotto's Dash</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Unlike the game, this page cannot work offline: it downloads firmware and
+       talks to the board over WebSerial. That is why loading a script from a CDN
+       is acceptable here and nowhere else in the project. -->
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+</head>
+<body>
+  <main class="page build-page">
+    <header class="hero">
+      <a class="build-back" href="index.html">← Back to Dotto's Dash</a>
+      <p class="language-link"><a href="de/flash.html">Deutsch</a></p>
+      <p class="eyebrow">Put Dotto on a real board</p>
+      <h1>Flash the ESP32 from your browser</h1>
+      <p class="hero-copy">No software to install and no ESPHome needed. Plug the board into this computer with a USB cable, press one button, and wait.</p>
+      <p class="offline-badge">Adult helper for USB · Chrome or Edge on a computer · Ages 10+</p>
+    </header>
+
+    <div class="flash-layout">
+      <section class="flash-card">
+        <p class="eyebrow">Before you start</p>
+        <h2>Three things to check</h2>
+        <ol class="flash-steps">
+          <li><strong>Use Chrome or Edge on a computer.</strong> Firefox and Safari cannot talk to a USB board, and phones cannot do this at all. A phone is only used later, to play the game.</li>
+          <li><strong>Use a data USB cable.</strong> Some cables only carry power. If the board never appears in the list, a charge-only cable is the usual reason.</li>
+          <li><strong>Pick the build that matches your sound part.</strong> If you have not wired any sound yet, choose the piezo build — it is the right choice even with nothing connected to GPIO27.</li>
+        </ol>
+        <div class="safety-note">
+          <strong>Safety:</strong> unplug USB before changing any wire, and never connect 5&nbsp;V to an ESP32 GPIO pin. Leave the board plugged in for the whole install; unplugging part-way can leave it without working firmware.
+        </div>
+      </section>
+
+      <section class="flash-card">
+        <p class="eyebrow">Step 1</p>
+        <h2>Choose your build</h2>
+
+        <p id="flash-release" class="flash-release" data-release="firmware/release.json" aria-live="polite"></p>
+
+        <div id="flash-builds">
+        <div class="flash-choice">
+          <div>
+            <h3>Piezo buzzer <span class="flash-tag">Start here</span></h3>
+            <p>The recommended first build. Works with a passive piezo on GPIO27, or with no sound part connected at all.</p>
+          </div>
+          <esp-web-install-button manifest="firmware/dottos-dash-piezo.manifest.json">
+            <button class="primary-button" slot="activate">Connect and install</button>
+            <span slot="unsupported" class="flash-unsupported">This browser cannot flash a board. Open this page in Chrome or Edge on a computer.</span>
+            <span slot="not-allowed" class="flash-unsupported">Flashing needs a secure connection (https). Open the published page rather than a local file.</span>
+          </esp-web-install-button>
+        </div>
+
+        <div class="flash-choice">
+          <div>
+            <h3>MAX98357A amplifier</h3>
+            <p>Choose this only if you wired a MAX98357A board and a small speaker. It uses different pins, so flashing the wrong one leaves you without sound.</p>
+          </div>
+          <esp-web-install-button manifest="firmware/dottos-dash-max98357a.manifest.json">
+            <button class="secondary-button" slot="activate">Connect and install</button>
+            <span slot="unsupported" class="flash-unsupported">This browser cannot flash a board. Open this page in Chrome or Edge on a computer.</span>
+            <span slot="not-allowed" class="flash-unsupported">Flashing needs a secure connection (https). Open the published page rather than a local file.</span>
+          </esp-web-install-button>
+        </div>
+        </div>
+
+        <p class="keyboard-help">A window will ask which serial port to use. If the list is empty, try another USB cable or another port first. If the board still does not appear, hold <strong>BOOT</strong>, tap <strong>EN</strong>, keep holding BOOT for two seconds, release it, and try again.</p>
+      </section>
+
+      <section class="flash-card">
+        <p class="eyebrow">Step 2</p>
+        <h2>Play it</h2>
+        <p>When the install finishes, the board restarts and makes its own Wi-Fi network called <strong>Dotto's Dash</strong>, with the password <strong>dottodash</strong>.</p>
+        <ol class="flash-steps">
+          <li>Join that network with a phone, tablet or computer.</li>
+          <li>Open <strong>http://192.168.4.1/</strong> — type it exactly, with <code>http://</code> and not <code>https://</code>.</li>
+          <li>The whole game loads from the board itself. No internet is used from here on.</li>
+        </ol>
+        <p class="keyboard-help">On Android the network may say <em>No internet</em>. Choose <strong>Stay connected</strong>, close the notice, then open the address in Chrome.</p>
+        <p>The built-in <strong>BOOT</strong> button already works as a Morse key, so there is something to play with before any wiring. To add the light, key, dial and sound one step at a time, follow the <a href="build.html">build lesson</a>.</p>
+      </section>
+
+      <section class="flash-card">
+        <p class="eyebrow">Later</p>
+        <h2>Updating without a cable</h2>
+        <p>Only the first install needs USB. For a later version, join the <strong>Dotto's Dash</strong> network, open the game, and use <strong>For adults: update firmware</strong> at the bottom of the page. Choose an <code>-ota.bin</code> file there — never a <code>-factory.bin</code>.</p>
+        <p class="keyboard-help">Whoever updates the board has to be near it. This is a deliberate part of the design: the board is never reachable from the internet.</p>
+      </section>
+    </div>
+  </main>
+  <footer>Dotto runs on curiosity, dots and dashes. ● —</footer>
+
+  <script>
+    // The deploy writes firmware/release.json. Offering install buttons that
+    // point at binaries which do not exist yet would waste a helper's time, so
+    // say plainly that no firmware has been released instead.
+    (function () {
+      var status = document.getElementById('flash-release');
+      var builds = document.getElementById('flash-builds');
+      if (!status || !builds) return;
+      fetch(status.dataset.release, { cache: 'no-store' })
+        .then(function (response) { return response.ok ? response.json() : Promise.reject(); })
+        .then(function (release) {
+          if (release && release.tag) {
+            status.textContent = 'Firmware version ' + release.tag + ', built and tested on real hardware.';
+            return;
+          }
+          throw new Error('no release');
+        })
+        .catch(function () {
+          status.dataset.state = 'none';
+          status.textContent = 'No firmware has been released yet, so there is nothing to install from this page. The game above still works in any browser.';
+          builds.hidden = true;
+        });
+    })();
+  </script>
+</body>
+</html>
