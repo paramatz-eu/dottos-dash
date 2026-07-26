@@ -22,7 +22,11 @@ const ESP_ONLY_IDS = new Set([
   'wifi-password',
   'wifi-connect-button',
   'wifi-setup-status',
+  'ota-update-form',
   'ota-firmware',
+  'ota-install-button',
+  'ota-progress',
+  'ota-status',
 ]);
 
 const problems = [];

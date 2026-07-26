@@ -70,7 +70,7 @@ function renderEmbeddedEspGame() {
       <section class="make-it-card"><h2>Baue Dottos Controller</h2><p>Die Taste und der Drehgeber senden direkt in dieses Spiel. Ein kurzer Tastendruck ist ein Punkt, ein langer ein Strich. Mit einem Piezo oder MAX98357A hörst du jeden Checkpoint.</p><p><strong>Tipp:</strong> Verbinde zuerst das WLAN <em>Dotto's Dash</em>, dann öffne diese Seite. Internet brauchst du nie.</p><details class="build-guide"><summary>📘 Bauanleitung öffnen</summary><div class="build-guide-content"><p>Diese Kurz-Bauanleitung ist direkt auf dem ESP32 gespeichert und funktioniert deshalb auch ohne Internet.</p><div class="safety-note"><strong>Sicherheit:</strong> Vor jeder Änderung der Kabel USB abziehen. Einen GPIO-Pin nie mit 5 V verbinden.</div><h3>1. Firmware</h3><p>Zuerst die Piezo-Version flashen: <code>esphome run firmware/dottos-dash-piezo.yaml</code>. Die eingebaute <strong>BOOT</strong>-Taste ist danach bereits eine Morse-Taste: kurz = Punkt, lang = Strich. BOOT beim Neustart oder Flashen nicht gedrückt halten.</p><h3>2. RGB-Licht und externer Taster</h3><table class="wire-table"><thead><tr><th>Bauteil</th><th>ESP32</th></tr></thead><tbody><tr><td>RGB-Modul R / G / B</td><td>GPIO16 / GPIO17 / GPIO18</td></tr><tr><td>RGB gemeinsamer Kathoden-Pin</td><td>GND</td></tr><tr><td>Taster, eine Seite</td><td>GPIO13</td></tr><tr><td>Taster, andere Seite</td><td>GND</td></tr></tbody></table><p>Die BOOT-Taste braucht keine Kabel. Der externe Taster bleibt zusätzlich nutzbar.</p><h3>3. Ton</h3><table class="wire-table"><thead><tr><th>Passiver Piezo</th><th>ESP32</th></tr></thead><tbody><tr><td>+</td><td>GPIO27</td></tr><tr><td>-</td><td>GND</td></tr></tbody></table><p>Nur ein <strong>passiver</strong> Piezo erzeugt die Morse-Töne am ESP32. Für Browser-Töne zuerst einmal auf dem Handy in diese Seite tippen; das ist eine Sicherheitsregel des Browsers.</p><h3>4. Drehgeber (optional)</h3><table class="wire-table"><thead><tr><th>Drehgeber</th><th>ESP32</th></tr></thead><tbody><tr><td>CLK / A</td><td>GPIO21</td></tr><tr><td>DT / B</td><td>GPIO19</td></tr><tr><td>SW</td><td>GPIO13</td></tr><tr><td>GND</td><td>GND</td></tr><tr><td>VCC</td><td>3V3</td></tr></tbody></table><p>Links drehen = Punkt, rechts drehen = Strich. Ist es vertauscht, USB abziehen und nur CLK und DT tauschen.</p><h3>Test</h3><p>Ein kurzer Druck muss cyan blinken und einen Punkt senden; ein langer Druck orange und einen Strich. Die einstellbare Buchstabenpause oben beginnt bei 500 ms. Piezo stumm? Prüfen: passiv, an GPIO27 und GND.</p></div></details></section>
       <details class="family-guide"><summary>Für Erwachsene: Familienleitfaden</summary><div class="family-guide-content"><p>Beginnt mit dem Spiel und ergänzt den Controller Stück für Stück. Eine funktionierende BOOT-Taste ist bereits ein vollständiges Projekt.</p><h3>Vor dem Einschalten</h3><ul><li>Eine erwachsene Person sollte die Platine flashen und die Verkabelung prüfen.</li><li>Vor jeder Änderung der Kabel USB abziehen und niemals 5 V mit einem ESP32-GPIO-Pin verbinden.</li><li>Wird die Platine heiß, riecht ungewöhnlich, startet ständig neu oder trennt die Verbindung: USB abziehen.</li></ul><h3>Eine entspannte erste Runde</h3><ol><li>Das Spiel zunächst ohne Hardware erkunden.</li><li><strong>E</strong> (Punkt), <strong>T</strong> (Strich) und dann <strong>SOS</strong> ausprobieren.</li><li>Nach der Erwachsenen-Prüfung die eingebaute BOOT-Taste des ESP32 testen.</li><li>Licht, Ton, Taste oder Drehgeber erst für das nächste Experiment ergänzen.</li></ol><h3>Privatsphäre und WLAN</h3><p>Das Spiel hat kein Konto, keine Analyse, keinen Cloud-Dienst und keinen Chat. Das lokale WLAN heißt <strong>Dotto’s Dash</strong>; das Passwort lautet <strong>dottodash</strong>. Internet wird nicht benötigt. Die optionale Heim-WLAN-Einrichtung ist eine Aufgabe für Erwachsene und gehört nur in ein vertrauenswürdiges Netzwerk.</p></div></details>
       <details class="wifi-card"><summary>Für Erwachsene: Mit Heim-WLAN verbinden</summary><div class="wifi-content"><p>Optional: Der ESP32 kann sich mit eurem 2,4-GHz-Heim-WLAN verbinden. Danach das Handy ebenfalls mit diesem WLAN verbinden und <strong>http://dottos-dash.local</strong> öffnen (bei der MAX98357A-Version: <strong>dottos-dash-max.local</strong>). Falls das nicht klappt, die IP-Adresse in der Geräteliste des Routers nachsehen.</p><p>Das Passwort wird nur an diesen ESP32 über das passwortgeschützte Dotto's-Dash-WLAN gesendet und nicht im Projekt gespeichert. Bei einem offenen WLAN das Passwortfeld leer lassen.</p><form id="wifi-setup-form" class="wifi-setup-form"><label class="write-label" for="wifi-ssid">WLAN-Name</label><input id="wifi-ssid" class="custom-message" type="text" maxlength="32" autocomplete="off" placeholder="Mein WLAN" required><label class="write-label" for="wifi-password">WLAN-Passwort</label><input id="wifi-password" class="custom-message" type="password" maxlength="63" autocomplete="current-password"><button id="wifi-connect-button" class="primary-button" type="submit">WLAN speichern &amp; verbinden</button></form><p id="wifi-setup-status" class="keyboard-help" aria-live="polite">Dottos Controller bleibt auch ohne Heim-WLAN nutzbar.</p></div></details>
-      <details class="ota-card"><summary>Für Erwachsene: Firmware aktualisieren</summary><div class="ota-content"><p>Nur eine normale OTA-Firmware-Datei mit <code>.bin</code> auswählen – niemals eine <code>factory.bin</code>. Während des Hochladens den ESP32 eingeschaltet lassen. Danach startet er selbst neu.</p><form action="/update" method="post" enctype="multipart/form-data"><label class="write-label" for="ota-firmware">Neue Firmware-Datei</label><input id="ota-firmware" class="ota-file-input" name="update" type="file" accept=".bin,application/octet-stream" required><button class="primary-button" type="submit">Firmware installieren</button></form></div></details>
+      <details class="ota-card"><summary>Für Erwachsene: Firmware aktualisieren</summary><div class="ota-content"><p>Nur eine normale OTA-Firmware-Datei mit <code>.bin</code> auswählen – niemals eine <code>factory.bin</code>. Während des Hochladens den ESP32 eingeschaltet lassen. Danach startet er selbst neu.</p><form id="ota-update-form" action="/update" method="post" enctype="multipart/form-data"><label class="write-label" for="ota-firmware">Neue Firmware-Datei</label><input id="ota-firmware" class="ota-file-input" name="update" type="file" accept=".bin,application/octet-stream" required><button id="ota-install-button" class="primary-button" type="submit">Firmware installieren</button><progress id="ota-progress" class="ota-progress" max="100" value="0" hidden aria-describedby="ota-status"></progress><p id="ota-status" class="ota-status" role="status" aria-live="polite">Wähle eine OTA-Datei aus, um den Namen und den Fortschritt zu sehen.</p></form></div></details>
     </main><footer>Dotto läuft mit Neugier, Punkten und Strichen. ● —</footer>`;
 }
 
@@ -352,6 +352,11 @@ const wifiSetupForm = $('wifi-setup-form');
 const wifiSsidInput = $('wifi-ssid');
 const wifiPasswordInput = $('wifi-password');
 const wifiSetupStatusEl = $('wifi-setup-status');
+const otaUpdateForm = $('ota-update-form');
+const otaFileInput = $('ota-firmware');
+const otaInstallButton = $('ota-install-button');
+const otaProgressEl = $('ota-progress');
+const otaStatusEl = $('ota-status');
 const storyPeriodEl = $('story-period');
 const storyTitleEl = $('story-title');
 const storyTextEl = $('story-text');
@@ -500,6 +505,105 @@ function setHardwareStatus(message) {
 }
 function setWifiSetupStatus(message) {
   if (wifiSetupStatusEl) wifiSetupStatusEl.textContent = message;
+}
+function setOtaStatus(message, state = 'info') {
+  if (!otaStatusEl) return;
+  otaStatusEl.textContent = message;
+  otaStatusEl.className = `ota-status ${state}`;
+}
+function formatFileSize(bytes) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+function otaFileProblem(file) {
+  if (!file) return 'Wähle zuerst eine Firmware-Datei aus.';
+  const name = file.name.toLowerCase();
+  if (!name.endsWith('.bin')) return 'Die Datei muss auf .bin enden.';
+  if (name.includes('factory')) return 'Das ist eine Factory-Datei. Bitte die Datei mit „-ota.bin“ auswählen.';
+  if (file.size === 0) return 'Die ausgewählte Datei ist leer. Bitte die OTA-Datei erneut herunterladen.';
+  return '';
+}
+function setOtaBusy(busy) {
+  if (otaFileInput) otaFileInput.disabled = busy;
+  if (otaInstallButton) otaInstallButton.disabled = busy;
+}
+function showOtaFileSelection() {
+  const file = otaFileInput?.files?.[0];
+  const problem = otaFileProblem(file);
+  if (otaProgressEl) otaProgressEl.hidden = true;
+  if (problem) return setOtaStatus(problem, file ? 'error' : 'info');
+  setOtaStatus(`Bereit: ${file.name} (${formatFileSize(file.size)}). Beim Installieren wird die Datei zum ESP32 übertragen.`, 'ready');
+}
+function waitForOtaRestart() {
+  const startedAt = Date.now();
+  const retry = () => {
+    window.setTimeout(async () => {
+      try {
+        const response = await fetch('/', { cache: 'no-store' });
+        if (!response.ok) throw new Error('ESP32 did not answer');
+        setOtaStatus('Fertig: Der ESP32 antwortet wieder. Die Seite wird mit der neuen Firmware neu geladen …', 'success');
+        window.setTimeout(() => window.location.reload(), 1200);
+      } catch {
+        if (Date.now() - startedAt < 60000) {
+          setOtaStatus('Schritt 3 von 3: Der ESP32 startet neu. Warte auf die Verbindung …', 'info');
+          retry();
+        } else {
+          setOtaStatus('Die Datei wurde angenommen, aber der ESP32 antwortet noch nicht. Warte noch etwas und öffne diese Seite erneut. Nicht den Strom trennen.', 'error');
+          setOtaBusy(false);
+        }
+      }
+    }, 2000);
+  };
+  retry();
+}
+function uploadFirmware(event) {
+  event.preventDefault();
+  const file = otaFileInput?.files?.[0];
+  const problem = otaFileProblem(file);
+  if (problem) return setOtaStatus(problem, 'error');
+
+  setOtaBusy(true);
+  if (otaProgressEl) {
+    otaProgressEl.hidden = false;
+    otaProgressEl.value = 0;
+  }
+  setOtaStatus(`Schritt 1 von 3: ${file.name} wird zum ESP32 übertragen …`, 'info');
+  const request = new XMLHttpRequest();
+  let uploadFinished = false;
+  request.open('POST', otaUpdateForm.action, true);
+  request.upload.addEventListener('progress', (progress) => {
+    if (!progress.lengthComputable) return;
+    const percent = Math.round((progress.loaded / progress.total) * 100);
+    if (otaProgressEl) otaProgressEl.value = percent;
+    setOtaStatus(`Schritt 1 von 3: Datei wird übertragen: ${percent}% (${formatFileSize(progress.loaded)} von ${formatFileSize(progress.total)}).`, 'info');
+    uploadFinished = percent === 100;
+  });
+  request.addEventListener('load', () => {
+    if (request.status < 200 || request.status >= 300) {
+      setOtaStatus(`Der ESP32 hat die Datei abgelehnt (HTTP ${request.status}). Prüfe, ob es die passende OTA-Datei für dieses Modell ist.`, 'error');
+      return setOtaBusy(false);
+    }
+    if (!request.responseText.includes('Update Successful')) {
+      setOtaStatus('Der ESP32 konnte diese Firmware nicht installieren. Prüfe, ob es die passende OTA-Datei (nicht Factory) für dieses Modell ist.', 'error');
+      return setOtaBusy(false);
+    }
+    if (otaProgressEl) otaProgressEl.value = 100;
+    setOtaStatus('Schritt 2 von 3: Datei angekommen. Der ESP32 prüft und schreibt die Firmware; die Seite darf kurz nicht antworten.', 'info');
+    waitForOtaRestart();
+  });
+  request.addEventListener('error', () => {
+    if (uploadFinished) {
+      setOtaStatus('Schritt 2 von 3: Die Übertragung ist abgeschlossen. Der ESP32 startet wahrscheinlich schon neu …', 'info');
+      return waitForOtaRestart();
+    }
+    setOtaStatus('Die Datei konnte nicht vollständig zum ESP32 übertragen werden. Prüfe, ob du noch mit „Dotto’s Dash“ verbunden bist, und versuche es erneut.', 'error');
+    setOtaBusy(false);
+  });
+  request.addEventListener('abort', () => {
+    setOtaStatus('Das Firmware-Update wurde abgebrochen. Die alte Firmware sollte weiterlaufen; versuche es bei stabiler WLAN-Verbindung erneut.', 'error');
+    setOtaBusy(false);
+  });
+  request.send(new FormData(otaUpdateForm));
 }
 async function configureHomeWifi(event) {
   event.preventDefault();
@@ -1059,6 +1163,8 @@ soundToggle.addEventListener('change', unlockBrowserAudio);
 letterPauseInput.addEventListener('input', () => setCharacterPause(letterPauseInput.value));
 letterPauseInput.addEventListener('change', setCharacterPauseOnHardware);
 if (wifiSetupForm) wifiSetupForm.addEventListener('submit', configureHomeWifi);
+if (otaFileInput) otaFileInput.addEventListener('change', showOtaFileSelection);
+if (otaUpdateForm) otaUpdateForm.addEventListener('submit', uploadFirmware);
 document.addEventListener('pointerdown', unlockBrowserAudio, { once: true, passive: true });
 function buildAlphabet() {
   $('alphabet').innerHTML = Object.entries(LETTERS).sort(([a], [b]) => a.localeCompare(b)).map(([letter, code]) => `<div class="alphabet-item"><strong>${letter}</strong><span>${spacedVisualCode(code)}</span></div>`).join('');
