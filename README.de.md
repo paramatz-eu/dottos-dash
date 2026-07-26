@@ -100,7 +100,9 @@ Finde immer einen Buchstaben, bis die ganze Nachricht fertig ist.
 
 Im Morsebaum nach dem richtigen Knoten **Buchstaben wählen** oder `Eingabe`
 drücken. Die `Leertaste` bleibt ausschließlich die Morse-Taste. Ein unfertiger
-Weg springt nach 6 Sekunden ohne Eingabe zum Start zurück.
+Weg springt nach 6 Sekunden ohne Eingabe zum Start zurück. Die vollständige
+Karte wird zuerst ins Bild eingepasst; mit **−**, **Einpassen** und **+** lassen
+sich einzelne Äste näher ansehen.
 
 Die Nachrichten-Werkstatt erlaubt A–Z, Zahlen und Leerzeichen. Tasten-Töne und
 Pausenlänge stehen unter **Ton und Tasten-Einstellungen**.

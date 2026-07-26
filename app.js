@@ -59,7 +59,7 @@ function renderEmbeddedEspGame() {
 
       <section id="tree-panel" class="game-panel">
         <div class="tree-intro"><div><p id="tree-mission" class="mission-count"></p><h2>Führe Dotto zu <span id="tree-word" class="tree-word">E</span></h2><p>Finde den nächsten Buchstaben: <strong id="tree-target">E</strong>. Gehe mit einem Punkt nach links oder mit einem Strich nach rechts. Danach den Buchstaben wählen.</p></div><div id="tree-status" class="tree-status" aria-live="polite"></div></div>
-        <div class="tree-controls" aria-label="Steuerung für den Morsebaum"><button id="tree-dot-button" class="signal-button dot" type="button">← Punkt</button><button id="tree-dash-button" class="signal-button dash" type="button">Strich →</button><button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Buchstaben wählen ↵</button><button id="tree-reset-button" class="secondary-button" type="button">Neu beginnen</button></div><p class="tree-mobile-tip">Wische seitlich, um alle Code-Wege zu erkunden.</p><div id="morse-tree" class="tree-wrap" tabindex="0"></div>
+        <div class="tree-controls" aria-label="Steuerung für den Morsebaum"><button id="tree-dot-button" class="signal-button dot" type="button">← Punkt</button><button id="tree-dash-button" class="signal-button dash" type="button">Strich →</button><button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Buchstaben wählen ↵</button><button id="tree-reset-button" class="secondary-button" type="button">Neu beginnen</button></div><p class="tree-mobile-tip">Die ganze Karte passt unten ins Bild. Zoome hinein, um einen Ast anzusehen.</p><div id="morse-tree" class="tree-wrap" tabindex="0"></div>
       </section>
 
       <section id="receive-panel" class="receive-panel hidden"><div class="listen-card"><p id="receive-mission" class="mission-count"></p><h2>Was hat Dotto gehört?</h2><p>Starte das Signal, höre genau zu und wähle Dottos Nachricht.</p><div class="listen-controls"><button id="play-button" class="primary-button" type="button">▶ Morsecode abspielen</button><button id="replay-button" class="secondary-button" type="button">Noch einmal</button></div></div><div class="answer-card"><p class="prompt">Was bedeutet der Code?</p><div id="answer-options" class="answer-options" aria-live="polite"></div></div></section>
@@ -157,7 +157,14 @@ const TEXT = {
     treeReset: 'Reset',
     treeDotHint: 'go left',
     treeDashHint: 'go right',
-    treeMapHint: 'Swipe sideways to explore every code route.',
+    treeMapHint: 'The complete map fits below. Zoom in to inspect a branch.',
+    treeMapTitle: 'Full Morse map',
+    treeRouteTitle: 'Build the route',
+    treeGoal: 'Goal',
+    treeFit: 'Fit',
+    treeZoomOut: 'Zoom out',
+    treeZoomIn: 'Zoom in',
+    treeRouteProgress: (depth) => `Step ${depth} of 5`,
     treeStagePrompt: (letter) => `Find ${letter}. Choose a turn.`,
     ariaTree: 'Morse code tree. Dot branches go left and dash branches go right.',
   },
@@ -206,7 +213,14 @@ const TEXT = {
     treeReset: 'Neu beginnen',
     treeDotHint: 'nach links',
     treeDashHint: 'nach rechts',
-    treeMapHint: 'Wische seitlich, um alle Code-Wege zu erkunden.',
+    treeMapHint: 'Die ganze Karte passt unten ins Bild. Zoome hinein, um einen Ast anzusehen.',
+    treeMapTitle: 'Vollständiger Morsebaum',
+    treeRouteTitle: 'Baue den Weg',
+    treeGoal: 'Ziel',
+    treeFit: 'Einpassen',
+    treeZoomOut: 'Verkleinern',
+    treeZoomIn: 'Vergrößern',
+    treeRouteProgress: (depth) => `Schritt ${depth} von 5`,
     treeStagePrompt: (letter) => `Finde ${letter}. Wähle eine Richtung.`,
     ariaTree: 'Morsebaum. Punkt-Äste gehen nach links, Strich-Äste nach rechts.',
   },
@@ -370,6 +384,20 @@ treeStageEl.className = 'tree-stage';
 treeStageEl.setAttribute('role', 'group');
 treeStageEl.setAttribute('aria-label', TEXT.treeStageLabel);
 (treeMobileTipEl || treeEl).before(treeStageEl);
+const treeMapToolbarEl = document.createElement('div');
+treeMapToolbarEl.className = 'tree-map-toolbar';
+treeMapToolbarEl.innerHTML = `
+  <div class="tree-map-heading">
+    <span class="tree-map-icon" aria-hidden="true">🌿</span>
+    <span><strong>${TEXT.treeMapTitle}</strong><small><i class="tree-legend-line dot"></i>${TEXT.dot} ← <i class="tree-legend-line dash"></i>${TEXT.dash} →</small></span>
+  </div>
+  <div class="tree-map-actions" role="group" aria-label="${TEXT.treeMapTitle}">
+    <button class="tree-map-tool" type="button" data-tree-zoom="out" aria-label="${TEXT.treeZoomOut}">−</button>
+    <output class="tree-map-zoom" data-tree-zoom-output aria-live="polite">100%</output>
+    <button class="tree-map-tool tree-map-fit" type="button" data-tree-zoom="fit">${TEXT.treeFit}</button>
+    <button class="tree-map-tool" type="button" data-tree-zoom="in" aria-label="${TEXT.treeZoomIn}">+</button>
+  </div>`;
+(treeMobileTipEl || treeEl).before(treeMapToolbarEl);
 treeEl.removeAttribute('tabindex');
 if (treeMobileTipEl) treeMobileTipEl.textContent = TEXT.treeMapHint;
 const receiveMissionEl = $('receive-mission');
@@ -415,6 +443,7 @@ let treeLastMovePath = '';
 let treeNotice = '';
 let treeNoticeKind = 'info';
 let treeResizeTimer;
+let treeMapZoom = 1;
 let writingMessage = '';
 let writingIndex = 0;
 let levelIndex = Number(localStorage.getItem('dottos-dash-level') || 0);
@@ -1028,11 +1057,20 @@ function checkReceivedAnswer(answer) {
   saveProgress();
   updateMission();
 }
+const TREE_VIEWBOX_WIDTH = 1200;
+const TREE_VIEWBOX_HEIGHT = 730;
+const TREE_TOP = 78;
+const TREE_LEVEL_GAP = 126;
 function nodeForPath(path) { return MORSE[path] || ''; }
+function treeNodeRadius(depth) { return [38, 32, 27, 22, 17, 13][depth] || 13; }
 function position(path) {
   const depth = path.length;
   const index = parseInt(path.replace(/\./g, '0').replace(/-/g, '1') || '0', 2);
-  return { x: 1200 * (index + .5) / (2 ** depth), y: 80 + depth * 118 };
+  const sidePadding = 22;
+  return {
+    x: sidePadding + (TREE_VIEWBOX_WIDTH - sidePadding * 2) * (index + .5) / (2 ** depth),
+    y: TREE_TOP + depth * TREE_LEVEL_GAP,
+  };
 }
 function updateTreeStatus() {
   const shownPath = treePath ? visualCode(treePath) : TEXT.start;
@@ -1044,6 +1082,7 @@ function updateTreeStatus() {
 function renderTreeStage() {
   const shownPath = treePath ? visualCode(treePath) : TEXT.start;
   const selected = MORSE[treePath] || '—';
+  const currentLabel = selected === '—' ? TEXT.start : selected;
   const routeSlots = Array.from({ length: 5 }, (_, index) => {
     const signal = treePath[index];
     const direction = signal === '.' ? 'dot' : signal === '-' ? 'dash' : '';
@@ -1051,15 +1090,25 @@ function renderTreeStage() {
   }).join('');
   const notice = treeNotice || TEXT.treeStagePrompt(currentLetter());
   treeStageEl.innerHTML = `
-    <div class="tree-stage-identity">
-      <span class="tree-stage-dotto" aria-hidden="true"><span>●</span></span>
-      <span class="tree-stage-location"><small>${TEXT.treeAt}</small><strong>${shownPath}</strong></span>
-      <span class="tree-stage-letter" aria-label="${TEXT.letter}: ${selected}">${selected}</span>
+    <div class="tree-stage-heading">
+      <span><small>${TEXT.treeRouteTitle}</small><strong>${TEXT.treeStagePrompt(currentLetter())}</strong></span>
+      <span class="tree-stage-goal">${TEXT.treeGoal} <strong>${currentLetter()}</strong></span>
     </div>
-    <div class="tree-stage-trail" aria-hidden="true">${routeSlots}</div>
-    <div class="tree-stage-turns">
-      <button class="tree-stage-turn dot" type="button" data-tree-stage-signal="."><span>← ${TEXT.dot}</span><strong>·</strong><small>${TEXT.treeDotHint}</small></button>
-      <button class="tree-stage-turn dash" type="button" data-tree-stage-signal="-"><span>${TEXT.dash} →</span><strong>—</strong><small>${TEXT.treeDashHint}</small></button>
+    <div class="tree-focus-board">
+      <div class="tree-focus-current">
+        <span class="tree-focus-dotto" aria-hidden="true"><i></i><i></i></span>
+        <span class="tree-focus-node">${currentLabel}</span>
+        <small>${TEXT.treeAt} · ${shownPath}</small>
+      </div>
+      <div class="tree-focus-fork" aria-hidden="true"><i></i><i></i></div>
+      <div class="tree-stage-turns">
+        <button class="tree-stage-turn dot" type="button" data-tree-stage-signal="."><span>← ${TEXT.dot}</span><strong>·</strong><small>${TEXT.treeDotHint}</small></button>
+        <button class="tree-stage-turn dash" type="button" data-tree-stage-signal="-"><span>${TEXT.dash} →</span><strong>—</strong><small>${TEXT.treeDashHint}</small></button>
+      </div>
+    </div>
+    <div class="tree-stage-route">
+      <span>${TEXT.treeRouteProgress(treePath.length)}</span>
+      <div class="tree-stage-trail" aria-hidden="true">${routeSlots}</div>
     </div>
     <div class="tree-stage-actions">
       <button class="primary-button" type="button" data-tree-stage-action="choose" ${treePath ? '' : 'disabled'}>${TEXT.treeChoose} <span aria-hidden="true">↵</span></button>
@@ -1067,9 +1116,27 @@ function renderTreeStage() {
     </div>
     <p class="tree-stage-notice ${treeNoticeKind}" aria-hidden="true">${notice}</p>`;
 }
+function applyTreeMapZoom(centre = true) {
+  const svg = treeEl.querySelector('svg');
+  if (svg) svg.style.setProperty('--tree-map-width', `${treeMapZoom * 100}%`);
+  treeEl.classList.toggle('is-fit', treeMapZoom === 1);
+  const output = treeMapToolbarEl.querySelector('[data-tree-zoom-output]');
+  const zoomOutButton = treeMapToolbarEl.querySelector('[data-tree-zoom="out"]');
+  const zoomInButton = treeMapToolbarEl.querySelector('[data-tree-zoom="in"]');
+  if (output) output.textContent = `${Math.round(treeMapZoom * 100)}%`;
+  if (zoomOutButton) zoomOutButton.disabled = treeMapZoom <= 1;
+  if (zoomInButton) zoomInButton.disabled = treeMapZoom >= 3.5;
+  if (treeMapZoom === 1) treeEl.scrollTo({ left: 0, top: 0, behavior: 'auto' });
+  else if (centre) window.requestAnimationFrame(centreTreeOnCurrentNode);
+}
+function setTreeMapZoom(value) {
+  treeMapZoom = Math.min(3.5, Math.max(1, Math.round(value * 2) / 2));
+  treeCentred = false;
+  applyTreeMapZoom();
+}
 function renderTree() {
-  const paths = [];
-  for (let depth = 0; depth <= 5; depth++) {
+  const paths = [''];
+  for (let depth = 1; depth <= 5; depth++) {
     for (let index = 0; index < 2 ** depth; index++) {
       paths.push(index.toString(2).padStart(depth, '0').replace(/0/g, '.').replace(/1/g, '-'));
     }
@@ -1077,45 +1144,60 @@ function renderTree() {
   const links = paths.filter(Boolean).map((path) => {
     const parent = position(path.slice(0, -1));
     const child = position(path);
+    const parentRadius = treeNodeRadius(path.length - 1);
+    const childRadius = treeNodeRadius(path.length);
+    const startY = parent.y + parentRadius;
+    const endY = child.y - childRadius;
+    const middleY = (startY + endY) / 2;
     const kind = path[path.length - 1] === '.' ? 'dot-link' : 'dash-link';
     const active = treePath.startsWith(path) ? 'active-link' : '';
     const newest = path === treeLastMovePath ? 'newest-link' : '';
-    return `<line class="tree-link ${kind} ${active} ${newest}" x1="${parent.x}" y1="${parent.y + 28}" x2="${child.x}" y2="${child.y - 24}"/>`;
+    return `<path class="tree-link ${kind} ${active} ${newest}" d="M ${parent.x} ${startY} C ${parent.x} ${middleY}, ${child.x} ${middleY}, ${child.x} ${endY}"/>`;
   }).join('');
   const nodes = paths.map((path) => {
     const point = position(path);
     const depth = path.length;
     const letter = nodeForPath(path);
-    const radius = Math.max(13, 33 - depth * 4);
+    const radius = treeNodeRadius(depth);
     const current = path === treePath ? 'current' : '';
     const empty = !letter && path ? 'empty' : '';
     const target = letter && letter === currentLetter() ? 'target' : '';
     const label = path ? letter : TEXT.start;
-    const size = path ? Math.max(11, 20 - depth * 2) : 20;
-    const dotto = current ? `<circle class="tree-dotto" cx="${point.x + radius * .75}" cy="${point.y - radius * .75}" r="${Math.max(5, radius * .3)}"/>` : '';
+    const root = path ? '' : 'root';
+    const size = path ? Math.max(12, 21 - depth * 1.8) : 16;
+    const dotto = current ? `<g class="tree-dotto-marker" transform="translate(${point.x} ${point.y - radius - 18})" aria-hidden="true"><circle class="tree-marker-halo" r="16"/><circle class="tree-marker-body" r="10"/><circle class="tree-marker-shine" cx="-3" cy="-3" r="2.5"/></g>` : '';
     const targetRing = target ? `<circle class="tree-target-ring" cx="${point.x}" cy="${point.y}" r="${radius + 8}"/>` : '';
-    return `<g class="tree-node ${current} ${target} ${empty}">${targetRing}<circle cx="${point.x}" cy="${point.y}" r="${radius}"/><text x="${point.x}" y="${point.y + size * .35}" font-size="${size}">${label}</text>${dotto}</g>`;
+    return `<g class="tree-node ${root} ${current} ${target} ${empty}">${targetRing}<circle class="tree-node-disc" cx="${point.x}" cy="${point.y}" r="${radius}"/><text x="${point.x}" y="${point.y + size * .35}" font-size="${size}">${label}</text>${dotto}</g>`;
   }).join('');
   updateTreeStatus();
   renderTreeStage();
-  treeEl.innerHTML = `<svg class="morse-tree-svg" viewBox="0 0 1200 700" role="img" aria-label="${TEXT.ariaTree}">
+  treeEl.innerHTML = `<svg class="morse-tree-svg" viewBox="0 0 ${TREE_VIEWBOX_WIDTH} ${TREE_VIEWBOX_HEIGHT}" preserveAspectRatio="xMidYMin meet" role="img" aria-label="${TEXT.ariaTree}">
     <defs><marker id="tree-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z"/></marker></defs>
-    <text class="tree-label" x="160" y="31">← ${TEXT.dot}</text><text class="tree-label" x="965" y="31">${TEXT.dash} →</text>${links}${nodes}
+    ${links}${nodes}
   </svg>`;
+  applyTreeMapZoom(false);
   centreTreeOnCurrentNode();
 }
-/* The tree is wider than a phone screen, so the wrapper scrolls sideways. Without
-   this the current node walks off screen after a dot or dash and the page looks
-   like nothing happened. Wide screens show the whole tree and never scroll. */
+/* At 100% the complete map fits the viewport. Higher zoom levels scroll in both
+   directions and follow Dotto, while the compact route board stays usable. */
 function centreTreeOnCurrentNode() {
   const svg = treeEl.querySelector('svg');
   if (!svg) return;
-  const overflow = treeEl.scrollWidth - treeEl.clientWidth;
-  if (overflow <= 0) return;
-  const scale = svg.getBoundingClientRect().width / 1200;
-  const left = position(treePath).x * scale - treeEl.clientWidth / 2;
+  const overflowX = treeEl.scrollWidth - treeEl.clientWidth;
+  const overflowY = treeEl.scrollHeight - treeEl.clientHeight;
+  if (overflowX <= 0 && overflowY <= 0) return;
+  const bounds = svg.getBoundingClientRect();
+  const scaleX = bounds.width / TREE_VIEWBOX_WIDTH;
+  const scaleY = bounds.height / TREE_VIEWBOX_HEIGHT;
+  const current = position(treePath);
+  const left = current.x * scaleX - treeEl.clientWidth / 2;
+  const top = current.y * scaleY - treeEl.clientHeight / 2;
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  treeEl.scrollTo({ left: Math.max(0, Math.min(overflow, left)), behavior: treeCentred && !reduceMotion ? 'smooth' : 'auto' });
+  treeEl.scrollTo({
+    left: Math.max(0, Math.min(overflowX, left)),
+    top: Math.max(0, Math.min(overflowY, top)),
+    behavior: treeCentred && !reduceMotion ? 'smooth' : 'auto',
+  });
   treeCentred = true;
 }
 function resetTree() {
@@ -1237,6 +1319,13 @@ treeStageEl.addEventListener('click', (event) => {
   if (!actionButton) return;
   if (actionButton.dataset.treeStageAction === 'choose') chooseTreeLetter();
   if (actionButton.dataset.treeStageAction === 'reset') resetTree();
+});
+treeMapToolbarEl.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-tree-zoom]');
+  if (!button) return;
+  if (button.dataset.treeZoom === 'out') setTreeMapZoom(treeMapZoom - .5);
+  if (button.dataset.treeZoom === 'in') setTreeMapZoom(treeMapZoom + .5);
+  if (button.dataset.treeZoom === 'fit') setTreeMapZoom(1);
 });
 $('play-button').addEventListener('click', () => playMorse(level().message));
 $('replay-button').addEventListener('click', () => playMorse(level().message));
