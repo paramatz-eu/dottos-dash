@@ -1,6 +1,6 @@
 # Dotto's Dash
 
-[Deutsche Anleitung](README.de.md) · [German web game](de/index.html) · [Build lesson](build.html) · [Flash from the browser](flash.html) · [Family companion guide](FAMILY-GUIDE.md) · [Project TODO](PROJECT-TODO.md) · [Contributing](CONTRIBUTING.md)
+[Deutsche Anleitung](README.de.md) · [German web game](de/index.html) · [Build lesson](build.html) · [Flash from the browser](flash.html) · [Family companion guide](FAMILY-GUIDE.md) · [Contributing](CONTRIBUTING.md)
 
 > An offline, kid-friendly ESP32 project for learning Morse code with a game,
 > a real key, coloured light and sound.

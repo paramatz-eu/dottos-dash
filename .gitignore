@@ -12,9 +12,13 @@ secrets.yaml
 .DS_Store
 Thumbs.db
 __pycache__/
-.claude/settings.local.json
 
 # Personal editor settings stay local, but the shared extension
 # recommendations are part of the project.
 .vscode/*
 !.vscode/extensions.json
+
+# Kept in the private planning repository instead of here.
+PROJECT-TODO.md
+CLAUDE.md
+.claude/

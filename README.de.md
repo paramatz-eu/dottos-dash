@@ -1,6 +1,6 @@
 # Dotto's Dash
 
-[English version](README.md) · [Deutsches Webspiel](de/index.html) · [Bauanleitung](de/build.html) · [Aus dem Browser flashen](de/flash.html) · [Familienleitfaden (Englisch)](FAMILY-GUIDE.md) · [Projekt-TODO](PROJECT-TODO.md) · [Mitmachen](CONTRIBUTING.md)
+[English version](README.md) · [Deutsches Webspiel](de/index.html) · [Bauanleitung](de/build.html) · [Aus dem Browser flashen](de/flash.html) · [Familienleitfaden (Englisch)](FAMILY-GUIDE.md) · [Mitmachen](CONTRIBUTING.md)
 
 > Ein kinderfreundliches Offline-Projekt mit ESP32: Morsezeichen mit Spiel,
 > echter Taste, farbigem Licht und Ton lernen.
