@@ -65,9 +65,8 @@
         </div>
       </details>
       <details class="play-settings">
-        <summary>Sound and key settings</summary>
+        <summary>Sound settings</summary>
         <label class="sound-toggle"><input id="sound-toggle" type="checkbox" checked> Key sounds</label>
-        <label class="pause-control" for="letter-pause"><span>Letter pause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>After this pause, the next letter starts.</small></label>
       </details>
     </section>
 
@@ -84,7 +83,18 @@
       <div class="input-card free-key-card">
         <button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Hold the Morse key</strong><small>Short = dot · long = dash</small></button>
         <button id="free-clear-button" class="secondary-button" type="button">Start over</button>
-        <p class="keyboard-help">Hold Space on a keyboard, press this key on a touch screen, or use the real button. Pause to decode a letter.</p>
+        <p class="keyboard-help">Hold Space on a keyboard, press this key on a touch screen, or use the real button.</p>
+        <details class="free-key-help">
+          <summary>Help and timing settings</summary>
+          <div class="free-key-help-content">
+            <p><strong>How to send:</strong> A short press is a dot. A press at or above the dash threshold is a dash. Wait for the letter gap between letters and the word gap between words.</p>
+            <div class="timing-controls">
+              <label class="pause-control" for="dash-threshold"><span>Dash from: <output id="dash-threshold-value">250 ms</output></span><input id="dash-threshold" type="range" min="100" max="1000" step="50" value="250"><small>Shorter presses are dots.</small></label>
+              <label class="pause-control" for="letter-pause"><span>Letter gap: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Then the decoder reads a letter.</small></label>
+              <label class="pause-control" for="word-pause"><span>Word gap: <output id="word-pause-value">1200 ms</output></span><input id="word-pause" type="range" min="700" max="5000" step="100" value="1200"><small>Then the decoder adds a space.</small></label>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -139,7 +149,7 @@
         <button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Choose letter ↵</button>
         <button id="tree-reset-button" class="secondary-button" type="button">Reset</button>
       </div>
-      <p class="tree-mobile-tip">Swipe sideways to explore the tree. Pinch with two fingers to zoom.</p>
+      <p class="tree-mobile-tip">Swipe sideways to explore every code route.</p>
       <div id="morse-tree" class="tree-wrap" tabindex="0"></div>
     </section>
 

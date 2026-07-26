@@ -129,6 +129,13 @@ body.morse-key-down .sound-toggle { color: var(--purple); transform: scale(1.04)
 .morse-input { display: block; min-height: 5rem; padding: .65rem; margin: .5rem 0 1rem; border-radius: .9rem; background: var(--soft); color: var(--navy); font: 900 clamp(2.2rem, 8vw, 4.4rem)/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .12em; }
 .free-message { display: block; min-height: 3.4rem; padding: .45rem .7rem; border-radius: .8rem; background: white; color: var(--purple); font: 900 clamp(2rem, 8vw, 3.6rem)/1.15 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .12em; overflow-wrap: anywhere; }
 .free-key-card { display: grid; align-content: center; gap: 1rem; }
+.free-key-help { width: 100%; padding: .8rem .9rem; border: 2px solid #c9d1ed; border-radius: 1rem; background: var(--soft); color: var(--navy); text-align: left; }
+.free-key-help > summary { font-size: 1rem; }
+.free-key-help-content { margin-top: .75rem; }
+.free-key-help-content > p { margin: 0; color: #4d5877; font-size: .92rem; line-height: 1.45; }
+.timing-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin-top: .8rem; }
+.free-key-help .pause-control { margin: 0; font-size: .88rem; }
+.free-key-help .pause-control small { font-size: .78rem; line-height: 1.35; }
 .morse-key-button { display: grid; min-height: 15rem; place-content: center; gap: .6rem; border: 0; border-radius: 1.4rem; background: linear-gradient(145deg, #243d77, #14244b); color: white; cursor: pointer; touch-action: none; user-select: none; box-shadow: inset 0 -10px 0 #0e1b3a, 0 8px 0 #cbd3ed; transition: transform .08s ease, box-shadow .08s ease, background .08s ease; }
 .morse-key-button > span { display: block; color: var(--yellow); font-size: 3.7rem; line-height: .8; text-shadow: 0 0 1rem #ffd16699; }
 .morse-key-button strong { font-size: clamp(1.5rem, 5vw, 2.3rem); }
@@ -150,22 +157,74 @@ body.morse-key-down .sound-toggle { color: var(--purple); transform: scale(1.04)
 .tree-intro { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.2rem 1.5rem; }
 .tree-intro h2 { margin: .2rem 0; font-size: 1.7rem; }
 .tree-intro p:not(.mission-count) { margin: 0; color: #5b6580; }
-.tree-status { min-width: 12rem; padding: .8rem; border-radius: .8rem; background: var(--soft); text-align: center; font-weight: 800; }
+.tree-status { display: grid; min-width: 12rem; gap: .45rem; padding: .8rem; border-radius: .8rem; background: var(--soft); text-align: center; font-weight: 800; }
+.tree-status-route { display: block; }
+.tree-status-notice { display: block; padding-top: .45rem; border-top: 1px solid #d8dff5; color: var(--navy); font-size: .82rem; line-height: 1.35; }
+.tree-status-notice.good { color: #05755a; }
+.tree-status-notice.try { color: #a2354f; }
 .tree-controls { grid-template-columns: 1fr 1fr 1fr auto; }
 .tree-confirm-button { min-width: 10rem; }
 .tree-mobile-tip { display: none; margin: -.45rem 0 -.15rem; color: #5b6580; font-size: .9rem; font-weight: 700; text-align: center; }
-.tree-wrap { padding: .65rem; overflow-x: auto; overscroll-behavior-x: contain; background: #f9faff; touch-action: pan-x pinch-zoom; -webkit-overflow-scrolling: touch; }
+.tree-stage { display: none; }
+.tree-wrap { position: relative; padding: .65rem; overflow-x: auto; overscroll-behavior-x: contain; background: radial-gradient(circle at 50% 0, #fff, #f4f6ff 72%); touch-action: pan-x pan-y pinch-zoom; -webkit-overflow-scrolling: touch; scrollbar-color: #a5afd0 transparent; }
 .morse-tree-svg { display: block; min-width: 60rem; width: 100%; height: auto; }
 .tree-link { fill: none; stroke: #a5afd0; stroke-width: 2; }
 .tree-link.dot-link { stroke-dasharray: 3 8; }
 .tree-link.dash-link { stroke-dasharray: 12 8; }
-.tree-link.active-link { stroke: var(--pink); stroke-width: 4; stroke-dasharray: none; marker-end: url(#tree-arrow); }
+.tree-link.active-link { stroke: var(--pink); stroke-width: 4; stroke-dasharray: 1000; stroke-dashoffset: 0; marker-end: url(#tree-arrow); }
+.tree-link.newest-link { animation: tree-link-draw .32s cubic-bezier(.2, .8, .2, 1) both; }
 .tree-node circle { fill: white; stroke: #a5afd0; stroke-width: 2; }
 .tree-node text { fill: var(--ink); font-weight: 900; text-anchor: middle; }
 .tree-node.empty { opacity: .48; }
-.tree-node.current circle { stroke: var(--pink); stroke-width: 4; }
+.tree-node .tree-target-ring { fill: #fffbe5; stroke: var(--yellow); stroke-width: 5; }
+.tree-node.target text { fill: var(--purple); }
+.tree-node.current > circle:not(.tree-dotto):not(.tree-target-ring) { stroke: var(--pink); stroke-width: 4; }
 .tree-node.current text { fill: var(--pink); }
+.tree-node .tree-dotto { fill: var(--pink); stroke: white; stroke-width: 3; filter: drop-shadow(0 2px 0 #b82f50); animation: tree-dotto-land .34s cubic-bezier(.2, .9, .3, 1.35) both; }
 .tree-label { fill: var(--navy); font-size: 25px; font-weight: 900; }
+@keyframes tree-link-draw { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+@keyframes tree-dotto-land { from { opacity: 0; transform: scale(.35); transform-origin: center; } to { opacity: 1; transform: scale(1); transform-origin: center; } }
+
+@media (max-width: 63rem) {
+  .tree-controls { display: none; }
+  .tree-mobile-tip { display: block; }
+  .tree-stage { display: grid; gap: .65rem; padding: .8rem; border: 3px solid var(--line); border-radius: 1.2rem; background: linear-gradient(145deg, #fff7d8, #fff 58%, #f0f9ff); box-shadow: 0 6px 0 #e9ecf8; }
+  .tree-stage-identity { display: grid; grid-template-columns: 2.8rem minmax(0, 1fr) auto; align-items: center; gap: .65rem; }
+  .tree-stage-dotto { display: grid; width: 2.8rem; aspect-ratio: 1; place-items: center; border-radius: 50%; background: var(--pink); color: white; box-shadow: 0 3px 0 #b82f50; animation: tree-stage-arrive .32s cubic-bezier(.2, .9, .3, 1.35) both; }
+  .tree-stage-dotto > span { color: var(--yellow); font-size: 1.2rem; text-shadow: 0 0 .55rem #ffd166; }
+  .tree-stage-location { display: grid; gap: .05rem; min-width: 0; }
+  .tree-stage-location small { color: #5b6580; font-weight: 800; }
+  .tree-stage-location strong { overflow: hidden; color: var(--navy); font: 900 clamp(1.15rem, 5vw, 1.6rem)/1.1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; text-overflow: ellipsis; white-space: nowrap; }
+  .tree-stage-letter { display: grid; min-width: 2.6rem; min-height: 2.6rem; place-items: center; border: 2px solid #dbd4f7; border-radius: .8rem; background: #f3f0ff; color: var(--purple); font: 900 1.45rem/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .tree-stage-trail { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .35rem; }
+  .tree-stage-slot { display: grid; min-height: 1.75rem; place-items: center; border: 1px dashed #c5cce6; border-radius: .55rem; background: #fff; color: #a5afd0; font: 900 .95rem/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .tree-stage-slot.is-filled { border-style: solid; color: var(--navy); animation: tree-slot-fill .22s ease-out both; }
+  .tree-stage-slot.dot { background: #e3f8ff; border-color: #89d9f3; }
+  .tree-stage-slot.dash { background: #fff2dc; border-color: #f5c878; }
+  .tree-stage-turns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+  .tree-stage-turn { display: grid; min-height: 4.65rem; align-content: center; gap: .05rem; border: 0; border-radius: .9rem; padding: .5rem; color: var(--navy); cursor: pointer; font: inherit; font-weight: 900; box-shadow: inset 0 -4px 0 #0002; transition: transform .12s ease, box-shadow .12s ease; }
+  .tree-stage-turn > span { font-size: .88rem; }
+  .tree-stage-turn strong { font: 900 1.55rem/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .tree-stage-turn small { color: #4e5e7f; font-size: .78rem; font-weight: 800; }
+  .tree-stage-turn.dot { background: #bcefff; }
+  .tree-stage-turn.dash { background: #ffe0aa; }
+  .tree-stage-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .65rem; }
+  .tree-stage-actions button { min-height: 3.35rem; }
+  .tree-stage-actions .secondary-button { min-width: 7.5rem; }
+  .tree-stage-notice { min-height: 1.3rem; margin: 0; padding: .1rem .35rem; border-radius: .55rem; color: var(--navy); font-size: .86rem; font-weight: 800; line-height: 1.35; text-align: center; }
+  .tree-stage-notice.good { background: #ddfff4; color: #05755a; }
+  .tree-stage-notice.try { background: #ffe5ec; color: #a2354f; }
+  .morse-tree-svg { min-width: 60rem; }
+}
+
+@keyframes tree-stage-arrive { from { opacity: .4; transform: translateX(-.5rem) scale(.85); } to { opacity: 1; transform: translateX(0) scale(1); } }
+@keyframes tree-slot-fill { from { opacity: .25; transform: translateY(-.3rem) scale(.8); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.signal-button:active, .tree-stage-turn:active { transform: translateY(3px); box-shadow: inset 0 -1px 0 #0002; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tree-link.newest-link, .tree-node .tree-dotto, .tree-stage-dotto, .tree-stage-slot.is-filled { animation: none; }
+  .tree-stage-turn, .signal-button { transition: none; }
+}
 
 .listen-card, .answer-card { padding: 1.5rem; border: 3px solid var(--line); border-radius: 1.4rem; background: white; box-shadow: 0 7px 0 #e9ecf8; text-align: center; }
 .listen-card { background: linear-gradient(145deg, #e6f6ff, white); }
@@ -287,6 +346,7 @@ footer { padding: 1.5rem; color: #5b6580; text-align: center; font-weight: 700; 
   .story-controls button:first-child { grid-column: 1; grid-row: 2; justify-self: stretch; }
   .story-controls button:last-child { grid-column: 2; grid-row: 2; justify-self: stretch; }
   .mode-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .timing-controls { grid-template-columns: 1fr; }
   .mode-button { min-height: 6.2rem; }
   .start-adventure { min-height: 5.3rem; }
   .activity-picker .mode-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -298,7 +358,7 @@ footer { padding: 1.5rem; color: #5b6580; text-align: center; font-weight: 700; 
   .tree-controls .secondary-button { grid-column: auto; }
   .tree-confirm-button { min-width: 0; }
   .tree-mobile-tip { display: block; }
-  .morse-tree-svg { min-width: 54rem; }
+  .morse-tree-svg { min-width: 60rem; }
   .progress-card { flex-wrap: wrap; }
   .mission-card, .input-card, .listen-card, .answer-card { padding: 1.1rem; }
   .cheat-sheet, .story-sources, .make-it-card, .family-guide, .wifi-card, .ota-card { padding: 1rem; }

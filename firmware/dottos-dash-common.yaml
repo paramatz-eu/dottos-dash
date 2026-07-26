@@ -76,10 +76,25 @@ globals:
     type: uint32_t
     restore_value: no
     initial_value: '0'
+  - id: morse_key_pressed_at
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
 
 # The same pause is used by the physical key and the browser game. It is kept
 # on the ESP32, so a chosen value stays in place after a restart.
 number:
+  - platform: template
+    id: dash_threshold_ms
+    name: "Dash Threshold"
+    icon: mdi:gesture-tap-hold
+    optimistic: true
+    restore_value: true
+    initial_value: 250
+    min_value: 100
+    max_value: 1000
+    step: 50
+    unit_of_measurement: ms
   - platform: template
     id: letter_pause_ms
     name: "Letter Pause"
@@ -328,20 +343,19 @@ binary_sensor:
     filters:
       - delayed_on_off: 20ms
     on_press:
+      - lambda: 'id(morse_key_pressed_at) = millis();'
       - script.execute: morse_key_down_feedback
     on_release:
       - script.execute: morse_key_up_feedback
-    on_click:
-      - min_length: 40ms
-        max_length: 300ms
+      - if:
+          condition:
+            lambda: 'return millis() - id(morse_key_pressed_at) < static_cast<uint32_t>(id(dash_threshold_ms).state);'
         then:
           # The held tone already played; adding one here would sound on release.
           - script.execute:
               id: enter_dot
               play_tone: false
-      - min_length: 301ms
-        max_length: 8000ms
-        then:
+        else:
           - script.execute:
               id: enter_dash
               play_tone: false
@@ -358,20 +372,19 @@ binary_sensor:
     filters:
       - delayed_on_off: 20ms
     on_press:
+      - lambda: 'id(morse_key_pressed_at) = millis();'
       - script.execute: morse_key_down_feedback
     on_release:
       - script.execute: morse_key_up_feedback
-    on_click:
-      - min_length: 40ms
-        max_length: 300ms
+      - if:
+          condition:
+            lambda: 'return millis() - id(morse_key_pressed_at) < static_cast<uint32_t>(id(dash_threshold_ms).state);'
         then:
           # The held tone already played; adding one here would sound on release.
           - script.execute:
               id: enter_dot
               play_tone: false
-      - min_length: 301ms
-        max_length: 8000ms
-        then:
+        else:
           - script.execute:
               id: enter_dash
               play_tone: false

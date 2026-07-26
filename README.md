@@ -102,7 +102,7 @@ message.
 
 In the Morse tree, press **Choose letter** or `Enter` after reaching the intended
 node. `Space` remains only the Morse key. An unfinished route returns to Start
-after 3.5 seconds without input.
+after 6 seconds without input.
 
 The message workshop accepts A–Z, digits and spaces. Key sounds start on by
 default and can be changed under **Sound and key settings**.

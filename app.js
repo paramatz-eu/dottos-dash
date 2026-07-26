@@ -44,12 +44,12 @@ function renderEmbeddedEspGame() {
           <button class="mode-button" type="button" data-mode="receive" data-story-target="3" aria-pressed="false"><span aria-hidden="true">👂</span><strong>Klicks hören</strong><small>Hören und auswählen</small></button>
           <button class="mode-button" type="button" data-mode="create" data-story-target="4" aria-pressed="false"><span aria-hidden="true">✎</span><strong>Nachricht senden</strong><small>Sehen, hören, senden</small></button>
         </div></details>
-        <details class="play-settings"><summary>Ton und Tasten-Einstellungen</summary><label class="sound-toggle"><input id="sound-toggle" type="checkbox" checked> Browser-Töne</label><label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Nach dieser Pause beginnt der nächste Buchstabe.</small></label></details>
+        <details class="play-settings"><summary>Ton-Einstellungen</summary><label class="sound-toggle"><input id="sound-toggle" type="checkbox" checked> Browser-Töne</label></details>
       </section>
 
       <section id="free-panel" class="game-panel hidden">
         <div class="mission-card write-card"><p class="prompt">Dottos Tasten-Checkpoint</p><h2>Was sagt Dottos Taste?</h2><p>Sende frei Morse. Nach jeder Pause liest Dottos Decoder den nächsten Buchstaben.</p><p class="prompt">Der Decoder liest:</p><output id="free-message" class="free-message" aria-live="polite">—</output><p id="free-key-status" class="keyboard-help" aria-live="polite">Bereit für deinen ersten Buchstaben.</p></div>
-        <div class="input-card free-key-card"><button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Morse-Taste halten</strong><small>Kurz = Punkt · lang = Strich</small></button><button id="free-clear-button" class="secondary-button" type="button">Neu beginnen</button><p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen. Pause macht einen Buchstaben daraus.</p></div>
+        <div class="input-card free-key-card"><button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Morse-Taste halten</strong><small>Kurz = Punkt · lang = Strich</small></button><button id="free-clear-button" class="secondary-button" type="button">Neu beginnen</button><p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen.</p><details class="free-key-help"><summary>Hilfe &amp; Timing einstellen</summary><div class="free-key-help-content"><p><strong>So sendest du:</strong> Kurz drücken ist ein Punkt. Ab der Strich-Grenze wird dein Druck ein Strich. Warte die Buchstabenpause zwischen Buchstaben und die Wortpause zwischen Wörtern.</p><div class="timing-controls"><label class="pause-control" for="dash-threshold"><span>Strich ab: <output id="dash-threshold-value">250 ms</output></span><input id="dash-threshold" type="range" min="100" max="1000" step="50" value="250"><small>Kürzere Drucke sind Punkte.</small></label><label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Danach liest der Decoder einen Buchstaben.</small></label><label class="pause-control" for="word-pause"><span>Wortpause: <output id="word-pause-value">1200 ms</output></span><input id="word-pause" type="range" min="700" max="5000" step="100" value="1200"><small>Danach setzt der Decoder ein Leerzeichen.</small></label></div></div></details></div>
       </section>
 
       <section id="create-panel" class="game-panel hidden">
@@ -59,7 +59,7 @@ function renderEmbeddedEspGame() {
 
       <section id="tree-panel" class="game-panel">
         <div class="tree-intro"><div><p id="tree-mission" class="mission-count"></p><h2>Führe Dotto zu <span id="tree-word" class="tree-word">E</span></h2><p>Finde den nächsten Buchstaben: <strong id="tree-target">E</strong>. Gehe mit einem Punkt nach links oder mit einem Strich nach rechts. Danach den Buchstaben wählen.</p></div><div id="tree-status" class="tree-status" aria-live="polite"></div></div>
-        <div class="tree-controls" aria-label="Steuerung für den Morsebaum"><button id="tree-dot-button" class="signal-button dot" type="button">← Punkt</button><button id="tree-dash-button" class="signal-button dash" type="button">Strich →</button><button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Buchstaben wählen ↵</button><button id="tree-reset-button" class="secondary-button" type="button">Neu beginnen</button></div><p class="tree-mobile-tip">Wische seitlich durch den Baum. Mit zwei Fingern kannst du zoomen.</p><div id="morse-tree" class="tree-wrap" tabindex="0"></div>
+        <div class="tree-controls" aria-label="Steuerung für den Morsebaum"><button id="tree-dot-button" class="signal-button dot" type="button">← Punkt</button><button id="tree-dash-button" class="signal-button dash" type="button">Strich →</button><button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Buchstaben wählen ↵</button><button id="tree-reset-button" class="secondary-button" type="button">Neu beginnen</button></div><p class="tree-mobile-tip">Wische seitlich, um alle Code-Wege zu erkunden.</p><div id="morse-tree" class="tree-wrap" tabindex="0"></div>
       </section>
 
       <section id="receive-panel" class="receive-panel hidden"><div class="listen-card"><p id="receive-mission" class="mission-count"></p><h2>Was hat Dotto gehört?</h2><p>Starte das Signal, höre genau zu und wähle Dottos Nachricht.</p><div class="listen-controls"><button id="play-button" class="primary-button" type="button">▶ Morsecode abspielen</button><button id="replay-button" class="secondary-button" type="button">Noch einmal</button></div></div><div class="answer-card"><p class="prompt">Was bedeutet der Code?</p><div id="answer-options" class="answer-options" aria-live="polite"></div></div></section>
@@ -101,11 +101,16 @@ const LEVELS = [
 ];
 const language = document.documentElement.lang.toLowerCase().startsWith('de') ? 'de' : 'en';
 const espHosted = document.body.dataset.espHosted === 'true';
-const DOT_THRESHOLD_MS = 250;
+const DEFAULT_DASH_THRESHOLD_MS = 250;
+const MIN_DASH_THRESHOLD_MS = 100;
+const MAX_DASH_THRESHOLD_MS = 1000;
 const DEFAULT_CHARACTER_PAUSE_MS = 500;
 const MIN_CHARACTER_PAUSE_MS = 300;
 const MAX_CHARACTER_PAUSE_MS = 2000;
-const TREE_IDLE_RESET_MS = 3500;
+const DEFAULT_WORD_PAUSE_MS = 1200;
+const MIN_WORD_PAUSE_MS = 700;
+const MAX_WORD_PAUSE_MS = 5000;
+const TREE_IDLE_RESET_MS = 6000;
 const TEXT = {
   en: {
     treeMission: (number, total, message, position) => `Route ${number} of ${total} · ${message} · letter ${position} of ${message.length}`,
@@ -146,6 +151,14 @@ const TEXT = {
     welcome: 'Dotto is at the start line. Reach E with one dot.',
     listening: 'Listen carefully…',
     start: 'Start', path: 'Dotto’s path', letter: 'Letter', dot: 'Dot', dash: 'Dash',
+    treeStageLabel: 'Dotto’s route controls',
+    treeAt: 'Dotto is here',
+    treeChoose: 'Choose letter',
+    treeReset: 'Reset',
+    treeDotHint: 'go left',
+    treeDashHint: 'go right',
+    treeMapHint: 'Swipe sideways to explore every code route.',
+    treeStagePrompt: (letter) => `Find ${letter}. Choose a turn.`,
     ariaTree: 'Morse code tree. Dot branches go left and dash branches go right.',
   },
   de: {
@@ -187,6 +200,14 @@ const TEXT = {
     welcome: 'Dotto steht an der Startlinie. Erreiche E mit einem Punkt.',
     listening: 'Hör genau zu…',
     start: 'Start', path: 'Dottos Weg', letter: 'Buchstabe', dot: 'Punkt', dash: 'Strich',
+    treeStageLabel: 'Steuerung für Dottos Route',
+    treeAt: 'Dotto ist hier',
+    treeChoose: 'Buchstaben wählen',
+    treeReset: 'Neu beginnen',
+    treeDotHint: 'nach links',
+    treeDashHint: 'nach rechts',
+    treeMapHint: 'Wische seitlich, um alle Code-Wege zu erkunden.',
+    treeStagePrompt: (letter) => `Finde ${letter}. Wähle eine Richtung.`,
     ariaTree: 'Morsebaum. Punkt-Äste gehen nach links, Strich-Äste nach rechts.',
   },
 }[language];
@@ -342,11 +363,24 @@ const treeTargetEl = $('tree-target');
 const treeMissionEl = $('tree-mission');
 const treeStatusEl = $('tree-status');
 const treeEl = $('morse-tree');
+treeStatusEl.setAttribute('aria-atomic', 'true');
+const treeMobileTipEl = document.querySelector('.tree-mobile-tip');
+const treeStageEl = document.createElement('div');
+treeStageEl.className = 'tree-stage';
+treeStageEl.setAttribute('role', 'group');
+treeStageEl.setAttribute('aria-label', TEXT.treeStageLabel);
+(treeMobileTipEl || treeEl).before(treeStageEl);
+treeEl.removeAttribute('tabindex');
+if (treeMobileTipEl) treeMobileTipEl.textContent = TEXT.treeMapHint;
 const receiveMissionEl = $('receive-mission');
 const answerOptionsEl = $('answer-options');
 const soundToggle = $('sound-toggle');
+const dashThresholdInput = $('dash-threshold');
+const dashThresholdValueEl = $('dash-threshold-value');
 const letterPauseInput = $('letter-pause');
 const letterPauseValueEl = $('letter-pause-value');
+const wordPauseInput = $('word-pause');
+const wordPauseValueEl = $('word-pause-value');
 const hardwareStatusEl = $('hardware-status');
 const wifiSetupForm = $('wifi-setup-form');
 const wifiSsidInput = $('wifi-ssid');
@@ -377,6 +411,10 @@ let freeMessage = '';
 let translatorMessage = '';
 let treePath = '';
 let treeCentred = false;
+let treeLastMovePath = '';
+let treeNotice = '';
+let treeNoticeKind = 'info';
+let treeResizeTimer;
 let writingMessage = '';
 let writingIndex = 0;
 let levelIndex = Number(localStorage.getItem('dottos-dash-level') || 0);
@@ -387,13 +425,16 @@ let liveKeyTone;
 let morseKeyDownAt = 0;
 let freeKeyDownAt = 0;
 let inputPauseTimer;
+let wordPauseTimer;
 let treePauseTimer;
 let hardwareEventSource;
 let hardwareEventsReady = false;
 let lastHardwareEvent = 0;
 let pendingHardwareSignals = 0;
 let hardwareKeyIsDown = false;
+let dashThresholdMs = normaliseDashThreshold(Number(localStorage.getItem('dottos-dash-dash-threshold') ?? DEFAULT_DASH_THRESHOLD_MS));
 let characterPauseMs = normaliseCharacterPause(Number(localStorage.getItem('dottos-dash-letter-pause') ?? DEFAULT_CHARACTER_PAUSE_MS));
+let wordPauseMs = normaliseWordPause(Number(localStorage.getItem('dottos-dash-word-pause') ?? DEFAULT_WORD_PAUSE_MS));
 let storyChapter = Number(localStorage.getItem('dottos-dash-story-chapter') || 0);
 
 if (!Number.isInteger(levelIndex) || levelIndex < 0 || levelIndex >= LEVELS.length) levelIndex = 0;
@@ -403,16 +444,40 @@ if (!Number.isInteger(storyChapter) || storyChapter < 0 || storyChapter >= STORY
 function level() { return LEVELS[levelIndex]; }
 function currentLetter() { return level().message[letterIndex]; }
 function currentWritingLetter() { return writingMessage[writingIndex]; }
+function normaliseDashThreshold(value) {
+  const numericValue = Number(value);
+  const roundedValue = Number.isFinite(numericValue) ? Math.round(numericValue / 50) * 50 : DEFAULT_DASH_THRESHOLD_MS;
+  return Math.min(MAX_DASH_THRESHOLD_MS, Math.max(MIN_DASH_THRESHOLD_MS, roundedValue));
+}
 function normaliseCharacterPause(value) {
   const numericValue = Number(value);
   const roundedValue = Number.isFinite(numericValue) ? Math.round(numericValue / 100) * 100 : DEFAULT_CHARACTER_PAUSE_MS;
   return Math.min(MAX_CHARACTER_PAUSE_MS, Math.max(MIN_CHARACTER_PAUSE_MS, roundedValue));
+}
+function normaliseWordPause(value) {
+  const numericValue = Number(value);
+  const roundedValue = Number.isFinite(numericValue) ? Math.round(numericValue / 100) * 100 : DEFAULT_WORD_PAUSE_MS;
+  return Math.min(MAX_WORD_PAUSE_MS, Math.max(Math.max(MIN_WORD_PAUSE_MS, characterPauseMs + 100), roundedValue));
+}
+function setDashThreshold(value) {
+  dashThresholdMs = normaliseDashThreshold(value);
+  dashThresholdInput.value = String(dashThresholdMs);
+  dashThresholdValueEl.textContent = `${dashThresholdMs} ms`;
+  localStorage.setItem('dottos-dash-dash-threshold', String(dashThresholdMs));
 }
 function setCharacterPause(value) {
   characterPauseMs = normaliseCharacterPause(value);
   letterPauseInput.value = String(characterPauseMs);
   letterPauseValueEl.textContent = `${characterPauseMs} ms`;
   localStorage.setItem('dottos-dash-letter-pause', String(characterPauseMs));
+  setWordPause(wordPauseMs);
+}
+function setWordPause(value) {
+  wordPauseMs = normaliseWordPause(value);
+  wordPauseInput.min = String(Math.max(MIN_WORD_PAUSE_MS, characterPauseMs + 100));
+  wordPauseInput.value = String(wordPauseMs);
+  wordPauseValueEl.textContent = `${wordPauseMs} ms`;
+  localStorage.setItem('dottos-dash-word-pause', String(wordPauseMs));
 }
 function visualCode(code) { return code.replace(/\./g, '·').replace(/-/g, '—'); }
 function spacedVisualCode(code) { return visualCode(code).split('').join(' '); }
@@ -499,6 +564,12 @@ function playMorse(message) {
 function feedback(message, type = 'info') {
   feedbackEl.textContent = message;
   feedbackEl.className = `feedback ${type}`;
+  if (mode === 'tree') {
+    treeNotice = message;
+    treeNoticeKind = type;
+    updateTreeStatus();
+    renderTreeStage();
+  }
 }
 function setHardwareStatus(message) {
   if (hardwareStatusEl) hardwareStatusEl.textContent = message;
@@ -630,12 +701,25 @@ function setCharacterPauseOnHardware() {
     if (!response.ok) throw new Error('Letter pause request failed');
   }).catch(() => setHardwareStatus('Die Buchstabenpause konnte nicht auf dem ESP32 gespeichert werden.'));
 }
+function setDashThresholdOnHardware() {
+  if (!espHosted) return;
+  fetch(`/number/${encodeURIComponent('Dash Threshold')}/set?value=${dashThresholdMs}`, { method: 'POST' }).then((response) => {
+    if (!response.ok) throw new Error('Dash threshold request failed');
+  }).catch(() => setHardwareStatus('Die Strich-Grenze konnte nicht auf dem ESP32 gespeichert werden.'));
+}
 function syncCharacterPauseFromHardware() {
   if (!espHosted) return;
   fetch(`/number/${encodeURIComponent('Letter Pause')}`).then((response) => {
     if (!response.ok) throw new Error('Letter pause request failed');
     return response.json();
   }).then((payload) => setCharacterPause(payload.state)).catch(() => {});
+}
+function syncDashThresholdFromHardware() {
+  if (!espHosted) return;
+  fetch(`/number/${encodeURIComponent('Dash Threshold')}`).then((response) => {
+    if (!response.ok) throw new Error('Dash threshold request failed');
+    return response.json();
+  }).then((payload) => setDashThreshold(payload.state)).catch(() => {});
 }
 function sendSignalToHardware(signal) {
   if (!espHosted) return;
@@ -653,6 +737,7 @@ function connectEspHardware() {
   if (!espHosted || !window.EventSource) return;
   setHardwareStatus('Verbunden mit Dottos Controller. Taste auf dem ESP32 oder hier auf dem Bildschirm.');
   syncCharacterPauseFromHardware();
+  syncDashThresholdFromHardware();
   hardwareEventSource = new EventSource('/events');
   hardwareEventSource.addEventListener('state', (event) => {
     let payload;
@@ -663,11 +748,16 @@ function connectEspHardware() {
       setCharacterPause(payload.state);
       return;
     }
+    if (readableIdentity.includes('dash threshold')) {
+      setDashThreshold(payload.state);
+      return;
+    }
     if (readableIdentity.includes('morse key')) {
       if (!hardwareEventsReady) return;
       const pressed = ['on', 'true', '1'].includes(String(payload.state || '').toLowerCase());
       if (pressed && !hardwareKeyIsDown) {
         hardwareKeyIsDown = true;
+        pauseFreeTimersForKeyDown();
         startMorseKeyTone();
       } else if (!pressed && hardwareKeyIsDown) {
         hardwareKeyIsDown = false;
@@ -707,6 +797,11 @@ function updateFreeMode() {
   if (freeKeyStatusEl) {
     freeKeyStatusEl.textContent = freeInput ? TEXT.freeKeyListening : (freeMessage ? TEXT.freeKeyNext : TEXT.freeKeyReady);
   }
+}
+function pauseFreeTimersForKeyDown() {
+  if (mode !== 'free') return;
+  window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
 }
 function morseForText(message) {
   return message.split(' ').map((word) => word.split('').map((letter) => spacedVisualCode(LETTERS[letter])).join('   ')).join('     /     ');
@@ -773,6 +868,7 @@ function updateMission() {
   nextLetterEl.textContent = LEVELS[(levelIndex + 1) % LEVELS.length].message;
   starsEl.textContent = stars;
   treePath = '';
+  treeLastMovePath = '';
   buildReceiveOptions();
   renderTree();
 }
@@ -782,13 +878,16 @@ function scheduleWriteFinish() {
 }
 function scheduleFreeFinish() {
   window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
   inputPauseTimer = window.setTimeout(checkFreeInput, characterPauseMs);
+  wordPauseTimer = window.setTimeout(finishFreeWord, wordPauseMs);
 }
 function scheduleTreeReset() {
   window.clearTimeout(treePauseTimer);
   treePauseTimer = window.setTimeout(() => {
     if (!treePath) return;
     treePath = '';
+    treeLastMovePath = '';
     renderTree();
     feedback(TEXT.treeTimedOut, 'info');
   }, TREE_IDLE_RESET_MS);
@@ -863,8 +962,14 @@ function checkFreeInput() {
   }
   updateFreeMode();
 }
+function finishFreeWord() {
+  if (freeInput || !freeMessage || freeMessage.endsWith(' ')) return;
+  freeMessage += ' ';
+  updateFreeMode();
+}
 function clearFreePractice() {
   window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
   freeInput = '';
   freeMessage = '';
   updateFreeMode();
@@ -874,6 +979,7 @@ function startFreePointerKey(event) {
   if (event.button !== undefined && event.button !== 0) return;
   event.preventDefault();
   if (freeKeyDownAt) return;
+  pauseFreeTimersForKeyDown();
   freeKeyDownAt = performance.now();
   freeKeyButton.classList.add('is-down');
   freeKeyButton.setPointerCapture?.(event.pointerId);
@@ -886,7 +992,7 @@ function finishFreePointerKey(event, cancelled = false) {
   freeKeyDownAt = 0;
   freeKeyButton.classList.remove('is-down');
   stopMorseKeyTone();
-  if (!cancelled) recordSignal(duration < DOT_THRESHOLD_MS ? '.' : '-', true);
+  if (!cancelled) recordSignal(duration < dashThresholdMs ? '.' : '-', true);
 }
 function playTranslation() {
   if (!translatorMessage) return feedback(TEXT.translateNoMessage, 'info');
@@ -895,6 +1001,8 @@ function playTranslation() {
 function moveTree(signal, playSound = true) {
   if (treePath.length >= 5) return feedback(TEXT.bottom, 'info');
   treePath += signal;
+  treeLastMovePath = treePath;
+  treeNotice = '';
   if (playSound) beep(signal === '-');
   renderTree();
   scheduleTreeReset();
@@ -904,6 +1012,7 @@ function chooseTreeLetter() {
   if (!treePath) return feedback(TEXT.chooseTreeFirst, 'info');
   const letter = MORSE[treePath];
   treePath = '';
+  treeLastMovePath = '';
   renderTree();
   if (!letter) return feedback(TEXT.emptyBranch, 'try');
   if (letter === currentLetter()) advanceFromSentLetter(letter);
@@ -925,6 +1034,39 @@ function position(path) {
   const index = parseInt(path.replace(/\./g, '0').replace(/-/g, '1') || '0', 2);
   return { x: 1200 * (index + .5) / (2 ** depth), y: 80 + depth * 118 };
 }
+function updateTreeStatus() {
+  const shownPath = treePath ? visualCode(treePath) : TEXT.start;
+  const selected = MORSE[treePath] || '—';
+  const notice = treeNotice ? `<span class="tree-status-notice ${treeNoticeKind}">${treeNotice}</span>` : '';
+  treeStatusEl.className = `tree-status ${treeNotice ? `has-notice ${treeNoticeKind}` : ''}`;
+  treeStatusEl.innerHTML = `<span class="tree-status-route">${TEXT.path}: <strong>${shownPath}</strong><br>${TEXT.letter}: <strong>${selected}</strong></span>${notice}`;
+}
+function renderTreeStage() {
+  const shownPath = treePath ? visualCode(treePath) : TEXT.start;
+  const selected = MORSE[treePath] || '—';
+  const routeSlots = Array.from({ length: 5 }, (_, index) => {
+    const signal = treePath[index];
+    const direction = signal === '.' ? 'dot' : signal === '-' ? 'dash' : '';
+    return `<span class="tree-stage-slot ${signal ? `is-filled ${direction}` : ''}">${signal ? visualCode(signal) : '○'}</span>`;
+  }).join('');
+  const notice = treeNotice || TEXT.treeStagePrompt(currentLetter());
+  treeStageEl.innerHTML = `
+    <div class="tree-stage-identity">
+      <span class="tree-stage-dotto" aria-hidden="true"><span>●</span></span>
+      <span class="tree-stage-location"><small>${TEXT.treeAt}</small><strong>${shownPath}</strong></span>
+      <span class="tree-stage-letter" aria-label="${TEXT.letter}: ${selected}">${selected}</span>
+    </div>
+    <div class="tree-stage-trail" aria-hidden="true">${routeSlots}</div>
+    <div class="tree-stage-turns">
+      <button class="tree-stage-turn dot" type="button" data-tree-stage-signal="."><span>← ${TEXT.dot}</span><strong>·</strong><small>${TEXT.treeDotHint}</small></button>
+      <button class="tree-stage-turn dash" type="button" data-tree-stage-signal="-"><span>${TEXT.dash} →</span><strong>—</strong><small>${TEXT.treeDashHint}</small></button>
+    </div>
+    <div class="tree-stage-actions">
+      <button class="primary-button" type="button" data-tree-stage-action="choose" ${treePath ? '' : 'disabled'}>${TEXT.treeChoose} <span aria-hidden="true">↵</span></button>
+      <button class="secondary-button" type="button" data-tree-stage-action="reset" ${treePath ? '' : 'disabled'}>↺ ${TEXT.treeReset}</button>
+    </div>
+    <p class="tree-stage-notice ${treeNoticeKind}" aria-hidden="true">${notice}</p>`;
+}
 function renderTree() {
   const paths = [];
   for (let depth = 0; depth <= 5; depth++) {
@@ -937,7 +1079,8 @@ function renderTree() {
     const child = position(path);
     const kind = path[path.length - 1] === '.' ? 'dot-link' : 'dash-link';
     const active = treePath.startsWith(path) ? 'active-link' : '';
-    return `<line class="tree-link ${kind} ${active}" x1="${parent.x}" y1="${parent.y + 28}" x2="${child.x}" y2="${child.y - 24}"/>`;
+    const newest = path === treeLastMovePath ? 'newest-link' : '';
+    return `<line class="tree-link ${kind} ${active} ${newest}" x1="${parent.x}" y1="${parent.y + 28}" x2="${child.x}" y2="${child.y - 24}"/>`;
   }).join('');
   const nodes = paths.map((path) => {
     const point = position(path);
@@ -946,13 +1089,15 @@ function renderTree() {
     const radius = Math.max(13, 33 - depth * 4);
     const current = path === treePath ? 'current' : '';
     const empty = !letter && path ? 'empty' : '';
+    const target = letter && letter === currentLetter() ? 'target' : '';
     const label = path ? letter : TEXT.start;
     const size = path ? Math.max(11, 20 - depth * 2) : 20;
-    return `<g class="tree-node ${current} ${empty}"><circle cx="${point.x}" cy="${point.y}" r="${radius}"/><text x="${point.x}" y="${point.y + size * .35}" font-size="${size}">${label}</text></g>`;
+    const dotto = current ? `<circle class="tree-dotto" cx="${point.x + radius * .75}" cy="${point.y - radius * .75}" r="${Math.max(5, radius * .3)}"/>` : '';
+    const targetRing = target ? `<circle class="tree-target-ring" cx="${point.x}" cy="${point.y}" r="${radius + 8}"/>` : '';
+    return `<g class="tree-node ${current} ${target} ${empty}">${targetRing}<circle cx="${point.x}" cy="${point.y}" r="${radius}"/><text x="${point.x}" y="${point.y + size * .35}" font-size="${size}">${label}</text>${dotto}</g>`;
   }).join('');
-  const shownPath = treePath ? visualCode(treePath) : TEXT.start;
-  const selected = MORSE[treePath] || '—';
-  treeStatusEl.innerHTML = `${TEXT.path}: <strong>${shownPath}</strong><br>${TEXT.letter}: <strong>${selected}</strong>`;
+  updateTreeStatus();
+  renderTreeStage();
   treeEl.innerHTML = `<svg class="morse-tree-svg" viewBox="0 0 1200 700" role="img" aria-label="${TEXT.ariaTree}">
     <defs><marker id="tree-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z"/></marker></defs>
     <text class="tree-label" x="160" y="31">← ${TEXT.dot}</text><text class="tree-label" x="965" y="31">${TEXT.dash} →</text>${links}${nodes}
@@ -969,8 +1114,16 @@ function centreTreeOnCurrentNode() {
   if (overflow <= 0) return;
   const scale = svg.getBoundingClientRect().width / 1200;
   const left = position(treePath).x * scale - treeEl.clientWidth / 2;
-  treeEl.scrollTo({ left: Math.max(0, Math.min(overflow, left)), behavior: treeCentred ? 'smooth' : 'auto' });
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  treeEl.scrollTo({ left: Math.max(0, Math.min(overflow, left)), behavior: treeCentred && !reduceMotion ? 'smooth' : 'auto' });
   treeCentred = true;
+}
+function resetTree() {
+  window.clearTimeout(treePauseTimer);
+  treePath = '';
+  treeLastMovePath = '';
+  renderTree();
+  feedback(TEXT.reset, 'info');
 }
 function setMode(nextMode) {
   morseKeyDownAt = 0;
@@ -988,6 +1141,7 @@ function setMode(nextMode) {
     button.setAttribute('aria-pressed', String(active));
   });
   window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
   window.clearTimeout(treePauseTimer);
   const modeMessage = {
     tree: TEXT.treeMode,
@@ -1070,7 +1224,20 @@ $('play-translation-button').addEventListener('click', playTranslation);
 $('tree-dot-button').addEventListener('click', () => recordSignal('.'));
 $('tree-dash-button').addEventListener('click', () => recordSignal('-'));
 $('tree-confirm-button').addEventListener('click', chooseTreeLetter);
-$('tree-reset-button').addEventListener('click', () => { window.clearTimeout(treePauseTimer); treePath = ''; renderTree(); feedback(TEXT.reset, 'info'); });
+$('tree-reset-button').addEventListener('click', resetTree);
+treeStageEl.addEventListener('click', (event) => {
+  const signalButton = event.target.closest('[data-tree-stage-signal]');
+  if (signalButton) {
+    const signal = signalButton.dataset.treeStageSignal;
+    recordSignal(signal);
+    window.requestAnimationFrame(() => treeStageEl.querySelector(`[data-tree-stage-signal="${signal}"]`)?.focus());
+    return;
+  }
+  const actionButton = event.target.closest('[data-tree-stage-action]');
+  if (!actionButton) return;
+  if (actionButton.dataset.treeStageAction === 'choose') chooseTreeLetter();
+  if (actionButton.dataset.treeStageAction === 'reset') resetTree();
+});
 $('play-button').addEventListener('click', () => playMorse(level().message));
 $('replay-button').addEventListener('click', () => playMorse(level().message));
 answerOptionsEl.addEventListener('click', (event) => {
@@ -1079,6 +1246,7 @@ answerOptionsEl.addEventListener('click', (event) => {
 });
 $('restart-button').addEventListener('click', () => {
   window.clearTimeout(inputPauseTimer);
+  window.clearTimeout(wordPauseTimer);
   window.clearTimeout(treePauseTimer);
   morseKeyDownAt = 0;
   freeKeyDownAt = 0;
@@ -1110,8 +1278,10 @@ window.addEventListener('keydown', (event) => {
   if (event.target.matches?.('input, textarea')) return;
   const nativeControl = event.target.closest?.('button, input, a, select, textarea, summary');
   if (event.code === 'Space') {
+    if (nativeControl) return;
     event.preventDefault();
     if ((mode === 'tree' || mode === 'create' || mode === 'free') && !event.repeat && !morseKeyDownAt) {
+      pauseFreeTimersForKeyDown();
       morseKeyDownAt = performance.now();
       startMorseKeyTone();
     }
@@ -1126,6 +1296,8 @@ window.addEventListener('keydown', (event) => {
     event.preventDefault();
     if (mode === 'tree') {
       treePath = treePath.slice(0, -1);
+      treeLastMovePath = '';
+      treeNotice = '';
       renderTree();
       if (treePath) scheduleTreeReset();
       else window.clearTimeout(treePauseTimer);
@@ -1137,13 +1309,23 @@ window.addEventListener('keydown', (event) => {
       freeInput = freeInput.slice(0, -1);
       updateFreeMode();
       if (freeInput) scheduleFreeFinish();
+      else {
+        window.clearTimeout(inputPauseTimer);
+        window.clearTimeout(wordPauseTimer);
+      }
     }
   }
   else if (event.key.toLowerCase() === 'r' && mode === 'tree') {
-    window.clearTimeout(treePauseTimer);
-    treePath = '';
-    renderTree();
+    resetTree();
   }
+});
+window.addEventListener('resize', () => {
+  window.clearTimeout(treeResizeTimer);
+  treeResizeTimer = window.setTimeout(() => {
+    if (mode !== 'tree') return;
+    treeCentred = false;
+    centreTreeOnCurrentNode();
+  }, 120);
 });
 window.addEventListener('keyup', (event) => {
   if (event.code !== 'Space' || !morseKeyDownAt) return;
@@ -1151,7 +1333,7 @@ window.addEventListener('keyup', (event) => {
   const duration = performance.now() - morseKeyDownAt;
   morseKeyDownAt = 0;
   stopMorseKeyTone();
-  recordSignal(duration < DOT_THRESHOLD_MS ? '.' : '-', true);
+  recordSignal(duration < dashThresholdMs ? '.' : '-', true);
 });
 window.addEventListener('blur', () => {
   morseKeyDownAt = 0;
@@ -1160,8 +1342,11 @@ window.addEventListener('blur', () => {
   stopMorseKeyTone();
 });
 soundToggle.addEventListener('change', unlockBrowserAudio);
+dashThresholdInput.addEventListener('input', () => setDashThreshold(dashThresholdInput.value));
+dashThresholdInput.addEventListener('change', setDashThresholdOnHardware);
 letterPauseInput.addEventListener('input', () => setCharacterPause(letterPauseInput.value));
 letterPauseInput.addEventListener('change', setCharacterPauseOnHardware);
+wordPauseInput.addEventListener('input', () => setWordPause(wordPauseInput.value));
 if (wifiSetupForm) wifiSetupForm.addEventListener('submit', configureHomeWifi);
 if (otaFileInput) otaFileInput.addEventListener('change', showOtaFileSelection);
 if (otaUpdateForm) otaUpdateForm.addEventListener('submit', uploadFirmware);
@@ -1170,6 +1355,7 @@ function buildAlphabet() {
   $('alphabet').innerHTML = Object.entries(LETTERS).sort(([a], [b]) => a.localeCompare(b)).map(([letter, code]) => `<div class="alphabet-item"><strong>${letter}</strong><span>${spacedVisualCode(code)}</span></div>`).join('');
 }
 buildAlphabet();
+setDashThreshold(dashThresholdMs);
 setCharacterPause(characterPauseMs);
 updateMission();
 updateWritingMode();

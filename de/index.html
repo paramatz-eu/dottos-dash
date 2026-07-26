@@ -65,9 +65,8 @@
         </div>
       </details>
       <details class="play-settings">
-        <summary>Ton und Tasten-Einstellungen</summary>
+        <summary>Ton-Einstellungen</summary>
         <label class="sound-toggle"><input id="sound-toggle" type="checkbox" checked> Tasten-Töne</label>
-        <label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Nach dieser Pause beginnt der nächste Buchstabe.</small></label>
       </details>
     </section>
 
@@ -84,7 +83,18 @@
       <div class="input-card free-key-card">
         <button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Morse-Taste halten</strong><small>Kurz = Punkt · lang = Strich</small></button>
         <button id="free-clear-button" class="secondary-button" type="button">Neu beginnen</button>
-        <p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen. Pause macht einen Buchstaben daraus.</p>
+        <p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen.</p>
+        <details class="free-key-help">
+          <summary>Hilfe &amp; Timing einstellen</summary>
+          <div class="free-key-help-content">
+            <p><strong>So sendest du:</strong> Kurz drücken ist ein Punkt. Ab der Strich-Grenze wird dein Druck ein Strich. Warte die Buchstabenpause zwischen Buchstaben und die Wortpause zwischen Wörtern.</p>
+            <div class="timing-controls">
+              <label class="pause-control" for="dash-threshold"><span>Strich ab: <output id="dash-threshold-value">250 ms</output></span><input id="dash-threshold" type="range" min="100" max="1000" step="50" value="250"><small>Kürzere Drucke sind Punkte.</small></label>
+              <label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Danach liest der Decoder einen Buchstaben.</small></label>
+              <label class="pause-control" for="word-pause"><span>Wortpause: <output id="word-pause-value">1200 ms</output></span><input id="word-pause" type="range" min="700" max="5000" step="100" value="1200"><small>Danach setzt der Decoder ein Leerzeichen.</small></label>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -139,7 +149,7 @@
         <button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Buchstaben wählen ↵</button>
         <button id="tree-reset-button" class="secondary-button" type="button">Neu beginnen</button>
       </div>
-      <p class="tree-mobile-tip">Wische seitlich durch den Baum. Mit zwei Fingern kannst du zoomen.</p>
+      <p class="tree-mobile-tip">Wische seitlich, um alle Code-Wege zu erkunden.</p>
       <div id="morse-tree" class="tree-wrap" tabindex="0"></div>
     </section>
 
