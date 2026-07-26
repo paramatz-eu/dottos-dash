@@ -1,0 +1,29 @@
+name: Validate Dotto's Dash
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  web:
+    name: Check the offline web game
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --check app.js
+      # index.html, de/index.html and the ESP32 template inside app.js are three
+      # copies of one page driven by one script. This checks they still agree.
+      - run: node tools/check-web.mjs
+
+  firmware:
+    name: Validate ESPHome builds
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/esphome/esphome:stable
+    steps:
+      - uses: actions/checkout@v4
+      - run: esphome config firmware/dottos-dash-piezo.yaml
+      - run: esphome config firmware/dottos-dash-max98357a.yaml

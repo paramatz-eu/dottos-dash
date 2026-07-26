@@ -1,0 +1,13 @@
+# ESPHome build products and local configuration
+.esphome/
+.pioenvs/
+.piolibdeps/
+secrets.yaml
+*.bin
+
+# Operating-system and editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.claude/settings.local.json
+__pycache__/

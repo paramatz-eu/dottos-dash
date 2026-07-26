@@ -1,0 +1,83 @@
+name: Build ESP32 firmware
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "firmware/**"
+      - "app.js"
+      - "style.css"
+      - ".github/workflows/build-firmware.yml"
+  pull_request:
+    paths:
+      - "firmware/**"
+      - "app.js"
+      - "style.css"
+      - ".github/workflows/build-firmware.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/esphome/esphome:2026.7.2
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - dottos-dash-piezo
+          - dottos-dash-max98357a
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Compile firmware
+        shell: bash
+        run: |
+          set -euo pipefail
+          export ESPHOME_BUILD_PATH="$GITHUB_WORKSPACE/build/${{ matrix.target }}"
+          esphome compile "firmware/${{ matrix.target }}.yaml"
+
+      - name: Collect easy-to-find binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="${{ matrix.target }}"
+          build="$GITHUB_WORKSPACE/build/$target"
+          out="$GITHUB_WORKSPACE/dist/$target"
+          mkdir -p "$out"
+
+          copy_named() {
+            pattern="$1"
+            output_name="$2"
+            source_file="$(find "$build" -type f -name "$pattern" -print -quit)"
+            if [ -n "$source_file" ]; then
+              cp "$source_file" "$out/$output_name"
+            fi
+          }
+
+          # Put the useful flash images directly at the artifact root, without
+          # hidden .pioenvs directories that mobile file managers may conceal.
+          copy_named 'firmware.factory.bin' "$target-factory.bin"
+          copy_named 'firmware.ota.bin'     "$target-ota.bin"
+          copy_named 'firmware.bin'         "$target-firmware.bin"
+
+          # Ensure at least one flashable image was collected.
+          find "$out" -maxdepth 1 -type f -name '*.bin' -print -quit | grep -q .
+
+          cd "$out"
+          sha256sum ./*.bin > SHA256SUMS.txt
+          ls -lh
+
+      - name: Upload compiled firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}-firmware
+          path: dist/${{ matrix.target }}/
+          if-no-files-found: error
+          retention-days: 30

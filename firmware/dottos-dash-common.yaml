@@ -1,0 +1,399 @@
+# Shared firmware for the Dotto's Dash learning pad.
+# Do not flash this file directly. Choose the piezo or MAX98357A build instead.
+
+esphome:
+  name: ${device_name}
+  friendly_name: "Dotto's Dash"
+  includes:
+    - wifi_setup_handler.h
+  on_boot:
+    priority: -100
+    then:
+      - lambda: |-
+          static dottos_dash::WifiSetupHandler wifi_setup_handler;
+          web_server_base::global_web_server_base->add_handler(&wifi_setup_handler);
+      - script.execute: ready_animation
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+
+# Keep the normal ESPHome integration available alongside the child-friendly
+# web game. This makes the device discoverable in Home Assistant and usable
+# from the ESPHome dashboard after it joins a home network.
+api:
+
+# The game works on its own local network without an account or internet
+# connection. An adult can optionally add a home Wi-Fi network from the game
+# page; ESPHome keeps those user-entered credentials out of this source file.
+wifi:
+  ap:
+    ssid: "Dotto's Dash"
+    password: "dottodash"
+    # If a saved home network cannot be reached, bring the Morse hotspot back
+    # after a short wait so the device can still be configured and used.
+    ap_timeout: 15s
+
+# No `captive_portal:` here: its Wi-Fi-configuration page is confusing for a
+# child and can hide the game on Android. The adult-only Wi-Fi form embedded in
+# the game uses a private endpoint that saves user-entered Wi-Fi credentials.
+#
+# The full game is stored in the ESP32 firmware. Connect a phone, tablet or
+# computer to the network above and open 192.168.4.1 — no web server, account
+# or internet connection is needed. ESPHome's supported local CSS/JS includes
+# replace its standard dashboard with the Morse game.
+web_server:
+  port: 80
+  version: 1
+  css_include: ../style.css
+  css_url: ""
+  js_include: ../app.js
+  # ESPHome's v1 page only adds the embedded JavaScript when it has an
+  # explicit script URL. `/0.js` is the local, firmware-embedded file above.
+  js_url: "/0.js"
+  log: false
+
+# Keep the useful part of the old ESPHome portal: an adult can upload a new
+# firmware.bin through the "Firmware aktualisieren" form in the game page.
+# Access is limited to people who know the WPA2 password of this offline AP.
+ota:
+  - platform: esphome
+  - platform: web_server
+
+globals:
+  - id: morse_buffer
+    type: std::string
+    restore_value: no
+    initial_value: '""'
+  - id: last_decode_was_valid
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+  - id: morse_event_counter
+    type: uint32_t
+    restore_value: no
+    initial_value: '0'
+
+# The same pause is used by the physical key and the browser game. It is kept
+# on the ESP32, so a chosen value stays in place after a restart.
+number:
+  - platform: template
+    id: letter_pause_ms
+    name: "Letter Pause"
+    icon: mdi:timer-outline
+    optimistic: true
+    restore_value: true
+    initial_value: 500
+    min_value: 300
+    max_value: 2000
+    step: 100
+    unit_of_measurement: ms
+
+text_sensor:
+  - platform: template
+    id: live_morse
+    name: "Morse Input"
+    icon: mdi:gesture-tap-button
+    update_interval: never
+  - platform: template
+    id: last_morse
+    name: "Last Morse Code"
+    icon: mdi:format-text
+    update_interval: never
+  - platform: template
+    id: decoded_letter
+    name: "Decoded Letter"
+    icon: mdi:alphabetical
+    update_interval: never
+  # A new, numbered event is published for every physical or web dot/dash.
+  # The game page listens to it so the button and encoder control the game.
+  - platform: template
+    id: morse_event
+    name: "Morse Event"
+    icon: mdi:gesture-tap-button
+    update_interval: never
+
+light:
+  # HW-479 common-cathode RGB module: R -> GPIO16, G -> GPIO17, B -> GPIO18.
+  - platform: rgb
+    id: rgb_light
+    name: "Morse Light"
+    red: rgb_red
+    green: rgb_green
+    blue: rgb_blue
+    restore_mode: ALWAYS_OFF
+
+output:
+  - platform: ledc
+    id: rgb_red
+    pin: GPIO16
+  - platform: ledc
+    id: rgb_green
+    pin: GPIO17
+  - platform: ledc
+    id: rgb_blue
+    pin: GPIO18
+
+script:
+  - id: ready_animation
+    mode: restart
+    then:
+      - light.turn_on:
+          id: rgb_light
+          brightness: 70%
+          red: 20%
+          green: 80%
+          blue: 100%
+      - rtttl.play: "ready:d=16,o=5,b=150:c,e,g"
+      - delay: 900ms
+      - light.turn_off: rgb_light
+
+  - id: flash_dot
+    mode: restart
+    then:
+      - light.turn_on:
+          id: rgb_light
+          brightness: 100%
+          red: 0%
+          green: 75%
+          blue: 100%
+      - delay: 140ms
+      - light.turn_off: rgb_light
+
+  - id: flash_dash
+    mode: restart
+    then:
+      - light.turn_on:
+          id: rgb_light
+          brightness: 100%
+          red: 95%
+          green: 35%
+          blue: 0%
+      - delay: 420ms
+      - light.turn_off: rgb_light
+
+  # A real Morse key gives feedback as soon as it is pressed. Keep the tone
+  # running until release; the press length is then classified as dot/dash.
+  - id: morse_key_down_feedback
+    mode: restart
+    then:
+      - light.turn_on:
+          id: rgb_light
+          brightness: 100%
+          red: 25%
+          green: 70%
+          blue: 100%
+      # An eight-second note is stopped explicitly on release. This works for
+      # both the piezo and the MAX98357A firmware variants.
+      - rtttl.play: "key:d=1,o=6,b=30:c"
+
+  - id: morse_key_up_feedback
+    mode: restart
+    then:
+      - rtttl.stop
+      - light.turn_off: rgb_light
+
+  - id: enter_dot
+    mode: queued
+    then:
+      - lambda: |-
+          id(morse_buffer) += ".";
+          id(live_morse).publish_state(id(morse_buffer));
+          id(morse_event_counter) += 1;
+          id(morse_event).publish_state(std::to_string(id(morse_event_counter)) + ":.");
+      - script.execute: flash_dot
+      # Let the key-release action stop its continuous tone first.
+      - delay: 20ms
+      - rtttl.play: "dot:d=32,o=6,b=180:c"
+      - script.execute: decode_after_pause
+
+  - id: enter_dash
+    mode: queued
+    then:
+      - lambda: |-
+          id(morse_buffer) += "-";
+          id(live_morse).publish_state(id(morse_buffer));
+          id(morse_event_counter) += 1;
+          id(morse_event).publish_state(std::to_string(id(morse_event_counter)) + ":-");
+      - script.execute: flash_dash
+      # Let the key-release action stop its continuous tone first.
+      - delay: 20ms
+      - rtttl.play: "dash:d=16,o=5,b=180:g"
+      - script.execute: decode_after_pause
+
+  - id: decode_after_pause
+    mode: restart
+    then:
+      - delay: !lambda 'return static_cast<uint32_t>(id(letter_pause_ms).state);'
+      - lambda: |-
+          const std::string code = id(morse_buffer);
+          std::string letter = "?";
+          if      (code == ".-") letter = "A";
+          else if (code == "-...") letter = "B";
+          else if (code == "-.-.") letter = "C";
+          else if (code == "-..") letter = "D";
+          else if (code == ".") letter = "E";
+          else if (code == "..-.") letter = "F";
+          else if (code == "--.") letter = "G";
+          else if (code == "....") letter = "H";
+          else if (code == "..") letter = "I";
+          else if (code == ".---") letter = "J";
+          else if (code == "-.-") letter = "K";
+          else if (code == ".-..") letter = "L";
+          else if (code == "--") letter = "M";
+          else if (code == "-.") letter = "N";
+          else if (code == "---") letter = "O";
+          else if (code == ".--.") letter = "P";
+          else if (code == "--.-") letter = "Q";
+          else if (code == ".-.") letter = "R";
+          else if (code == "...") letter = "S";
+          else if (code == "-") letter = "T";
+          else if (code == "..-") letter = "U";
+          else if (code == "...-") letter = "V";
+          else if (code == ".--") letter = "W";
+          else if (code == "-..-") letter = "X";
+          else if (code == "-.--") letter = "Y";
+          else if (code == "--..") letter = "Z";
+          else if (code == "-----") letter = "0";
+          else if (code == ".----") letter = "1";
+          else if (code == "..---") letter = "2";
+          else if (code == "...--") letter = "3";
+          else if (code == "....-") letter = "4";
+          else if (code == ".....") letter = "5";
+          else if (code == "-....") letter = "6";
+          else if (code == "--...") letter = "7";
+          else if (code == "---..") letter = "8";
+          else if (code == "----.") letter = "9";
+
+          id(last_decode_was_valid) = letter != "?";
+          id(last_morse).publish_state(code);
+          id(decoded_letter).publish_state(letter);
+          id(morse_buffer).clear();
+          id(live_morse).publish_state("");
+      - if:
+          condition:
+            lambda: 'return id(last_decode_was_valid);'
+          then:
+            - light.turn_on:
+                id: rgb_light
+                brightness: 100%
+                red: 0%
+                green: 100%
+                blue: 25%
+            - rtttl.play: "yes:d=16,o=6,b=170:g,c7"
+          else:
+            - light.turn_on:
+                id: rgb_light
+                brightness: 100%
+                red: 100%
+                green: 0%
+                blue: 20%
+            - rtttl.play: "try:d=16,o=5,b=130:c,8p,c"
+      - delay: 650ms
+      - light.turn_off: rgb_light
+
+# Button-only stage: a short press is a dot and a long press is a dash.
+# The BOOT button on an ESP32 DevKit is normally wired to GPIO0, so it can be
+# used without external hardware. Do not hold it while resetting or flashing:
+# GPIO0 also selects the serial bootloader at startup.
+# The external button / encoder switch on GPIO13 remains available too.
+binary_sensor:
+  - platform: gpio
+    id: morse_boot_button
+    name: "Morse Key (BOOT)"
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    filters:
+      - delayed_on_off: 20ms
+    on_press:
+      - script.execute: morse_key_down_feedback
+    on_release:
+      - script.execute: morse_key_up_feedback
+    on_click:
+      - min_length: 40ms
+        max_length: 300ms
+        then:
+          - script.execute: enter_dot
+      - min_length: 301ms
+        max_length: 8000ms
+        then:
+          - script.execute: enter_dash
+
+  - platform: gpio
+    id: morse_button
+    name: "Morse Key (external)"
+    pin:
+      number: GPIO13
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    filters:
+      - delayed_on_off: 20ms
+    on_press:
+      - script.execute: morse_key_down_feedback
+    on_release:
+      - script.execute: morse_key_up_feedback
+    on_click:
+      - min_length: 40ms
+        max_length: 300ms
+        then:
+          - script.execute: enter_dot
+      - min_length: 301ms
+        max_length: 8000ms
+        then:
+          - script.execute: enter_dash
+
+# Encoder stage: physical left is a dot, physical right is a dash.
+# Leaving the encoder unplugged is safe; the button stage still works.
+sensor:
+  - platform: rotary_encoder
+    id: morse_encoder
+    name: "Morse Dial"
+    pin_a:
+      number: GPIO21
+      mode:
+        input: true
+        pullup: true
+    pin_b:
+      number: GPIO19
+      mode:
+        input: true
+        pullup: true
+    on_clockwise:
+      then:
+        - script.execute: enter_dash
+    on_anticlockwise:
+      then:
+        - script.execute: enter_dot
+
+button:
+  # These two endpoints are used by the embedded webpage. They intentionally
+  # call the exact same scripts as the physical button and encoder.
+  - platform: template
+    name: "Web Dot"
+    icon: mdi:gesture-tap
+    on_press:
+      - script.execute: enter_dot
+  - platform: template
+    name: "Web Dash"
+    icon: mdi:gesture-tap-hold
+    on_press:
+      - script.execute: enter_dash
+  - platform: template
+    name: "Play Dot"
+    icon: mdi:music-note
+    on_press:
+      - rtttl.play: "dot:d=32,o=6,b=180:c"
+  - platform: template
+    name: "Play Dash"
+    icon: mdi:music-note-eighth
+    on_press:
+      - rtttl.play: "dash:d=16,o=5,b=180:g"

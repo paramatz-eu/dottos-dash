@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dotto's Dash ist ein freundliches Offline-Morsecode-Abenteuer für neugierige junge Tüftlerinnen und Tüftler.">
+  <title>Dotto’s Dash</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <p class="language-link"><a href="../">English</a></p>
+      <p class="eyebrow">Ein Punkt-und-Strich-Abenteuer</p>
+      <h1>Dotto’s Dash</h1>
+      <div class="dotto-track" aria-hidden="true"><span class="dotto-dot">••</span><span class="dotto-dash"></span><span class="dotto-finish">★</span></div>
+      <p class="hero-copy">Reise mit Dotto durch die wahre Geschichte des Morsecodes. In jedem Kapitel löst du dasselbe Problem wie die Erfinder.</p>
+      <p class="offline-badge">Funktioniert offline · Kein Konto · Ab 10 Jahren</p>
+    </header>
+
+    <section class="story-journey" aria-labelledby="journey-title">
+      <div class="story-intro">
+        <p class="eyebrow">Eine wahre Erfinder-Geschichte</p>
+        <h2 id="journey-title">Warum wurde der Morsecode erfunden?</h2>
+        <p>Lerne die Menschen und ihr Problem kennen. Dann probierst du ihre nächste Idee selbst aus.</p>
+      </div>
+
+      <ol class="story-map" aria-label="Kapitel der Geschichte">
+        <li><button class="story-step active" type="button" data-story-chapter="0" aria-current="step"><span>1</span><strong>Das Problem</strong><small>Vor dem Telegrafen</small></button></li>
+        <li><button class="story-step" type="button" data-story-chapter="1"><span>2</span><strong>Das Team</strong><small>1830er-Jahre</small></button></li>
+        <li><button class="story-step" type="button" data-story-chapter="2"><span>3</span><strong>Die Taste</strong><small>Ab 1837</small></button></li>
+        <li><button class="story-step" type="button" data-story-chapter="3"><span>4</span><strong>Die erste Leitung</strong><small>1843–1844</small></button></li>
+        <li><button class="story-step" type="button" data-story-chapter="4"><span>5</span><strong>Ein Weltcode</strong><small>1865–1906</small></button></li>
+      </ol>
+
+      <article class="story-card" aria-live="polite">
+        <div class="story-copy">
+          <p id="story-period" class="story-period">Vor elektrischen Telegrafen · Das Problem</p>
+          <h3 id="story-title">Eine Nachricht war nicht schneller als ein Pferd</h3>
+          <p id="story-text">Briefe reisten mit Reitern und Schiffen. Signalflaggen und Türme waren schneller, aber man musste die nächste Station sehen können. Erfinder wollten Nachrichten durch einen Draht schicken.</p>
+          <div class="story-people"><span aria-hidden="true">💭</span><p><strong id="story-people-title">Die große Frage</strong><span id="story-people-text">Kann Elektrizität eine Idee weiter tragen, als unsere Augen sehen können?</span></p></div>
+        </div>
+        <aside class="story-mission">
+          <p class="eyebrow">Deine Kapitel-Aufgabe</p>
+          <h3 id="story-mission-title">Baue ein winziges Alphabet</h3>
+          <p id="story-mission-text">Beginne mit nur zwei Signalen. Ein Punkt geht nach links, ein Strich nach rechts. Führe Dotto zum nächsten Buchstaben.</p>
+          <p class="story-lesson-link">Probiere es gleich darunter aus ↓</p>
+        </aside>
+      </article>
+
+      <nav class="story-controls" aria-label="Zwischen den Kapiteln wechseln">
+        <button id="story-back" class="secondary-button" type="button">← Früheres Kapitel</button>
+        <strong id="story-position">Kapitel 1 von 5</strong>
+        <button id="story-next" class="primary-button" type="button">Nächstes Kapitel →</button>
+      </nav>
+
+      <details class="activity-picker">
+        <summary>Direkt zu einer Aufgabe springen</summary>
+        <div class="mode-options" aria-label="Aufgaben">
+          <button class="mode-button active" type="button" data-mode="tree" data-story-target="0" aria-pressed="true"><span aria-hidden="true">🌿</span><strong>Code-Wege</strong><small>Punkten und Strichen folgen</small></button>
+          <button class="mode-button" type="button" data-mode="free" data-story-target="2" aria-pressed="false"><span aria-hidden="true">🔑</span><strong>Taste ausprobieren</strong><small>Senden und entschlüsseln</small></button>
+          <button class="mode-button" type="button" data-mode="receive" data-story-target="3" aria-pressed="false"><span aria-hidden="true">👂</span><strong>Klicks hören</strong><small>Hören und auswählen</small></button>
+          <button class="mode-button" type="button" data-mode="create" data-story-target="4" aria-pressed="false"><span aria-hidden="true">✎</span><strong>Nachricht senden</strong><small>Sehen, hören, senden</small></button>
+        </div>
+      </details>
+      <details class="play-settings">
+        <summary>Ton und Tasten-Einstellungen</summary>
+        <label class="sound-toggle"><input id="sound-toggle" type="checkbox" checked> Tasten-Töne</label>
+        <label class="pause-control" for="letter-pause"><span>Buchstabenpause: <output id="letter-pause-value">500 ms</output></span><input id="letter-pause" type="range" min="300" max="2000" step="100" value="500"><small>Nach dieser Pause beginnt der nächste Buchstabe.</small></label>
+      </details>
+    </section>
+
+    <section id="free-panel" class="game-panel hidden">
+      <div class="mission-card write-card">
+        <p class="prompt">Dottos Tasten-Checkpoint</p>
+        <h2>Was sagt Dottos Taste?</h2>
+        <p>Sende frei Morse. Nach jeder Pause liest Dottos Decoder den nächsten Buchstaben.</p>
+        <p class="prompt">Der Decoder liest:</p>
+        <output id="free-message" class="free-message" aria-live="polite">—</output>
+        <p id="free-key-status" class="keyboard-help" aria-live="polite">Bereit für deinen ersten Buchstaben.</p>
+      </div>
+
+      <div class="input-card free-key-card">
+        <button id="free-key-button" class="morse-key-button" type="button"><span aria-hidden="true">●</span><strong>Morse-Taste halten</strong><small>Kurz = Punkt · lang = Strich</small></button>
+        <button id="free-clear-button" class="secondary-button" type="button">Neu beginnen</button>
+        <p class="keyboard-help">Leertaste am Computer halten, diese Taste auf dem Touchscreen drücken oder den echten Taster benutzen. Pause macht einen Buchstaben daraus.</p>
+      </div>
+    </section>
+
+    <section id="create-panel" class="game-panel hidden">
+      <div class="mission-card write-card">
+        <p class="prompt">Dottos Nachrichten-Werkstatt</p>
+        <h2>Schreibe sie. Hör sie. Sende sie.</h2>
+        <label class="write-label" for="message-input">Buchstaben, Zahlen und Leerzeichen</label>
+        <input id="message-input" class="custom-message" type="text" maxlength="24" autocomplete="off" autocapitalize="characters" placeholder="LOS DOTTO">
+        <p class="prompt">So klingt der Morsecode:</p>
+        <output id="translation-output" class="morse-input translation-output" aria-live="polite">—</output>
+        <div class="action-controls create-actions">
+          <button id="play-translation-button" class="secondary-button" type="button">▶ Anhören</button>
+          <button id="start-writing-button" class="primary-button" type="button">Selbst senden</button>
+        </div>
+        <p class="keyboard-help"><strong>/</strong> bedeutet Wortpause. Wähle „Selbst senden“, wenn du bereit für die Aufgabe bist.</p>
+        <div class="create-task" hidden>
+          <p id="write-message" class="target-word" aria-live="polite">—</p>
+          <p id="write-position" class="mission-count">Schreibe zuerst eine Nachricht.</p>
+          <p class="prompt">Nächster Buchstabe:</p>
+          <div id="write-target-letter" class="target-letter" aria-live="polite">—</div>
+        </div>
+      </div>
+
+      <div class="input-card create-challenge" hidden>
+        <p class="prompt">Dein Morse-Code</p>
+        <output id="write-morse-input" class="morse-input" aria-live="polite">—</output>
+        <div class="input-controls">
+          <button id="write-dot-button" class="signal-button dot" type="button">← Punkt <span>·</span></button>
+          <button id="write-dash-button" class="signal-button dash" type="button">Strich → <span>—</span></button>
+        </div>
+        <div class="action-controls">
+          <button id="write-check-button" class="primary-button" type="button">Jetzt prüfen</button>
+          <button id="write-clear-button" class="secondary-button" type="button">Löschen</button>
+        </div>
+        <p class="keyboard-help">Mit der Taste, Leertaste, ← oder → sendest du jeden Buchstaben.</p>
+      </div>
+    </section>
+
+    <section id="tree-panel" class="game-panel">
+      <div class="tree-intro">
+        <div>
+          <p id="tree-mission" class="mission-count"></p>
+          <h2>Führe Dotto zu <span id="tree-word" class="tree-word">E</span></h2>
+          <p>Finde den nächsten Buchstaben: <strong id="tree-target">E</strong>. Gehe mit einem Punkt nach links oder mit einem Strich nach rechts. Danach den Buchstaben wählen.</p>
+        </div>
+        <div id="tree-status" class="tree-status" aria-live="polite"></div>
+      </div>
+      <div class="tree-controls" aria-label="Steuerung für den Morsebaum">
+        <button id="tree-dot-button" class="signal-button dot" type="button">← Punkt</button>
+        <button id="tree-dash-button" class="signal-button dash" type="button">Strich →</button>
+        <button id="tree-confirm-button" class="primary-button tree-confirm-button" type="button">Buchstaben wählen ↵</button>
+        <button id="tree-reset-button" class="secondary-button" type="button">Neu beginnen</button>
+      </div>
+      <p class="tree-mobile-tip">Wische seitlich durch den Baum. Mit zwei Fingern kannst du zoomen.</p>
+      <div id="morse-tree" class="tree-wrap" tabindex="0"></div>
+    </section>
+
+    <section id="receive-panel" class="receive-panel hidden">
+      <div class="listen-card">
+        <p id="receive-mission" class="mission-count"></p>
+        <h2>Was hat Dotto gehört?</h2>
+        <p>Starte das Signal, höre genau zu und wähle Dottos Nachricht.</p>
+        <div class="listen-controls">
+          <button id="play-button" class="primary-button" type="button">▶ Morsecode abspielen</button>
+          <button id="replay-button" class="secondary-button" type="button">Noch einmal</button>
+        </div>
+      </div>
+      <div class="answer-card">
+        <p class="prompt">Was bedeutet der Code?</p>
+        <div id="answer-options" class="answer-options" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+
+    <section class="progress-card">
+      <div><span class="stat-label">Dash-Punkte</span><strong id="stars">0</strong></div>
+      <div><span class="stat-label">Nächster Checkpoint</span><strong id="next-letter">T</strong></div>
+      <button id="restart-button" class="secondary-button" type="button">Dash neu starten</button>
+    </section>
+
+    <details class="cheat-sheet">
+      <summary>Spickzettel: Morse-Alphabet</summary>
+      <div id="alphabet" class="alphabet-grid"></div>
+    </details>
+
+    <details class="story-sources">
+      <summary>Für neugierige Erwachsene: Quellen der Geschichte</summary>
+      <p>Die Geschichte folgt Aufzeichnungen der <a href="https://www.loc.gov/collections/samuel-morse-papers/articles-and-essays/invention-of-the-telegraph/">Library of Congress</a>, der <a href="https://siarchives.si.edu/blog/forgotten-history-alfred-vail-and-samuel-morse">Smithsonian Institution Archives</a> sowie den Geschichten der Internationalen Fernmeldeunion über ihre <a href="https://www.itu.int/en/history/Pages/ITUBorn1865.aspx">Gründungskonferenz von 1865</a> und den <a href="https://www.itu.int/hub/2022/06/seafarer-day-itu-maritime-publications/">Seefunk</a>.</p>
+    </details>
+
+    <section class="make-it-card">
+      <h2>Baue Dottos Controller</h2>
+      <p>Ergänze die ESP32-Taste, den Drehgeber für Punkte und Striche und einen Piezo oder Lautsprecher für jeden Checkpoint.</p>
+      <a href="build.html">Schritt-für-Schritt-Bauanleitung öffnen →</a>
+    </section>
+  </main>
+  <footer>Dotto läuft mit Neugier, Punkten und Strichen. ● —</footer>
+  <script src="../app.js"></script>
+</body>
+</html>

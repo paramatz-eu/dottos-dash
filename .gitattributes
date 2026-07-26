@@ -1,0 +1,19 @@
+# Normalise to LF in the repository regardless of a contributor's core.autocrlf.
+# The firmware compiles in a Linux container, so CRLF must never reach the YAML,
+# the shell steps in the workflows or the C++ header.
+* text=auto
+
+*.yaml  text
+*.yml   text
+*.h     text
+*.js    text
+*.mjs   text
+*.css   text
+*.html  text
+*.md    text
+
+*.bin   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary

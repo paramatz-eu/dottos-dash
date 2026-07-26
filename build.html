@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A step-by-step electronics lesson for building Dotto's Dash.">
+  <title>Build Dotto's Dash</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page build-page">
+    <header class="hero">
+      <a class="build-back" href="index.html">← Back to Dotto's Dash</a>
+      <p class="language-link"><a href="de/build.html">Deutsch</a></p>
+      <p class="eyebrow">Build Dotto’s controller</p>
+      <h1>Make the dot-and-dash machine</h1>
+      <p class="hero-copy">Build one small circuit, test it, then add the next piece. That is how makers turn an idea into a working invention.</p>
+      <p class="offline-badge">Offline · Adult helper for USB and wiring · Ages 10+</p>
+    </header>
+
+    <div class="lesson-layout">
+      <nav class="lesson-nav" aria-label="Build lesson sections">
+        <strong>Build steps</strong>
+        <a href="#safety">Safety</a>
+        <a href="#parts">Parts</a>
+        <a href="#flash">Flash</a>
+        <a href="#light">RGB light</a>
+        <a href="#button">Morse button</a>
+        <a href="#encoder">Rotary encoder</a>
+        <a href="#sound">Sound</a>
+        <a href="#debug">Debug</a>
+        <a href="#experiments">Experiments</a>
+      </nav>
+
+      <article class="lesson-content">
+        <section class="lesson-card concept-card">
+          <h2>What are we building?</h2>
+          <p>The ESP32 is a tiny computer. It notices a button or dial, turns that into Morse code, then answers with coloured light and sound.</p>
+          <pre class="wire-diagram">finger or dial → ESP32 input pin → Morse program → light and sound
+
+short press = dot        long press = dash
+turn left = dot          turn right = dash
+pause 1.2 seconds = decode a letter</pre>
+        </section>
+
+        <section id="safety" class="lesson-card safety-card">
+          <h2>Safety first</h2>
+          <ul>
+            <li>An adult flashes the board and checks wires before USB is connected.</li>
+            <li>Unplug USB before moving a wire.</li>
+            <li>Use USB power only while learning. Never use wall power, mains electricity, unknown supplies, or oversized batteries.</li>
+            <li>ESP32 GPIO pins are <strong>3.3 V only</strong>. Never connect 5 V to a GPIO pin.</li>
+            <li>Use the named HW-479 RGB module, or add a resistor to every channel of a bare LED.</li>
+            <li>If the board gets hot, smells odd, or disconnects: unplug it now and inspect the wiring with the adult helper.</li>
+          </ul>
+        </section>
+
+        <section id="parts" class="lesson-card">
+          <h2>Parts and their jobs</h2>
+          <table class="wire-table">
+            <thead><tr><th>Part</th><th>What it teaches</th><th>When needed</th></tr></thead>
+            <tbody>
+              <tr><td>ESP32 DevKit + USB</td><td>The computer that reads and controls pins.</td><td>Always</td></tr>
+              <tr><td>Breadboard + jumper wires</td><td>Safe removable connections.</td><td>Hardware stages</td></tr>
+              <tr><td>HW-479 common-cathode RGB module</td><td>Three coloured outputs.</td><td>Light</td></tr>
+              <tr><td>Momentary button</td><td>A switch and a Morse key.</td><td>Button</td></tr>
+              <tr><td>Rotary encoder</td><td>Two signals reveal turning direction.</td><td>Dial</td></tr>
+              <tr><td>Passive piezo or MAX98357A + speaker</td><td>Electronic sound.</td><td>Optional sound</td></tr>
+            </tbody>
+          </table>
+          <p><strong>GND</strong> means ground: the shared return path for electricity. Components need a shared GND to work together.</p>
+        </section>
+
+        <section id="flash" class="lesson-card">
+          <span class="step-label">Step 0</span>
+          <h2>Flash before wiring</h2>
+          <ol>
+            <li>Connect only the ESP32 with USB.</li>
+            <li>On the adult's computer, run:</li>
+          </ol>
+          <pre class="wire-diagram">esphome run firmware/dottos-dash-piezo.yaml</pre>
+          <ol start="3">
+            <li>Unplug USB. Put the ESP32 on the breadboard with its USB socket facing the same way each time.</li>
+            <li>Find labels such as <kbd>13</kbd>, <kbd>21</kbd>, <kbd>GND</kbd>, <kbd>3V3</kbd>, and <kbd>VIN</kbd>/<kbd>5V</kbd>. These labels matter—not the breadboard row numbers.</li>
+          </ol>
+          <table class="wire-table">
+            <thead><tr><th>ESP32 pin</th><th>Job</th></tr></thead>
+            <tbody>
+              <tr><td>GPIO16 / 17 / 18</td><td>RGB red / green / blue</td></tr>
+              <tr><td>GPIO13</td><td>Button or encoder switch</td></tr>
+              <tr><td>GPIO21 / 19</td><td>Encoder turning signals</td></tr>
+              <tr><td>GPIO27</td><td>Passive piezo</td></tr>
+              <tr><td>GPIO26 / 25 / 22</td><td>MAX98357A sound timing and data</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="light" class="lesson-card">
+          <span class="step-label">Step 1</span>
+          <h2>Connect the RGB light</h2>
+          <table class="wire-table">
+            <thead><tr><th>HW-479 label</th><th>ESP32 pin</th></tr></thead>
+            <tbody><tr><td><kbd>R</kbd></td><td>GPIO16</td></tr><tr><td><kbd>G</kbd></td><td>GPIO17</td></tr><tr><td><kbd>B</kbd></td><td>GPIO18</td></tr><tr><td><kbd>GND</kbd> / common cathode</td><td>GND</td></tr></tbody>
+          </table>
+          <pre class="wire-diagram">GPIO16 ───────── RGB R
+GPIO17 ───────── RGB G
+GPIO18 ───────── RGB B
+GND    ───────── RGB common / GND</pre>
+          <div class="test-card lesson-card">
+            <h3>Test</h3>
+            <p>Reconnect USB. The light should briefly glow blue-green. Later, dots are cyan, dashes are orange, a recognised letter is green, and an unknown code is red.</p>
+          </div>
+          <details><summary>What is an RGB light?</summary><p>RGB means red, green and blue. The ESP32 rapidly switches each colour channel on and off using PWM (pulse-width modulation). Your eyes blend those fast flashes into colours. A common-cathode LED has one shared path to GND and three separately controlled colour paths.</p></details>
+          <p><strong>Stop if needed:</strong> do not guess from wire colours. This project expects a common-cathode HW-479 module. A common-anode LED or a module with a different pin layout needs different wiring and firmware.</p>
+        </section>
+
+        <section id="button" class="lesson-card">
+          <span class="step-label">Step 2</span>
+          <h2>Make the Morse button</h2>
+          <p><strong>Start without wiring:</strong> the ESP32 DevKit's <kbd>BOOT</kbd> button is already a Morse key after flashing. Releasing it records a dot or dash; with RGB and a piezo connected, feedback begins when it is pressed. Do not hold BOOT while resetting or flashing.</p>
+          <p>Add the external button below when you want a larger key on the breadboard.</p>
+          <table class="wire-table"><thead><tr><th>Button side</th><th>ESP32 pin</th></tr></thead><tbody><tr><td>One side</td><td>GPIO13</td></tr><tr><td>Other side</td><td>GND</td></tr></tbody></table>
+          <pre class="wire-diagram">GPIO13 ───────── [ push button ] ───────── GND</pre>
+          <div class="test-card lesson-card">
+            <h3>Test</h3>
+            <ol><li>Quick tap: cyan means dot.</li><li>Hold for about half a second: orange means dash.</li><li>Tap once, wait: <kbd>.</kbd> becomes <kbd>E</kbd>.</li><li>Make <kbd>...</kbd>, wait: it becomes <kbd>S</kbd>.</li></ol>
+          </div>
+          <details><summary>Why is there no resistor on the button?</summary><p>The ESP32 uses an internal pull-up resistor. When the button is open, GPIO13 reads HIGH. Pressing the button joins it to GND, so it reads LOW. The program measures the LOW time. It also ignores tiny switch wiggles at first contact; that is debouncing.</p></details>
+          <p>Four-leg breadboard buttons have two joined legs on each side. Use one leg from each side across the centre gap. Two legs from the same side are already connected.</p>
+        </section>
+
+        <section id="encoder" class="lesson-card">
+          <span class="step-label">Step 3</span>
+          <h2>Add the rotary encoder</h2>
+          <p>Keep the button. The encoder switch <kbd>SW</kbd> uses the same GPIO13 and GND connections.</p>
+          <table class="wire-table"><thead><tr><th>Encoder label</th><th>ESP32 pin</th></tr></thead><tbody><tr><td><kbd>CLK</kbd> / <kbd>A</kbd></td><td>GPIO21</td></tr><tr><td><kbd>DT</kbd> / <kbd>B</kbd></td><td>GPIO19</td></tr><tr><td><kbd>GND</kbd> / <kbd>C</kbd></td><td>GND</td></tr><tr><td><kbd>SW</kbd></td><td>GPIO13</td></tr><tr><td><kbd>+</kbd> / <kbd>VCC</kbd> (module only)</td><td>3V3</td></tr></tbody></table>
+          <div class="test-card lesson-card"><h3>Test</h3><p>Turn left for a dot and right for a dash. If it feels backwards, unplug USB and swap only the <kbd>CLK</kbd> and <kbd>DT</kbd> wires.</p></div>
+          <details><summary>How can a dial know left from right?</summary><p>An encoder sends two click signals. One changes just before the other; that order tells the ESP32 which way it turned. This two-signal idea is called quadrature.</p></details>
+        </section>
+
+        <section id="sound" class="lesson-card">
+          <span class="step-label">Step 4</span>
+          <h2>Choose your sound</h2>
+          <h3>Option A: passive piezo (recommended first)</h3>
+          <table class="wire-table"><thead><tr><th>Piezo pin</th><th>ESP32 pin</th></tr></thead><tbody><tr><td><kbd>+</kbd></td><td>GPIO27</td></tr><tr><td><kbd>-</kbd></td><td>GND</td></tr></tbody></table>
+          <pre class="wire-diagram">GPIO27 ───────── piezo +
+GND    ───────── piezo -</pre>
+          <p>Use a <strong>passive</strong> piezo. The firmware makes its tone by changing the GPIO signal thousands of times per second. A passive piezo bends a tiny amount, moves air, and makes sound.</p>
+          <h3>Option B: MAX98357A and a small speaker</h3>
+          <p>Use this instead of the piezo for louder sound. Flash the other firmware first.</p>
+          <pre class="wire-diagram">esphome run firmware/dottos-dash-max98357a.yaml</pre>
+          <table class="wire-table"><thead><tr><th>MAX98357A label</th><th>ESP32 pin</th></tr></thead><tbody><tr><td><kbd>BCLK</kbd></td><td>GPIO26</td></tr><tr><td><kbd>LRC</kbd> / <kbd>WS</kbd></td><td>GPIO25</td></tr><tr><td><kbd>DIN</kbd></td><td>GPIO22</td></tr><tr><td><kbd>GND</kbd></td><td>GND</td></tr><tr><td><kbd>VIN</kbd></td><td>ESP32 <kbd>VIN</kbd> / <kbd>5V</kbd></td></tr><tr><td><kbd>SPK+</kbd>, <kbd>SPK-</kbd></td><td>The two speaker wires only</td></tr></tbody></table>
+          <p>The speaker connects only to the amplifier, never directly to an ESP32 pin. <kbd>BCLK</kbd>, <kbd>LRC</kbd>, and <kbd>DIN</kbd> are the three digital I2S sound signals; the MAX98357A turns them into speaker power.</p>
+        </section>
+
+        <section id="debug" class="lesson-card">
+          <h2>Debug like a maker</h2>
+          <table class="wire-table"><thead><tr><th>What you see</th><th>Check one thing</th></tr></thead><tbody><tr><td>No RGB light</td><td>Shared LED pin to GND; R, G, B to GPIO16, 17, 18.</td></tr><tr><td>Wrong RGB colours</td><td>Read module labels, not jumper-wire colours.</td></tr><tr><td>Button always pressed</td><td>Move a wire to the opposite side of the button centre gap.</td></tr><tr><td>Button does nothing</td><td>It must join GPIO13 to GND, not 3V3.</td></tr><tr><td>Encoder direction wrong</td><td>Swap GPIO21 and GPIO19 with USB unplugged.</td></tr><tr><td>Piezo silent</td><td>Check that it is passive and connected to GPIO27/GND.</td></tr><tr><td>Board resets or warms up</td><td>Unplug immediately; look for a short circuit or 5 V on a GPIO.</td></tr></tbody></table>
+        </section>
+
+        <section id="experiments" class="lesson-card concept-card">
+          <h2>Invent your own experiment</h2>
+          <ol><li>Send <kbd>E</kbd> (<kbd>.</kbd>), <kbd>T</kbd> (<kbd>-</kbd>), then <kbd>SOS</kbd> (<kbd>... --- ...</kbd>).</li><li>Predict the light colour before pressing the button, then test your prediction.</li><li>On paper, decide which two wires change the encoder direction.</li><li>With an adult, open <a href="firmware/dottos-dash-common.yaml">the shared firmware</a>. Find <kbd>GPIO13</kbd> and the 1200 ms pause.</li></ol>
+          <p>Every successful test is a small scientific experiment: predict, change one thing, observe, and write down what happened.</p>
+        </section>
+      </article>
+    </div>
+  </main>
+  <footer>Dotto runs on curiosity, dots and dashes. ● —</footer>
+</body>
+</html>
