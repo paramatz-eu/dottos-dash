@@ -34,7 +34,7 @@ function renderEmbeddedEspGame() {
           <li><button class="story-step" type="button" data-story-chapter="4"><span>5</span><strong>Ein Weltcode</strong><small>1865–1906</small></button></li>
         </ol>
         <article class="story-card" aria-live="polite">
-          <div class="story-copy"><p id="story-period" class="story-period">Vor elektrischen Telegrafen · Das Problem</p><h3 id="story-title">Eine Nachricht war nicht schneller als ein Pferd</h3><p id="story-text">Briefe reisten mit Reitern und Schiffen. Signalflaggen und Türme waren schneller, aber man musste die nächste Station sehen können. Erfinder wollten Nachrichten durch einen Draht schicken.</p><div class="story-people"><span aria-hidden="true">💭</span><p><strong id="story-people-title">Die große Frage</strong><span id="story-people-text">Kann Elektrizität eine Idee weiter tragen, als unsere Augen sehen können?</span></p></div></div>
+          <div class="story-copy"><p id="story-period" class="story-period">Vor elektrischen Telegrafen · Das Problem</p><h3 id="story-title">Eine Nachricht war nicht schneller als ein Pferd</h3><p id="story-text">Stell dir vor, du müsstest einer Person in der nächsten Stadt sagen: Ein Schiff ist angekommen, jemand aus der Familie ist sicher oder das Wetter ändert sich. Briefe reisten mit Reitern und Schiffen; die Nachricht konnte Tage oder Wochen unterwegs sein. Signalflaggen und Türme waren schneller, aber jede Station musste die nächste sehen können. Erfinder suchten nach einer Nachricht, die weiter reiste als unsere Augen sehen.</p><div class="story-detail"><strong id="story-detail-title">Wie ein Draht eine Nachricht tragen kann</strong><p id="story-detail">Eine Batterie liefert Strom, eine Taste öffnet und schließt den Stromkreis, und ein Empfänger am anderen Ende bemerkt jede Änderung. Aus den zwei Zuständen – an und aus – kann ein Muster entstehen. Der clevere Teil ist die gemeinsame Bedeutung dieses Musters.</p></div><div class="story-people"><span aria-hidden="true">💭</span><p><strong id="story-people-title">Die große Frage</strong><span id="story-people-text">Kann Elektrizität eine Idee weiter tragen, als unsere Augen sehen können?</span></p></div></div>
           <aside class="story-mission"><p class="eyebrow">Deine Kapitel-Aufgabe</p><h3 id="story-mission-title">Baue ein winziges Alphabet</h3><p id="story-mission-text">Beginne mit nur zwei Signalen. Ein Punkt geht nach links, ein Strich nach rechts. Führe Dotto zum nächsten Buchstaben.</p><p class="story-lesson-link">Probiere es gleich darunter aus ↓</p></aside>
         </article>
         <nav class="story-controls" aria-label="Zwischen den Kapiteln wechseln"><button id="story-back" class="secondary-button" type="button">← Früheres Kapitel</button><strong id="story-position">Kapitel 1 von 5</strong><button id="story-next" class="primary-button" type="button">Nächstes Kapitel →</button></nav>
@@ -196,7 +196,9 @@ const STORY_CHAPTERS = {
     {
       period: 'Before electric telegraphs · The problem',
       title: 'A message could not outrun a horse',
-      text: 'Letters travelled with riders and ships. Signal flags and towers were quicker, but people had to see the next station. Inventors wanted a message that could travel through a wire.',
+      text: 'Imagine needing to tell someone in another town that a ship had arrived, a family member was safe, or the weather was changing. Letters travelled with riders and ships, so the news could take days or weeks. Signal flags and towers were quicker, but each station had to see the next one. Inventors wanted a message that could travel farther than eyes could see.',
+      detailTitle: 'How a wire can carry a message',
+      detail: 'A telegraph does not send letters through a wire. A battery supplies electricity; a key opens and closes the circuit; a receiver at the far end notices each change. Those two states—on and off—can make a pattern. The clever part is agreeing what the pattern means.',
       peopleTitle: 'The big question',
       people: 'Could electricity carry an idea farther than eyes could see?',
       missionTitle: 'Make a tiny alphabet',
@@ -206,7 +208,9 @@ const STORY_CHAPTERS = {
     {
       period: 'The 1830s · The team',
       title: 'A painter gathers a team',
-      text: 'Samuel Morse was a painter who pursued an electric telegraph—but he did not solve it alone. Leonard Gale helped with the science, using earlier electromagnet work by Joseph Henry. Alfred Vail brought money, tools, and mechanical skill.',
+      text: 'Samuel Morse was a painter, not a lone wizard with one perfect idea. He began pursuing an electric telegraph in the 1830s, then found people whose knowledge filled the gaps. Leonard Gale helped with the science, drawing on earlier electromagnet experiments by Joseph Henry. Alfred Vail brought money, tools, a workshop at his family’s iron works, and the skill to make a fragile demonstration into a machine.',
+      detailTitle: 'Why the team mattered',
+      detail: 'A long wire weakens an electric signal. Henry had shown that an electromagnet could turn a small electrical effect into a strong movement. Gale helped Morse use batteries, wire, and electromagnets more effectively; later telegraph lines used relay stations to pass a fresh signal onward. Big inventions often need connected ideas, not just one inventor.',
       peopleTitle: 'Four different strengths',
       people: 'Morse led the project, Gale understood the science, Henry’s experiments showed what electromagnets could do, and Vail made the machine practical.',
       missionTitle: 'Give every letter a route',
@@ -216,7 +220,9 @@ const STORY_CHAPTERS = {
     {
       period: 'From 1837 · The key and code',
       title: 'Alfred Vail helps make the idea practical',
-      text: 'Morse’s early plan used numbers and a codebook. During Morse and Vail’s collaboration, Vail improved the machinery and helped shape a simpler alphabetic code. A key closed the electric circuit; an electromagnet at the other end marked moving paper.',
+      text: 'Morse’s early plan used numbers: an operator would send a number, then look it up in a codebook. That was slow. During their collaboration, Morse and Vail developed machinery and a more direct alphabetic code, so a trained operator could send letters themselves. Pressing a key closed the circuit. At the far end, an electromagnet pulled an arm that made marks on a moving paper strip.',
+      detailTitle: 'Turn time into code',
+      detail: 'A quick press made a short mark; a longer press made a long mark. Gaps separated signals, letters, and words. That is why a Morse key feels like an instrument: its rhythm carries information. Dotto uses International Morse, the later international version with regular dots and dashes; the original American Morse system was a little different.',
       peopleTitle: 'The workshop teammate',
       people: 'Vail saw Morse’s demonstration in 1837 and joined the project. His family’s iron works gave the team a place and tools to build.',
       missionTitle: 'Become the telegraph key',
@@ -226,7 +232,9 @@ const STORY_CHAPTERS = {
     {
       period: '1843–1844 · The first public line',
       title: 'Forty miles, one stubborn wire',
-      text: 'Congress funded a line from Washington to Baltimore. The team first buried the wire, but poor insulation made it fail, so they put it on poles. On 24 May 1844, Morse sent “What hath God wrought?” to Vail in Baltimore. A reply proved it had arrived.',
+      text: 'In 1843, the United States Congress funded an experimental line between Washington and Baltimore—about forty miles (64 kilometres). The first plan put wire underground in lead pipes, but the insulation failed. Instead, the team strung separate wires on wooden poles, a solution that became a familiar part of the landscape. On 24 May 1844, Morse sent “What hath God wrought?” to Vail in Baltimore. Vail’s reply showed that the message had really crossed the distance.',
+      detailTitle: 'From marks to music',
+      detail: 'Copper wire has resistance, so very long lines need careful wiring and, later, relay stations. At first operators read marks on paper. They soon noticed that the electromagnet’s arm made recognisable clicks, and skilled operators learned to read the rhythm by ear—often faster than reading the paper. That is the listening skill you are about to try.',
       peopleTitle: 'A message with many helpers',
       people: 'Annie Ellsworth suggested the words. Morse sent them from Washington, and Vail received and returned them from Baltimore.',
       missionTitle: 'Hear what came through the wire',
@@ -236,7 +244,9 @@ const STORY_CHAPTERS = {
     {
       period: '1865–1906 · A world code',
       title: 'One code had to work for everyone',
-      text: 'Telegraph networks crossed borders, so countries needed shared rules. In 1865, delegates agreed to use Morse code and instruments for international service. At a 1906 radio conference, SOS became the international distress signal: · · · — — — · · ·.',
+      text: 'Soon wires crossed borders and even reached under oceans. A message is only useful if the next operator can understand it, so countries needed shared rules about equipment, timing, and code. Delegates created the International Telegraph Union in 1865 and agreed on arrangements for international telegraph service. Radio later carried the same dot-and-dash idea without a wire, allowing ships and shore stations to speak across the sea.',
+      detailTitle: 'Why SOS is so easy to recognise',
+      detail: 'The 1906 International Radiotelegraph Conference chose three dots, three dashes, and three dots as the distress signal, for use from 1908: ···———···. It is one continuous signal—there are no letter gaps—and its rhythm cuts through noise. It was not originally short for “Save Our Souls”; the pattern itself was what mattered.',
       peopleTitle: 'From a team to the world',
       people: 'Engineers, operators, governments, and ship radio crews kept adapting the system so strangers could understand one another.',
       missionTitle: 'Send a message across the world',
@@ -248,7 +258,9 @@ const STORY_CHAPTERS = {
     {
       period: 'Vor elektrischen Telegrafen · Das Problem',
       title: 'Eine Nachricht war nicht schneller als ein Pferd',
-      text: 'Briefe reisten mit Reitern und Schiffen. Signalflaggen und Türme waren schneller, aber man musste die nächste Station sehen können. Erfinder wollten Nachrichten durch einen Draht schicken.',
+      text: 'Stell dir vor, du müsstest einer Person in der nächsten Stadt sagen: Ein Schiff ist angekommen, jemand aus der Familie ist sicher oder das Wetter ändert sich. Briefe reisten mit Reitern und Schiffen; die Nachricht konnte Tage oder Wochen unterwegs sein. Signalflaggen und Türme waren schneller, aber jede Station musste die nächste sehen können. Erfinder suchten nach einer Nachricht, die weiter reiste als unsere Augen sehen.',
+      detailTitle: 'Wie ein Draht eine Nachricht tragen kann',
+      detail: 'Ein Telegraf schickt keine Buchstaben durch den Draht. Eine Batterie liefert Strom, eine Taste öffnet und schließt den Stromkreis, und ein Empfänger am anderen Ende bemerkt jede Änderung. Aus den zwei Zuständen – an und aus – kann ein Muster entstehen. Der clevere Teil ist die gemeinsame Bedeutung dieses Musters.',
       peopleTitle: 'Die große Frage',
       people: 'Kann Elektrizität eine Idee weiter tragen, als unsere Augen sehen können?',
       missionTitle: 'Baue ein winziges Alphabet',
@@ -258,7 +270,9 @@ const STORY_CHAPTERS = {
     {
       period: 'Die 1830er-Jahre · Das Team',
       title: 'Ein Maler versammelt ein Team',
-      text: 'Samuel Morse war Maler und arbeitete an einem elektrischen Telegrafen – aber nicht allein. Leonard Gale half bei der Wissenschaft und nutzte frühere Elektromagnet-Versuche von Joseph Henry. Alfred Vail brachte Geld, Werkzeuge und handwerkliches Können mit.',
+      text: 'Samuel Morse war Maler, kein einsamer Zauberer mit einer perfekten Idee. In den 1830er-Jahren arbeitete er an einem elektrischen Telegrafen und fand Menschen, deren Wissen die Lücken füllte. Leonard Gale half bei der Wissenschaft und nutzte frühere Elektromagnet-Versuche von Joseph Henry. Alfred Vail brachte Geld, Werkzeuge, eine Werkstatt in der Eisenhütte seiner Familie und das Geschick mit, aus einer empfindlichen Vorführung eine Maschine zu machen.',
+      detailTitle: 'Warum das Team wichtig war',
+      detail: 'Auf einem langen Draht wird ein elektrisches Signal schwächer. Henry hatte gezeigt, dass ein Elektromagnet aus einem kleinen elektrischen Effekt eine starke Bewegung machen kann. Gale half Morse, Batterien, Draht und Elektromagnete besser einzusetzen; spätere Telegrafenleitungen nutzten Relaisstationen, die ein neues Signal weitergaben. Große Erfindungen brauchen oft verbundene Ideen, nicht nur eine Person.',
       peopleTitle: 'Vier verschiedene Stärken',
       people: 'Morse leitete das Projekt, Gale verstand die Wissenschaft, Henrys Versuche zeigten, was Elektromagnete konnten, und Vail machte die Maschine praktisch.',
       missionTitle: 'Gib jedem Buchstaben einen Weg',
@@ -268,7 +282,9 @@ const STORY_CHAPTERS = {
     {
       period: 'Ab 1837 · Die Taste und der Code',
       title: 'Alfred Vail macht die Idee praktisch',
-      text: 'Morses erster Plan arbeitete mit Zahlen und einem Codebuch. In der Zusammenarbeit von Morse und Vail verbesserte Vail die Maschine und half bei einem einfacheren Buchstabencode. Eine Taste schloss den Stromkreis; am anderen Ende zeichnete ein Elektromagnet auf Papier.',
+      text: 'Morses erster Plan arbeitete mit Zahlen: Ein Telegrafist hätte eine Zahl gesendet und sie dann in einem Codebuch nachgeschlagen. Das war langsam. In ihrer Zusammenarbeit entwickelten Morse und Vail die Maschine und einen direkteren Buchstabencode weiter, sodass geübte Telegrafisten Buchstaben selbst senden konnten. Ein Druck auf die Taste schloss den Stromkreis. Am anderen Ende zog ein Elektromagnet einen Arm an, der Zeichen auf einen laufenden Papierstreifen machte.',
+      detailTitle: 'Aus Zeit wird ein Code',
+      detail: 'Ein kurzer Druck machte ein kurzes Zeichen, ein längerer ein langes. Pausen trennten Signale, Buchstaben und Wörter. Darum fühlt sich eine Telegrafentaste wie ein Instrument an: Ihr Rhythmus trägt Information. Dotto nutzt den internationalen Morsecode, die spätere Weltversion mit regelmäßigen Punkten und Strichen; der ursprüngliche amerikanische Morsecode war etwas anders.',
       peopleTitle: 'Der Teamkollege in der Werkstatt',
       people: 'Vail sah Morses Vorführung 1837 und stieg in das Projekt ein. Die Eisenhütte seiner Familie gab dem Team Platz und Werkzeuge zum Bauen.',
       missionTitle: 'Werde selbst zur Telegrafentaste',
@@ -278,7 +294,9 @@ const STORY_CHAPTERS = {
     {
       period: '1843–1844 · Die erste öffentliche Leitung',
       title: 'Vierzig Meilen und ein störrischer Draht',
-      text: 'Der US-Kongress bezahlte eine Leitung von Washington nach Baltimore. Zuerst wurde der Draht vergraben, doch schlechte Isolierung ließ ihn ausfallen. Also kam er auf Masten. Am 24. Mai 1844 sendete Morse „What hath God wrought?“ an Vail in Baltimore. Eine Antwort bewies: Es hatte funktioniert.',
+      text: '1843 bezahlte der US-Kongress eine Versuchsstrecke zwischen Washington und Baltimore – etwa vierzig Meilen oder 64 Kilometer. Der erste Plan verlegte Draht unter der Erde in Bleirohren, doch die Isolierung versagte. Also spannte das Team einzelne Drähte auf hölzerne Masten; bald prägten solche Leitungen die Landschaft. Am 24. Mai 1844 sendete Morse „What hath God wrought?“ an Vail in Baltimore. Vails Antwort zeigte: Die Nachricht hatte die Strecke wirklich überquert.',
+      detailTitle: 'Von Papierzeichen zu Musik',
+      detail: 'Kupferdraht hat Widerstand. Für sehr lange Leitungen braucht man deshalb sorgfältige Verbindungen und später Relaisstationen. Zuerst lasen Telegrafisten Zeichen auf Papier. Bald merkten sie, dass der Arm des Elektromagneten erkennbare Klicks machte, und geübte Menschen lasen den Rhythmus mit den Ohren – oft schneller als das Papier. Genau dieses Hören probierst du gleich aus.',
       peopleTitle: 'Eine Nachricht mit vielen Helfern',
       people: 'Annie Ellsworth schlug die Worte vor. Morse sendete sie aus Washington; Vail empfing und beantwortete sie in Baltimore.',
       missionTitle: 'Höre, was durch den Draht kam',
@@ -288,7 +306,9 @@ const STORY_CHAPTERS = {
     {
       period: '1865–1906 · Ein Weltcode',
       title: 'Ein Code musste für alle funktionieren',
-      text: 'Telegrafennetze überquerten Grenzen. Deshalb brauchten Länder gemeinsame Regeln. 1865 einigten sich Delegierte auf Morsecode und passende Geräte für internationale Verbindungen. Auf einer Funkkonferenz wurde 1906 SOS zum internationalen Notsignal: · · · — — — · · ·.',
+      text: 'Bald überquerten Drähte Grenzen und erreichten sogar Meeresböden. Eine Nachricht hilft nur, wenn der nächste Telegrafist sie versteht. Deshalb brauchten Länder gemeinsame Regeln für Geräte, Zeitabstände und Code. Delegierte gründeten 1865 die Internationale Telegraphenunion und vereinbarten Regeln für den internationalen Telegrafendienst. Später trug Funk dieselbe Punkt-Strich-Idee ohne Draht über das Meer, sodass Schiffe und Küstenstationen miteinander sprechen konnten.',
+      detailTitle: 'Warum SOS so gut zu erkennen ist',
+      detail: 'Die Internationale Funkkonferenz von 1906 wählte drei Punkte, drei Striche und drei Punkte als Notsignal, gültig ab 1908: ···———···. Es ist ein durchgehendes Signal – ohne Buchstabenpausen – und sein Rhythmus fällt auch im Lärm auf. SOS war ursprünglich keine Abkürzung für „Save Our Souls“; wichtig war das Muster selbst.',
       peopleTitle: 'Vom Team hinaus in die Welt',
       people: 'Ingenieure, Telegrafisten, Regierungen und Funker auf Schiffen entwickelten das System weiter, damit Fremde einander verstehen konnten.',
       missionTitle: 'Sende eine Nachricht um die Welt',
@@ -335,6 +355,8 @@ const wifiSetupStatusEl = $('wifi-setup-status');
 const storyPeriodEl = $('story-period');
 const storyTitleEl = $('story-title');
 const storyTextEl = $('story-text');
+const storyDetailTitleEl = $('story-detail-title');
+const storyDetailEl = $('story-detail');
 const storyPeopleTitleEl = $('story-people-title');
 const storyPeopleTextEl = $('story-people-text');
 const storyMissionTitleEl = $('story-mission-title');
@@ -884,6 +906,8 @@ function showStoryChapter(nextChapter) {
   storyPeriodEl.textContent = chapter.period;
   storyTitleEl.textContent = chapter.title;
   storyTextEl.textContent = chapter.text;
+  storyDetailTitleEl.textContent = chapter.detailTitle;
+  storyDetailEl.textContent = chapter.detail;
   storyPeopleTitleEl.textContent = chapter.peopleTitle;
   storyPeopleTextEl.textContent = chapter.people;
   storyMissionTitleEl.textContent = chapter.missionTitle;
