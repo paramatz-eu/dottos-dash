@@ -108,7 +108,7 @@ body.morse-key-down .sound-toggle { color: var(--purple); transform: scale(1.04)
 #create-panel.is-ready { grid-template-columns: 1fr 1.15fr; }
 #create-panel > .mission-card { max-width: 42rem; margin: 0 auto; }
 #create-panel.is-ready > .mission-card { max-width: none; margin: 0; }
-.mission-card, .input-card, .tree-intro, .tree-wrap, .progress-card, .cheat-sheet, .story-sources, .make-it-card {
+.mission-card, .input-card, .tree-intro, .tree-wrap, .progress-card, .cheat-sheet, .story-sources, .make-it-card, .family-guide {
   border: 3px solid var(--line); border-radius: 1.4rem; background: white; box-shadow: 0 7px 0 #e9ecf8;
 }
 .mission-card, .input-card { padding: 1.6rem; text-align: center; }
@@ -181,7 +181,7 @@ body.morse-key-down .sound-toggle { color: var(--purple); transform: scale(1.04)
 .progress-card strong { display: block; color: var(--purple); font-size: 1.7rem; }
 .stat-label { color: #5b6580; font-weight: 700; }
 
-.cheat-sheet, .story-sources, .make-it-card { margin-top: 1.25rem; padding: 1.25rem; }
+.cheat-sheet, .story-sources, .make-it-card, .family-guide { margin-top: 1.25rem; padding: 1.25rem; }
 .story-sources { background: #f9faff; }
 .story-sources p { margin: .8rem 0 0; line-height: 1.5; }
 .story-sources a { color: var(--purple); font-weight: 800; }
@@ -197,7 +197,9 @@ body.morse-key-down .sound-toggle { color: var(--purple); transform: scale(1.04)
 .wifi-setup-form { display: grid; gap: .7rem; max-width: 34rem; }
 .ota-file-input { width: 100%; padding: .7rem; border: 2px dashed #d98da0; border-radius: .8rem; background: white; color: var(--navy); }
 summary { cursor: pointer; color: var(--navy); font-size: 1.15rem; font-weight: 900; }
-.alphabet-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr)); gap: .5rem; margin-top: 1rem; }
+/* The track minimum is set by the longest code ("— — — — —"), which must not wrap
+   and must not spill out of its tile. */
+.alphabet-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: .5rem; margin-top: 1rem; }
 .alphabet-item { padding: .55rem; border-radius: .6rem; background: var(--soft); text-align: center; }
 .alphabet-item strong { display: block; color: var(--purple); font-size: 1.25rem; }
 .alphabet-item span { display: block; margin-top: .2rem; color: var(--navy); font: 900 1.15rem/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; white-space: nowrap; }
@@ -205,6 +207,12 @@ summary { cursor: pointer; color: var(--navy); font-size: 1.15rem; font-weight: 
 .make-it-card h2 { margin: 0; color: var(--navy); }
 .make-it-card p { line-height: 1.5; }
 .make-it-card a { color: var(--purple); font-weight: 900; }
+.family-guide { background: #fff8e8; }
+.family-guide summary { color: var(--navy); }
+.family-guide-content { margin-top: .9rem; line-height: 1.5; }
+.family-guide-content h3 { margin: 1rem 0 .35rem; color: var(--navy); }
+.family-guide-content ul, .family-guide-content ol { margin: .4rem 0; padding-left: 1.4rem; }
+.family-guide-content a { color: var(--purple); font-weight: 800; }
 .build-guide { margin-top: 1rem; padding: .9rem 1rem; border: 2px solid #9fe5d2; border-radius: 1rem; background: #f6fffc; }
 .build-guide-content { display: grid; gap: .7rem; margin-top: .8rem; }
 .build-guide-content h3 { margin: .45rem 0 0; color: var(--purple); }
@@ -284,6 +292,13 @@ footer { padding: 1.5rem; color: #5b6580; text-align: center; font-weight: 700; 
   .tree-mobile-tip { display: block; }
   .morse-tree-svg { min-width: 54rem; }
   .progress-card { flex-wrap: wrap; }
+  .mission-card, .input-card, .listen-card, .answer-card { padding: 1.1rem; }
+  .cheat-sheet, .story-sources, .make-it-card, .family-guide, .wifi-card, .ota-card { padding: 1rem; }
+  /* Phones get more, narrower tiles, so the code shrinks with the viewport to
+     keep fitting on one line. */
+  .alphabet-grid { grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr)); gap: .4rem; }
+  .alphabet-item { padding: .45rem .2rem; }
+  .alphabet-item span { font-size: clamp(.82rem, 3.2vw, .95rem); letter-spacing: normal; }
   .lesson-layout { grid-template-columns: 1fr; }
   .lesson-nav { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .1rem .6rem; }
   .lesson-nav strong { grid-column: span 2; }

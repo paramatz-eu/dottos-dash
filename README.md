@@ -1,6 +1,6 @@
 # Dotto's Dash
 
-[Deutsche Anleitung](README.de.md) · [German web game](de/index.html) · [Build lesson](build.html) · [Flash from the browser](flash.html) · [Family companion guide](FAMILY-GUIDE.md) · [Contributing](CONTRIBUTING.md)
+[Family companion guide](FAMILY-GUIDE.md) · [Deutsche Anleitung](README.de.md) · [German web game](de/index.html) · [Build lesson](build.html) · [Flash from the browser](flash.html) · [Contributing](CONTRIBUTING.md)
 
 > An offline, kid-friendly ESP32 project for learning Morse code with a game,
 > a real key, coloured light and sound.
@@ -9,6 +9,12 @@
 nearby for the USB flashing and wiring. It deliberately has no accounts, no
 PHP server or cloud service. It works fully offline, with an optional home
 Wi-Fi setup for adults.
+
+> [!IMPORTANT]
+> **Starting with a child or sharing adult responsibilities?** Read the
+> [family companion guide](FAMILY-GUIDE.md) first. It covers safety, a relaxed
+> first 25 minutes, privacy, local Wi-Fi, troubleshooting, and the split
+> between child and adult tasks.
 
 The name is the game: Dotto starts as a dot, follows dots and dashes through
 Morse-code routes, and races from one checkpoint to the next.
@@ -35,7 +41,7 @@ step at a time.
 | Build the electronics with a child | [step-by-step build lesson](build.html) |
 | Flash an ESP32 with no software to install | [flash.html](flash.html), from Chrome or Edge |
 | Flash an ESP32 from the command line | [Flash the ESP32](#2-flash-the-esp32) |
-| Share the project between a technical and an educational/safety lead | [family companion guide](FAMILY-GUIDE.md) |
+| Start safely with a child or share adult responsibilities | **[family companion guide](FAMILY-GUIDE.md)** |
 | Change or improve the project | [CONTRIBUTING.md](CONTRIBUTING.md) |
 
 ### Highlights

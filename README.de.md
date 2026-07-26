@@ -1,6 +1,6 @@
 # Dotto's Dash
 
-[English version](README.md) · [Deutsches Webspiel](de/index.html) · [Bauanleitung](de/build.html) · [Aus dem Browser flashen](de/flash.html) · [Familienleitfaden (Englisch)](FAMILY-GUIDE.md) · [Mitmachen](CONTRIBUTING.md)
+[Familienleitfaden (Englisch)](FAMILY-GUIDE.md) · [English version](README.md) · [Deutsches Webspiel](de/index.html) · [Bauanleitung](de/build.html) · [Aus dem Browser flashen](de/flash.html) · [Mitmachen](CONTRIBUTING.md)
 
 > Ein kinderfreundliches Offline-Projekt mit ESP32: Morsezeichen mit Spiel,
 > echter Taste, farbigem Licht und Ton lernen.
@@ -9,6 +9,12 @@
 über USB und beim Verkabeln sollte eine erwachsene Person helfen. Das Projekt
 braucht weder Konto noch PHP-Server oder Cloud-Dienst. Es funktioniert ganz
 ohne Heim-WLAN; Erwachsene können es bei Bedarf zusätzlich einrichten.
+
+> [!IMPORTANT]
+> **Mit einem Kind starten oder Aufgaben unter Erwachsenen aufteilen?** Zuerst
+> den [Familienleitfaden (Englisch)](FAMILY-GUIDE.md) lesen. Er behandelt
+> Sicherheit, eine entspannte erste Runde, Privatsphäre, lokales WLAN,
+> Fehlersuche und die Aufgaben von Kindern und Erwachsenen.
 
 Der Name ist das Spiel: Dotto startet als Punkt, folgt Punkten und Strichen
 durch Morse-Routen und flitzt von Checkpoint zu Checkpoint.
@@ -35,7 +41,7 @@ danach wächst die Schaltung in sicheren, überschaubaren Schritten.
 | Die Elektronik mit einem Kind bauen | [Schritt-für-Schritt-Bauanleitung](de/build.html) |
 | Einen ESP32 flashen, ohne etwas zu installieren | [de/flash.html](de/flash.html), mit Chrome oder Edge |
 | Einen ESP32 über die Kommandozeile flashen | [ESP32 flashen](#2-den-esp32-flashen) |
-| Technische, pädagogische und Sicherheitsaufgaben in der Familie aufteilen | [Familienleitfaden (Englisch)](FAMILY-GUIDE.md) |
+| Sicher mit einem Kind starten oder Aufgaben in der Familie aufteilen | **[Familienleitfaden (Englisch)](FAMILY-GUIDE.md)** |
 | Das Projekt verbessern | [CONTRIBUTING.md](CONTRIBUTING.md) |
 
 ### Das bietet das Projekt
