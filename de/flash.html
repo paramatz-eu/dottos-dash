@@ -29,7 +29,7 @@
         <ol class="flash-steps">
           <li><strong>Chrome oder Edge am Computer benutzen.</strong> Firefox und Safari können nicht mit einer USB-Platine sprechen, Handys gar nicht. Das Handy kommt erst später zum Spielen dazu.</li>
           <li><strong>Ein Daten-USB-Kabel benutzen.</strong> Manche Kabel übertragen nur Strom. Wenn die Platine nie in der Liste auftaucht, ist meist ein reines Ladekabel schuld.</li>
-          <li><strong>Die Version zum eigenen Tonteil wählen.</strong> Wer noch keinen Ton verkabelt hat, nimmt die Piezo-Version — sie passt auch, wenn an GPIO27 noch nichts angeschlossen ist.</li>
+          <li><strong>Die eine Dotto's-Dash-Version verwenden.</strong> Sie funktioniert ohne Tonteil, mit passivem Piezo, mit MAX98357A-Lautsprecher oder mit beidem zusammen.</li>
         </ol>
         <div class="safety-note">
           <strong>Sicherheit:</strong> Vor jeder Änderung an den Kabeln USB abziehen und niemals 5&nbsp;V an einen GPIO-Pin des ESP32 legen. Die Platine während der ganzen Installation eingesteckt lassen; ein Abziehen mittendrin kann sie ohne funktionierende Firmware zurücklassen.
@@ -38,34 +38,23 @@
 
       <section class="flash-card">
         <p class="eyebrow">Schritt 1</p>
-        <h2>Version auswählen</h2>
+        <h2>Dotto's Dash installieren</h2>
 
         <p id="flash-release" class="flash-release" data-release="../firmware/release.json" aria-live="polite"></p>
 
         <div id="flash-builds">
         <div class="flash-choice">
           <div>
-            <h3>Piezo-Summer <span class="flash-tag">Hier anfangen</span></h3>
-            <p>Die empfohlene erste Version. Sie funktioniert mit einem passiven Piezo an GPIO27 — und auch ganz ohne angeschlossenes Tonteil.</p>
+            <h3>Eine Version <span class="flash-tag">Hier anfangen</span></h3>
+            <p>Funktioniert ohne Tonteil, mit passivem Piezo an GPIO27, mit MAX98357A-Lautsprecher oder mit beiden Tonteilen zusammen.</p>
           </div>
-          <esp-web-install-button manifest="../firmware/dottos-dash-piezo.manifest.json">
+          <esp-web-install-button manifest="../firmware/dottos-dash.manifest.json">
             <button class="primary-button" slot="activate">Verbinden und installieren</button>
             <span slot="unsupported" class="flash-unsupported">Dieser Browser kann keine Platine flashen. Die Seite in Chrome oder Edge am Computer öffnen.</span>
             <span slot="not-allowed" class="flash-unsupported">Flashen braucht eine sichere Verbindung (https). Bitte die veröffentlichte Seite statt einer lokalen Datei öffnen.</span>
           </esp-web-install-button>
         </div>
 
-        <div class="flash-choice">
-          <div>
-            <h3>MAX98357A-Verstärker</h3>
-            <p>Nur wählen, wenn wirklich ein MAX98357A und ein kleiner Lautsprecher verkabelt sind. Diese Version benutzt andere Pins — die falsche Wahl lässt euch ohne Ton zurück.</p>
-          </div>
-          <esp-web-install-button manifest="../firmware/dottos-dash-max98357a.manifest.json">
-            <button class="secondary-button" slot="activate">Verbinden und installieren</button>
-            <span slot="unsupported" class="flash-unsupported">Dieser Browser kann keine Platine flashen. Die Seite in Chrome oder Edge am Computer öffnen.</span>
-            <span slot="not-allowed" class="flash-unsupported">Flashen braucht eine sichere Verbindung (https). Bitte die veröffentlichte Seite statt einer lokalen Datei öffnen.</span>
-          </esp-web-install-button>
-        </div>
         </div>
 
         <p class="keyboard-help">Ein Fenster fragt nach dem seriellen Anschluss. Ist die Liste leer, zuerst ein anderes USB-Kabel oder einen anderen Anschluss probieren. Taucht die Platine immer noch nicht auf: <strong>BOOT</strong> halten, kurz <strong>EN</strong> tippen, BOOT noch zwei Sekunden halten, loslassen und es erneut versuchen.</p>

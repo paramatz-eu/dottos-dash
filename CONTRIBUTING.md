@@ -59,13 +59,7 @@ CI on every push.
 Run the relevant firmware build before sharing a change:
 
 ```sh
-esphome run firmware/dottos-dash-piezo.yaml
-```
-
-If changing sound support, test the MAX98357A variant as well:
-
-```sh
-esphome run firmware/dottos-dash-max98357a.yaml
+esphome run firmware/dottos-dash.yaml
 ```
 
 On hardware, check at least the following:

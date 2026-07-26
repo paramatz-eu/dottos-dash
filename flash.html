@@ -29,7 +29,7 @@
         <ol class="flash-steps">
           <li><strong>Use Chrome or Edge on a computer.</strong> Firefox and Safari cannot talk to a USB board, and phones cannot do this at all. A phone is only used later, to play the game.</li>
           <li><strong>Use a data USB cable.</strong> Some cables only carry power. If the board never appears in the list, a charge-only cable is the usual reason.</li>
-          <li><strong>Pick the build that matches your sound part.</strong> If you have not wired any sound yet, choose the piezo build — it is the right choice even with nothing connected to GPIO27.</li>
+          <li><strong>Use the one Dotto's Dash build.</strong> It works before any sound is wired, with a passive piezo, with a MAX98357A speaker, or with both together.</li>
         </ol>
         <div class="safety-note">
           <strong>Safety:</strong> unplug USB before changing any wire, and never connect 5&nbsp;V to an ESP32 GPIO pin. Leave the board plugged in for the whole install; unplugging part-way can leave it without working firmware.
@@ -38,34 +38,23 @@
 
       <section class="flash-card">
         <p class="eyebrow">Step 1</p>
-        <h2>Choose your build</h2>
+        <h2>Install Dotto's Dash</h2>
 
         <p id="flash-release" class="flash-release" data-release="firmware/release.json" aria-live="polite"></p>
 
         <div id="flash-builds">
         <div class="flash-choice">
           <div>
-            <h3>Piezo buzzer <span class="flash-tag">Start here</span></h3>
-            <p>The recommended first build. Works with a passive piezo on GPIO27, or with no sound part connected at all.</p>
+            <h3>One build <span class="flash-tag">Start here</span></h3>
+            <p>Works with no sound part, a passive piezo on GPIO27, a MAX98357A speaker, or both sound parts together.</p>
           </div>
-          <esp-web-install-button manifest="firmware/dottos-dash-piezo.manifest.json">
+          <esp-web-install-button manifest="firmware/dottos-dash.manifest.json">
             <button class="primary-button" slot="activate">Connect and install</button>
             <span slot="unsupported" class="flash-unsupported">This browser cannot flash a board. Open this page in Chrome or Edge on a computer.</span>
             <span slot="not-allowed" class="flash-unsupported">Flashing needs a secure connection (https). Open the published page rather than a local file.</span>
           </esp-web-install-button>
         </div>
 
-        <div class="flash-choice">
-          <div>
-            <h3>MAX98357A amplifier</h3>
-            <p>Choose this only if you wired a MAX98357A board and a small speaker. It uses different pins, so flashing the wrong one leaves you without sound.</p>
-          </div>
-          <esp-web-install-button manifest="firmware/dottos-dash-max98357a.manifest.json">
-            <button class="secondary-button" slot="activate">Connect and install</button>
-            <span slot="unsupported" class="flash-unsupported">This browser cannot flash a board. Open this page in Chrome or Edge on a computer.</span>
-            <span slot="not-allowed" class="flash-unsupported">Flashing needs a secure connection (https). Open the published page rather than a local file.</span>
-          </esp-web-install-button>
-        </div>
         </div>
 
         <p class="keyboard-help">A window will ask which serial port to use. If the list is empty, try another USB cable or another port first. If the board still does not appear, hold <strong>BOOT</strong>, tap <strong>EN</strong>, keep holding BOOT for two seconds, release it, and try again.</p>

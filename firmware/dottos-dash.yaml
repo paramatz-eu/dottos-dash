@@ -1,0 +1,36 @@
+# One firmware image for every sound setup. It is safe to flash before wiring
+# either sound part: the unused piezo pin and I2S pins simply remain unused.
+
+substitutions:
+  device_name: dottos-dash
+
+packages:
+  common: !include dottos-dash-common.yaml
+
+# Passive piezo buzzer: GPIO27 -> +, GND -> -.
+output:
+  - platform: ledc
+    id: piezo_output
+    pin: GPIO27
+
+# MAX98357A I2S amplifier: BCLK -> GPIO26, LRC -> GPIO25, DIN -> GPIO22.
+i2s_audio:
+  - id: i2s_out
+    i2s_lrclk_pin: GPIO25
+    i2s_bclk_pin: GPIO26
+
+speaker:
+  - platform: i2s_audio
+    id: max98357a_speaker
+    i2s_audio_id: i2s_out
+    i2s_dout_pin: GPIO22
+    dac_type: external
+    channel: mono
+
+# RTTTL can send a tune to one output at a time. Two components let the shared
+# scripts start the same tune on both the piezo and the amplified speaker.
+rtttl:
+  - id: piezo_rtttl
+    output: piezo_output
+  - id: max98357a_rtttl
+    speaker: max98357a_speaker
