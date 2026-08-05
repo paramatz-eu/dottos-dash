@@ -1320,6 +1320,7 @@ function showStoryChapter(nextChapter) {
   const index = Number(nextChapter);
   if (!Number.isInteger(index) || index < 0 || index >= STORY_CHAPTERS.length) return;
   storyChapter = index;
+  document.body.dataset.storyChapter = String(storyChapter);
   const chapter = STORY_CHAPTERS[storyChapter];
   storyPeriodEl.textContent = chapter.period;
   storyTitleEl.textContent = chapter.title;
