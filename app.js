@@ -78,7 +78,216 @@ function renderEmbeddedEspGame() {
         <p><strong>Ist Morsecode also Binärcode?</strong> Fast – und der Unterschied lohnt sich. Ein Byte hat immer genau acht Bits, deshalb weiß ein Computer, wo ein Zeichen endet und das nächste beginnt. Morsezeichen sind unterschiedlich lang: <strong>E</strong> hat ein Signal, <strong>Z</strong> hat vier. Darum braucht Morse zusätzlich die Stille dazwischen, die zeigt, wo ein Buchstabe aufhört. Morse benutzt also drei Dinge: Punkt, Strich und Pause.</p>
         <p><strong>In Dottos Controller</strong> ist wirklich alles Bits. Der Taster-Pin liest 1, solange die Taste offen ist, und 0, während du sie hältst. Jede Farbe entsteht aus tausenden schnellen Einsen und Nullen pro Sekunde. Der Ton geht als Binärzahlen zum Lautsprecher-Verstärker. Auch diese Seite kam als Bits zu dir: Der ESP32 speichert das ganze Spiel als etwa eine Million davon.</p>
       </div></details>
-      <section class="make-it-card"><h2>Baue Dottos Controller</h2><p>Die Taste und der Drehgeber senden direkt in dieses Spiel. Ein kurzer Tastendruck ist ein Punkt, ein langer ein Strich. Mit einem Piezo oder MAX98357A hörst du jeden Checkpoint.</p><p><strong>Tipp:</strong> Verbinde zuerst das WLAN <em>Dotto's Dash</em>, dann öffne diese Seite. Internet brauchst du nie.</p><details class="build-guide"><summary>📘 Bauanleitung öffnen</summary><div class="build-guide-content"><p>Diese Kurz-Bauanleitung ist direkt auf dem ESP32 gespeichert und funktioniert deshalb auch ohne Internet.</p><div class="safety-note"><strong>Sicherheit:</strong> Vor jeder Änderung der Kabel USB abziehen. Einen GPIO-Pin nie mit 5 V verbinden.</div><h3>1. Firmware</h3><p>Zuerst die Firmware flashen: <code>esphome run firmware/dottos-dash.yaml</code>. Ein einziges Image deckt Piezo und MAX98357A ab. Die eingebaute <strong>BOOT</strong>-Taste ist danach bereits eine Morse-Taste: kurz = Punkt, lang = Strich. BOOT beim Neustart oder Flashen nicht gedrückt halten.</p><h3>2. RGB-Licht und externer Taster</h3><table class="wire-table"><thead><tr><th>Bauteil</th><th>ESP32</th></tr></thead><tbody><tr><td>RGB-Modul R / G / B</td><td>GPIO16 / GPIO17 / GPIO18</td></tr><tr><td>RGB gemeinsamer Kathoden-Pin</td><td>GND</td></tr><tr><td>Taster, eine Seite</td><td>GPIO13</td></tr><tr><td>Taster, andere Seite</td><td>GND</td></tr></tbody></table><p>Die BOOT-Taste braucht keine Kabel. Der externe Taster bleibt zusätzlich nutzbar.</p><h3>3. Ton</h3><table class="wire-table"><thead><tr><th>Passiver Piezo</th><th>ESP32</th></tr></thead><tbody><tr><td>+</td><td>GPIO27</td></tr><tr><td>-</td><td>GND</td></tr></tbody></table><p>Nur ein <strong>passiver</strong> Piezo erzeugt die Morse-Töne am ESP32. Für Browser-Töne zuerst einmal auf dem Handy in diese Seite tippen; das ist eine Sicherheitsregel des Browsers.</p><h3>4. Drehgeber (optional)</h3><table class="wire-table"><thead><tr><th>Drehgeber</th><th>ESP32</th></tr></thead><tbody><tr><td>CLK / A</td><td>GPIO21</td></tr><tr><td>DT / B</td><td>GPIO19</td></tr><tr><td>SW</td><td>GPIO13</td></tr><tr><td>GND</td><td>GND</td></tr><tr><td>VCC</td><td>3V3</td></tr></tbody></table><p>Links drehen = Punkt, rechts drehen = Strich. Ist es vertauscht, USB abziehen und nur CLK und DT tauschen.</p><h3>Test</h3><p>Ein kurzer Druck muss cyan blinken und einen Punkt senden; ein langer Druck orange und einen Strich. Die einstellbare Buchstabenpause oben beginnt bei 500 ms. Piezo stumm? Prüfen: passiv, an GPIO27 und GND.</p></div></details></section>
+      <section class="make-it-card"><h2>Baue Dottos Controller</h2><p>Die Taste und der Drehgeber senden direkt in dieses Spiel. Ein kurzer Tastendruck ist ein Punkt, ein langer ein Strich. Mit einem Piezo oder MAX98357A hörst du jeden Checkpoint.</p><p><strong>Tipp:</strong> Verbinde zuerst das WLAN <em>Dotto's Dash</em>, dann öffne diese Seite. Internet brauchst du nie.</p><details class="build-guide"><summary>📘 Bauanleitung öffnen</summary><div class="build-guide-content"><p>Diese vollständige Bauanleitung ist direkt auf dem ESP32 gespeichert und funktioniert deshalb auch ohne Internet.</p>
+<!-- BUILD-GUIDE:START -->
+<div class="lesson-layout">
+      <nav class="lesson-nav" aria-label="Abschnitte der Bauanleitung">
+        <strong>Deine Bau-Reise</strong>
+        <a href="#safety">Sicherheit</a>
+        <a href="#basics">Strom verstehen</a>
+        <a href="#parts">Bauteile kennenlernen</a>
+        <a href="#binary">Einsen und Nullen</a>
+        <a href="#flash">Flashen</a>
+        <a href="#light">RGB-Licht</a>
+        <a href="#button">Morse-Taste</a>
+        <a href="#encoder">Drehgeber</a>
+        <a href="#sound">Ton</a>
+        <a href="#debug">Fehlersuche</a>
+        <a href="#experiments">Experimente</a>
+      </nav>
+
+      <article class="lesson-content">
+        <section class="lesson-card kid-intro">
+          <h2>Willkommen in deiner Erfinder-Werkstatt!</h2>
+          <p>Heute baust du keine fertige Spielzeug-Maschine zusammen. Du gibst einem kleinen Computer Augen, Ohren und eine Stimme: Die Taste und der Drehgeber sind seine Eingaben, das Licht und der Ton sind seine Antworten.</p>
+          <pre class="wire-diagram">Finger oder Drehknopf → ESP32-Eingang → Morse-Programm → Licht und Ton
+
+kurz drücken = Punkt       lang drücken = Strich
+links drehen = Punkt       rechts drehen = Strich
+1,2 Sekunden Pause = Buchstabe wird entschlüsselt</pre>
+          <p class="kid-question">Deine erste Forscherfrage: Was glaubst du – ist der ESP32 eher das Gehirn, die Hand oder die Lampe? Antwort: Er ist das Gehirn. Er entscheidet, was Licht und Ton tun.</p>
+        </section>
+
+        <section id="safety" class="lesson-card safety-card">
+          <h2>Sicherheit zuerst</h2>
+          <ul>
+            <li>Eine erwachsene Person flasht das Board und prüft die Kabel, bevor USB angeschlossen wird.</li>
+            <li>USB abziehen, bevor ein Kabel umgesteckt wird.</li>
+            <li>Zum Lernen nur USB-Strom verwenden. Niemals Steckdose, Netzspannung, unbekannte Netzteile oder zu starke Batterien benutzen.</li>
+            <li>ESP32-GPIO-Pins vertragen nur <strong>3,3 V</strong>. Niemals 5 V an einen GPIO-Pin geben.</li>
+            <li>Das genannte HW-479-RGB-Modul verwenden – oder an jeden Anschluss einer nackten LED einen Widerstand setzen.</li>
+            <li>Wird das Board heiß, riecht komisch oder trennt sich vom Computer: sofort USB abziehen und die Verdrahtung prüfen.</li>
+          </ul>
+        </section>
+
+        <section id="basics" class="lesson-card concept-card">
+          <h2>Bevor wir bauen: Wie kann Strom etwas tun?</h2>
+          <p>Stell dir Strom wie winzige, unsichtbare Teilchen vor, die einen <strong>geschlossenen Rundweg</strong> brauchen. USB liefert Energie zum ESP32. Der ESP32 kann diese Energie an einem Pin weitergeben oder merken, ob an einem Pin etwas passiert.</p>
+          <div class="flow-steps" aria-label="Ein einfacher Stromkreis">
+            <div class="flow-step"><span>🔌</span>USB gibt Energie</div>
+            <div class="flow-step"><span>🧠</span>ESP32 denkt</div>
+            <div class="flow-step"><span>💡</span>Teil macht etwas</div>
+            <div class="flow-step"><span>🏠</span>GND ist der Heimweg</div>
+          </div>
+          <dl class="word-list">
+            <div><dt>Spannung</dt><dd>Der kleine „Schubs“, der Strom in Bewegung bringt. Die GPIO-Pins des ESP32 benutzen 3,3 V.</dd></div>
+            <div><dt>GND</dt><dd>Der gemeinsame Heimweg. Ohne GND findet der Stromkreis nicht zurück.</dd></div>
+            <div><dt>GPIO-Pin</dt><dd>Ein kleiner Anschluss am ESP32. Er kann zuhören (Eingang) oder etwas steuern (Ausgang).</dd></div>
+            <div><dt>Firmware</dt><dd>Das Programm im ESP32. Es sagt: „Kurzer Druck ist ein Punkt.“</dd></div>
+          </dl>
+          <h3>Das Steckbrett ist kein Zauberbrett</h3>
+          <p>Ein Steckbrett verbindet einige Löcher im Inneren miteinander. In der Mitte ist ein langer Graben: Die linke und rechte Seite sind dort <strong>nicht</strong> verbunden. Viele Reihen mit fünf Löchern gehören zusammen – aber schau immer auf die Markierungen deines eigenen Steckbretts.</p>
+          <pre class="wire-diagram">o o o o o   |   o o o o o
+──────────  |  ──────────
+oft innen verbunden   Mittelgraben trennt beide Seiten</pre>
+          <p>Jumper-Kabel sind einfach bunte Wege für Strom und Signale. Die Farbe ist nur eine Hilfe für Menschen; der ESP32 kann Farben nicht sehen. Lies immer die Beschriftung am Pin.</p>
+          <p class="kid-question">Mini-Check: Wenn eine Lampe mit GND verbunden ist, wohin muss ihr anderer Weg führen, damit der ESP32 sie steuern kann? Zu einem GPIO-Pin.</p>
+        </section>
+
+        <section id="parts" class="lesson-card">
+          <h2>Lerne deine Bauteile kennen</h2>
+          <p>Lege alle Teile vor dich. Lies diese Karten erst, dann wird das Anschließen viel leichter.</p>
+          <table class="wire-table">
+            <thead><tr><th>Teil</th><th>Was es lehrt</th><th>Ab wann nötig</th></tr></thead>
+            <tbody>
+              <tr><td>ESP32 DevKit + USB</td><td>Der Computer, der Pins liest und steuert.</td><td>Immer</td></tr>
+              <tr><td>Steckbrett + Jumper-Kabel</td><td>Sichere, wieder lösbare Verbindungen.</td><td>Hardware-Stufen</td></tr>
+              <tr><td>HW-479 RGB mit gemeinsamer Kathode</td><td>Drei farbige Ausgänge.</td><td>Licht</td></tr>
+              <tr><td>Taster</td><td>Ein Schalter und eine Morse-Taste.</td><td>Taste</td></tr>
+              <tr><td>Drehgeber</td><td>Zwei Signale verraten die Drehrichtung.</td><td>Drehknopf</td></tr>
+              <tr><td>Passiver Piezo oder MAX98357A + Lautsprecher</td><td>Elektronischer Ton.</td><td>Optionaler Ton</td></tr>
+            </tbody>
+          </table>
+          <div class="component-grid">
+            <section class="component-card"><span class="component-icon" aria-hidden="true">🧠</span><h3>ESP32</h3><p><strong>Was ist das?</strong> Ein programmierbarer Mini-Computer mit vielen kleinen Anschlüssen.</p><p><strong>Sein Job:</strong> Er merkt sich den Morsecode und steuert Licht und Ton.</p></section>
+            <section class="component-card"><span class="component-icon" aria-hidden="true">🧱</span><h3>Steckbrett</h3><p><strong>Was ist das?</strong> Eine Bauplatte mit vielen Löchern, in die Kabel ohne Löten gesteckt werden.</p><p><strong>Sein Job:</strong> Du kannst Fehler sicher ändern und neue Ideen ausprobieren.</p></section>
+            <section class="component-card"><span class="component-icon" aria-hidden="true">🌈</span><h3>RGB-Modul</h3><p><strong>Was ist das?</strong> Drei kleine Lampen in einem Teil: Rot, Grün und Blau.</p><p><strong>Sein Job:</strong> Es zeigt dir Morsecode mit Farben. Wir verwenden dafür das sichere HW-479-Modul, nicht eine nackte LED.</p></section>
+            <section class="component-card"><span class="component-icon" aria-hidden="true">🔘</span><h3>Taster</h3><p><strong>Was ist das?</strong> Ein Schalter, der nur verbunden ist, solange du ihn drückst.</p><p><strong>Sein Job:</strong> Dein Finger macht daraus einen Punkt oder Strich.</p></section>
+            <section class="component-card"><span class="component-icon" aria-hidden="true">🎛️</span><h3>Drehgeber</h3><p><strong>Was ist das?</strong> Ein Drehknopf, der in kleinen Schritten klickt. Er ist kein Lautstärke-Regler.</p><p><strong>Sein Job:</strong> Links ist Punkt, rechts ist Strich.</p></section>
+            <section class="component-card"><span class="component-icon" aria-hidden="true">🔔</span><h3>Passiver Piezo</h3><p><strong>Was ist das?</strong> Eine kleine Scheibe, die bei einem schnellen elektrischen Wechsel vibriert.</p><p><strong>Sein Job:</strong> Er macht die Morse-Pieptöne hörbar.</p></section>
+            <section class="component-card"><span class="component-icon" aria-hidden="true">🔊</span><h3>MAX98357A + Lautsprecher</h3><p><strong>Was ist das?</strong> Ein Verstärker und ein Lautsprecher für lauteren Ton.</p><p><strong>Sein Job:</strong> Der Verstärker macht die kleinen ESP32-Signale stark genug für den Lautsprecher.</p></section>
+            <section class="component-card"><span class="component-icon" aria-hidden="true">🧵</span><h3>Jumper-Kabel</h3><p><strong>Was ist das?</strong> Kleine, steckbare Leitungen.</p><p><strong>Sein Job:</strong> Sie verbinden die richtigen beschrifteten Pins miteinander.</p></section>
+          </div>
+          <p class="kid-question">Zeige mit dem Finger auf den ESP32: Wo sitzt sein USB-Anschluss? Zeige dann auf dem RGB-Modul die drei Buchstaben R, G und B.</p>
+        </section>
+
+        <section id="binary" class="lesson-card concept-card">
+          <h2>Einsen und Nullen: die Sprache unter allem</h2>
+          <p>Bevor wir verkabeln, lohnt sich eine Frage: Was liest ein GPIO-Pin eigentlich? Er misst keine Volt wie ein Messgerät. Er beantwortet nur eine Frage: Ist dieser Pin näher an 3,3 V oder näher an 0 V? Diese zwei Antworten heißen <strong>HIGH</strong> und <strong>LOW</strong> oder <strong>1</strong> und <strong>0</strong>. Eine solche Antwort ist ein <strong>Bit</strong>, kurz für <em>binary digit</em>, also Binärziffer.</p>
+          <p>Zwei Zustände genügen einem Computer, weil zwei Zustände Störungen überstehen. Ein etwas schwaches oder verrauschtes Signal ist immer noch deutlich näher an einem der beiden Enden – und kann sauber weitergegeben werden. Genau das merkten schon die Telegrafisten 1844: Ein Klick kam an oder eben nicht.</p>
+          <table class="wire-table">
+            <thead><tr><th>In diesem Projekt</th><th>1 / HIGH</th><th>0 / LOW</th></tr></thead>
+            <tbody>
+              <tr><td>GPIO13 mit internem Pull-up</td><td>Taster offen</td><td>Taster gedrückt, mit GND verbunden</td></tr>
+              <tr><td>GPIO16 für den roten Kanal</td><td>Rot an</td><td>Rot aus</td></tr>
+              <tr><td>Drehgeber <kbd>CLK</kbd> und <kbd>DT</kbd></td><td>Kontakt offen</td><td>Kontakt geschlossen</td></tr>
+            </tbody>
+          </table>
+          <p>Ein einzelnes Bit sagt wenig, deshalb werden Bits gruppiert – und jedes zusätzliche Bit <strong>verdoppelt</strong>, wie viele verschiedene Dinge die Gruppe bedeuten kann.</p>
+          <pre class="wire-diagram">1 Bit  →   2 Werte   0  1
+2 Bits →   4 Werte   00  01  10  11
+3 Bits →   8 Werte
+8 Bits → 256 Werte   = 1 Byte = ein Textzeichen</pre>
+          <p>Computer haben sich auf eine gemeinsame Liste geeinigt, welche Zahl welches Zeichen bedeutet. Sie heißt <strong>ASCII</strong>: <kbd>A</kbd> ist 65, also <kbd>01000001</kbd>. Im Spiel kannst du unter <em>Baue ein Byte</em> diese acht Bits umschalten und siehst den Buchstaben mit seinem Morsecode.</p>
+          <h3>Wo die Bits in deinem Aufbau stecken</h3>
+          <ul>
+            <li><strong>Die Taste:</strong> Die Firmware liest immer wieder ein Bit von GPIO13 und misst, wie lange es 0 war. Unter der Strich-Grenze ist es ein Punkt, länger ein Strich.</li>
+            <li><strong>Die Farben:</strong> PWM schaltet einen Pin tausende Male pro Sekunde zwischen 1 und 0. „Halb hell“ heißt: Der Pin ist in jedem winzigen Zeitabschnitt zur Hälfte 1.</li>
+            <li><strong>Der Ton:</strong> I2S schickt dem MAX98357A eine Folge von Binärzahlen. <kbd>BCLK</kbd> tickt einmal pro Bit und <kbd>DIN</kbd> trägt das Bit selbst – so weiß der Verstärker genau, wo eine Zahl endet.</li>
+            <li><strong>Die Firmware:</strong> Beim Flashen wird etwa ein Megabyte an Bytes in den Speicher des ESP32 kopiert: das Programm, die Spielseite und diese Anleitung, alles als Einsen und Nullen.</li>
+          </ul>
+          <details><summary>Ist Morsecode dasselbe wie Binärcode?</summary><p>Fast. Morse hat zwei Signale, aber seine Buchstaben sind verschieden lang – <kbd>E</kbd> hat ein Signal, <kbd>Z</kbd> hat vier. Darum braucht Morse noch etwas Drittes: die Stille, die zeigt, wo ein Buchstabe endet. Ein Byte hat immer genau acht Bits; ein Computer braucht also keine Pause, um Zeichen zu trennen. Deshalb hat die Firmware eine Einstellung <kbd>Letter Pause</kbd> und dein Laptop nicht.</p></details>
+          <p class="kid-question">Zähl an einer Hand: Daumen 1, Zeigefinger 2, Mittelfinger 4, Ringfinger 8, kleiner Finger 16. Jeder Finger ist ein Bit, eine Hand zählt also bis 31. Welche Finger ergeben 21? Baue danach deine Initialen als Bytes im Spiel.</p>
+        </section>
+
+        <section id="flash" class="lesson-card">
+          <span class="step-label">Schritt 0</span>
+          <h2>Vor dem Verkabeln flashen</h2>
+          <p><strong>„Flashen“</strong> heißt: Das Morse-Programm wird in den Speicher des ESP32 übertragen. Danach kann der ESP32 das Programm auch ohne Computer ausführen. Dieser Schritt ist für die erwachsene Person, aber du darfst zusehen: Das ist der Moment, in dem das Gehirn seine Regeln lernt.</p>
+          <ol><li>Nur den ESP32 per USB anschließen.</li><li>Auf dem Computer der erwachsenen Person ausführen:</li></ol>
+          <pre class="wire-diagram">esphome run firmware/dottos-dash.yaml</pre>
+          <ol start="3"><li>USB abziehen. Den ESP32 immer mit dem USB-Anschluss zur gleichen Seite ins Steckbrett stecken.</li><li>Beschriftungen wie <kbd>13</kbd>, <kbd>21</kbd>, <kbd>GND</kbd>, <kbd>3V3</kbd> und <kbd>VIN</kbd>/<kbd>5V</kbd> suchen. Diese Beschriftungen sind wichtig – nicht die Nummern der Steckbrett-Reihen.</li></ol>
+          <table class="wire-table"><thead><tr><th>ESP32-Pin</th><th>Aufgabe</th></tr></thead><tbody><tr><td>GPIO16 / 17 / 18</td><td>RGB Rot / Grün / Blau</td></tr><tr><td>GPIO13</td><td>Taster oder Drehgeber-Schalter</td></tr><tr><td>GPIO21 / 19</td><td>Dreh-Signale</td></tr><tr><td>GPIO27</td><td>Passiver Piezo</td></tr><tr><td>GPIO26 / 25 / 22</td><td>MAX98357A Ton-Takt und Daten</td></tr></tbody></table>
+          <p class="kid-question">Erst raten, dann nachsehen: Welcher Pin wird später deine Morse-Taste lesen? Die Antwort steht in der Tabelle: GPIO13.</p>
+        </section>
+
+        <section id="light" class="lesson-card">
+          <span class="step-label">Schritt 1</span>
+          <h2>Das RGB-Licht anschließen</h2>
+          <p>Eine LED ist eine winzige Lampe. RGB bedeutet, dass in diesem einen Modul drei winzige Lampen stecken: eine rote, eine grüne und eine blaue. Zusammen können sie viele Farben zeigen.</p>
+          <table class="wire-table"><thead><tr><th>HW-479-Beschriftung</th><th>ESP32-Pin</th></tr></thead><tbody><tr><td><kbd>R</kbd></td><td>GPIO16</td></tr><tr><td><kbd>G</kbd></td><td>GPIO17</td></tr><tr><td><kbd>B</kbd></td><td>GPIO18</td></tr><tr><td><kbd>GND</kbd> / gemeinsame Kathode</td><td>GND</td></tr></tbody></table>
+          <pre class="wire-diagram">GPIO16 ───────── RGB R
+GPIO17 ───────── RGB G
+GPIO18 ───────── RGB B
+GND    ───────── RGB common / GND</pre>
+          <div class="test-card lesson-card"><h3>Test</h3><p>USB wieder anschließen. Beim Start leuchtet das Licht kurz blaugrün. Später sind Punkte cyan, Striche orange, ein erkannter Buchstabe grün und unbekannter Code rot.</p></div>
+          <details><summary>Was bedeutet „gemeinsame Kathode“?</summary><p>Das klingt schwierig, bedeutet aber nur: Die drei kleinen Lampen teilen sich einen gemeinsamen Rückweg zu GND. Deshalb kommt der gemeinsame Pin an GND. R, G und B bekommen jeweils ihren eigenen GPIO-Pin.</p></details>
+          <details><summary>Wie mischt der ESP32 Farben?</summary><p>Er schaltet jeden Farbkanal sehr schnell an und aus. Das heißt PWM (Pulsweitenmodulation). Unsere Augen mischen die schnellen Blitze zu einer Farbe, ähnlich wie beim Mischen von Wasserfarben.</p></details>
+          <p><strong>Falls nötig anhalten:</strong> Nicht nach den Farben der Jumper-Kabel raten. Dieses Projekt erwartet ein HW-479 mit gemeinsamer Kathode. Eine gemeinsame Anode oder andere Pin-Anordnung braucht andere Verdrahtung und Firmware.</p>
+          <p class="kid-question">Farb-Detektiv: Wenn nur der Pin R verbunden wäre, welche Farbe erwartest du? Rot.</p>
+        </section>
+
+        <section id="button" class="lesson-card">
+          <span class="step-label">Schritt 2</span>
+          <h2>Die Morse-Taste bauen</h2>
+          <p><strong>Ohne Kabel starten:</strong> Die <kbd>BOOT</kbd>-Taste des ESP32 DevKit ist nach dem Flashen schon eine Morse-Taste. Beim Loslassen wird Punkt oder Strich gesendet; mit RGB-Licht und Piezo beginnt die Rückmeldung beim Drücken. BOOT beim Neustart oder Flashen nicht gedrückt halten.</p>
+          <p>Den externen Taster unten ergänzen, wenn eine größere Taste auf dem Steckbrett gewünscht ist.</p>
+          <p>Ein Taster ist eine Brücke für Strom: Nicht gedrückt ist die Brücke offen. Beim Drücken wird sie geschlossen. Der ESP32 merkt nur „offen“ oder „geschlossen“ – die Firmware macht daraus Punkt oder Strich.</p>
+          <table class="wire-table"><thead><tr><th>Seite des Tasters</th><th>ESP32-Pin</th></tr></thead><tbody><tr><td>Eine Seite</td><td>GPIO13</td></tr><tr><td>Andere Seite</td><td>GND</td></tr></tbody></table>
+          <pre class="wire-diagram">GPIO13 ───────── [ Taster ] ───────── GND</pre>
+          <div class="test-card lesson-card"><h3>Test</h3><ol><li>Kurz antippen: cyan bedeutet Punkt.</li><li>Etwa eine halbe Sekunde halten: orange bedeutet Strich.</li><li>Einmal antippen, warten: <kbd>.</kbd> wird zu <kbd>E</kbd>.</li><li><kbd>...</kbd> machen, warten: daraus wird <kbd>S</kbd>.</li></ol></div>
+          <details><summary>Warum gibt es keinen Widerstand am Taster?</summary><p>Der ESP32 nutzt einen internen Pull-up-Widerstand. Ist die Taste offen, liest GPIO13 HIGH. Beim Drücken verbindet sie ihn mit GND, also LOW. Das Programm misst die LOW-Zeit und ignoriert winzige Kontakt-Zuckungen beim ersten Drücken. Das heißt Entprellen.</p></details>
+          <p>Viele Steckbrett-Taster haben vier Beine. Je zwei Beine auf einer Seite sind schon verbunden. Ein Bein von jeder Seite über den Mittelspalt nehmen; zwei Beine auf derselben Seite wären immer verbunden.</p>
+          <pre class="wire-diagram">● ●   Mittelspalt   ● ●
+│ │                 │ │
+linkes Beinpaar     rechtes Beinpaar
+
+Nimm ein Bein links UND ein Bein rechts.</pre>
+          <p class="kid-question">Teste ohne Raten: Was passiert bei einem ganz kurzen Druck? Und was bei einem langen? Sage erst deine Vorhersage laut, dann probiere es.</p>
+        </section>
+
+        <section id="encoder" class="lesson-card">
+          <span class="step-label">Schritt 3</span>
+          <h2>Den Drehgeber hinzufügen</h2>
+          <p>Der Drehgeber sieht ein bisschen wie ein Lautstärke-Regler aus, ist aber anders: Er hat keinen Anfang und kein Ende. Beim Drehen macht er kleine Klicks. Jeder Klick sagt dem ESP32 nur: „Ich wurde links“ oder „ich wurde rechts gedreht.“</p>
+          <p>Der Taster bleibt angeschlossen. Der Drehgeber-Schalter <kbd>SW</kbd> nutzt dieselben Verbindungen an GPIO13 und GND.</p>
+          <table class="wire-table"><thead><tr><th>Drehgeber-Beschriftung</th><th>ESP32-Pin</th></tr></thead><tbody><tr><td><kbd>CLK</kbd> / <kbd>A</kbd></td><td>GPIO21</td></tr><tr><td><kbd>DT</kbd> / <kbd>B</kbd></td><td>GPIO19</td></tr><tr><td><kbd>GND</kbd> / <kbd>C</kbd></td><td>GND</td></tr><tr><td><kbd>SW</kbd></td><td>GPIO13</td></tr><tr><td><kbd>+</kbd> / <kbd>VCC</kbd> (nur Modul)</td><td>3V3</td></tr></tbody></table>
+          <div class="test-card lesson-card"><h3>Test</h3><p>Links drehen ist Punkt, rechts drehen ist Strich. Ist es verkehrt herum: USB abziehen und nur <kbd>CLK</kbd> und <kbd>DT</kbd> tauschen.</p></div>
+          <details><summary>Woher kennt ein Drehgeber links und rechts?</summary><p>Im Drehgeber sind zwei kleine Schalter. Sie klicken fast gleichzeitig, aber einer ist einen winzigen Moment früher. Der ESP32 vergleicht die Reihenfolge. Diese Zwei-Signal-Idee heißt Quadratur. Du musst das Wort nicht auswendig lernen – wichtig ist: zwei Kabel verraten die Richtung.</p></details>
+          <p class="kid-question">Wenn links und rechts vertauscht sind: Welche zwei Kabel darfst du tauschen? Nur CLK und DT, und nur bei abgezogenem USB.</p>
+        </section>
+
+        <section id="sound" class="lesson-card">
+          <span class="step-label">Schritt 4</span>
+          <h2>Wähle deinen Ton</h2>
+          <h3>Option A: passiver Piezo (zuerst empfohlen)</h3>
+          <table class="wire-table"><thead><tr><th>Piezo-Pin</th><th>ESP32-Pin</th></tr></thead><tbody><tr><td><kbd>+</kbd></td><td>GPIO27</td></tr><tr><td><kbd>-</kbd></td><td>GND</td></tr></tbody></table>
+          <pre class="wire-diagram">GPIO27 ───────── Piezo +
+GND    ───────── Piezo -</pre>
+          <p>Ein <strong>passiver</strong> Piezo ist richtig. Er ist wie eine winzige Trommelfell-Scheibe: Die Firmware schubst ihn sehr schnell hin und her. Die Scheibe vibriert, bewegt Luft und daraus wird Ton. Ein <strong>aktiver</strong> Summer macht beim Anschließen an Strom selbst einen einzigen Ton – den wollen wir hier nicht.</p>
+          <h3>Option B: MAX98357A und kleiner Lautsprecher</h3>
+          <p>Diese Option sorgt für lauteren Klang. Sie kann zusätzlich zum Piezo verkabelt werden; beide Tonteile nutzen dieselbe Firmware.</p>
+          <table class="wire-table"><thead><tr><th>MAX98357A-Beschriftung</th><th>ESP32-Pin</th></tr></thead><tbody><tr><td><kbd>BCLK</kbd></td><td>GPIO26</td></tr><tr><td><kbd>LRC</kbd> / <kbd>WS</kbd></td><td>GPIO25</td></tr><tr><td><kbd>DIN</kbd></td><td>GPIO22</td></tr><tr><td><kbd>GND</kbd></td><td>GND</td></tr><tr><td><kbd>VIN</kbd></td><td>ESP32 <kbd>VIN</kbd> / <kbd>5V</kbd></td></tr><tr><td><kbd>SPK+</kbd>, <kbd>SPK-</kbd></td><td>Nur die beiden Lautsprecherkabel</td></tr></tbody></table>
+          <p>Der Lautsprecher wird nur am Verstärker angeschlossen, nie direkt an einem ESP32-Pin. Stell dir den MAX98357A wie ein Megafon für den ESP32 vor: Der ESP32 flüstert digitale Ton-Nachrichten über <kbd>BCLK</kbd>, <kbd>LRC</kbd> und <kbd>DIN</kbd>; der Verstärker macht daraus genug Kraft für den Lautsprecher.</p>
+          <p class="kid-question">Hör-Experiment: Was ist länger – ein Morse-Punkt oder ein Morse-Strich? Drücke beides und zähle im Kopf mit.</p>
+        </section>
+
+        <section id="debug" class="lesson-card">
+          <h2>Wie ein Maker Fehler suchen</h2>
+          <p>Ein Fehler bedeutet nicht, dass du etwas nicht kannst. Er ist ein Hinweis. Ändere nie fünf Dinge auf einmal: USB abziehen, <strong>eine</strong> Verbindung prüfen, wieder testen und erst dann die nächste prüfen.</p>
+          <table class="wire-table"><thead><tr><th>Beobachtung</th><th>Eine Sache prüfen</th></tr></thead><tbody><tr><td>RGB-Licht bleibt dunkel</td><td>Gemeinsamer LED-Pin an GND; R, G, B an GPIO16, 17, 18.</td></tr><tr><td>RGB-Farben falsch</td><td>Modul-Beschriftung lesen, nicht Jumper-Farben.</td></tr><tr><td>Taster immer gedrückt</td><td>Ein Kabel auf die andere Seite des Mittelspalts stecken.</td></tr><tr><td>Taster macht nichts</td><td>Er muss GPIO13 mit GND verbinden, nicht 3V3.</td></tr><tr><td>Drehgeber falsch herum</td><td>GPIO21 und GPIO19 bei abgezogenem USB tauschen.</td></tr><tr><td>Piezo bleibt still</td><td>Prüfen: passiv und an GPIO27/GND.</td></tr><tr><td>Board setzt sich zurück oder wird warm</td><td>Sofort abziehen; Kurzschluss oder 5 V an GPIO suchen.</td></tr></tbody></table>
+          <p class="kid-question">Maker-Regel: Erst beobachten, dann vermuten, dann genau eine Sache ändern. So findest du den Fehler wirklich.</p>
+        </section>
+
+        <section id="experiments" class="lesson-card concept-card">
+          <h2>Deine Erfinder-Missionen</h2>
+          <ol><li><strong>Morse-Meister:</strong> <kbd>E</kbd> (<kbd>.</kbd>), <kbd>T</kbd> (<kbd>-</kbd>) und dann <kbd>SOS</kbd> (<kbd>... --- ...</kbd>) senden.</li><li><strong>Farb-Zauberer:</strong> Vor dem Drücken die Lichtfarbe vorhersagen, dann die Vermutung testen.</li><li><strong>Richtungs-Detektiv:</strong> Auf Papier entscheiden, welche zwei Kabel die Dreh-Richtung ändern.</li><li><strong>Code-Forscher:</strong> Mit einer erwachsenen Person die gemeinsame Firmware (<code>firmware/dottos-dash-common.yaml</code>) öffnen. <kbd>GPIO13</kbd> und die Pause von 1200 ms suchen.</li></ol>
+          <p>Jeder gelungene Test ist ein kleines Forschungsexperiment: Vermutung aufstellen, nur eine Sache ändern, Ergebnis beobachten und aufschreiben.</p>
+        </section>
+      </article>
+    </div>
+<!-- BUILD-GUIDE:END -->
+</div></details></section>
       <details class="family-guide"><summary>Für Erwachsene: Familienleitfaden</summary><div class="family-guide-content"><p>Beginnt mit dem Spiel und ergänzt den Controller Stück für Stück. Eine funktionierende BOOT-Taste ist bereits ein vollständiges Projekt.</p><h3>Vor dem Einschalten</h3><ul><li>Eine erwachsene Person sollte die Platine flashen und die Verkabelung prüfen.</li><li>Vor jeder Änderung der Kabel USB abziehen und niemals 5 V mit einem ESP32-GPIO-Pin verbinden.</li><li>Wird die Platine heiß, riecht ungewöhnlich, startet ständig neu oder trennt die Verbindung: USB abziehen.</li></ul><h3>Eine entspannte erste Runde</h3><ol><li>Das Spiel zunächst ohne Hardware erkunden.</li><li><strong>E</strong> (Punkt), <strong>T</strong> (Strich) und dann <strong>SOS</strong> ausprobieren.</li><li>Nach der Erwachsenen-Prüfung die eingebaute BOOT-Taste des ESP32 testen.</li><li>Licht, Ton, Taste oder Drehgeber erst für das nächste Experiment ergänzen.</li></ol><h3>Privatsphäre und WLAN</h3><p>Das Spiel hat kein Konto, keine Analyse, keinen Cloud-Dienst und keinen Chat. Das lokale WLAN heißt <strong>Dotto’s Dash</strong>; das Passwort lautet <strong>dottodash</strong>. Internet wird nicht benötigt. Die optionale Heim-WLAN-Einrichtung ist eine Aufgabe für Erwachsene und gehört nur in ein vertrauenswürdiges Netzwerk.</p></div></details>
       <details class="wifi-card"><summary>Für Erwachsene: Mit Heim-WLAN verbinden</summary><div class="wifi-content"><p>Optional: Der ESP32 kann sich mit eurem 2,4-GHz-Heim-WLAN verbinden. Danach das Handy ebenfalls mit diesem WLAN verbinden und <strong>http://dottos-dash.local</strong> öffnen. Falls das nicht klappt, die IP-Adresse in der Geräteliste des Routers nachsehen.</p><p>Das Passwort wird nur an diesen ESP32 über das passwortgeschützte Dotto's-Dash-WLAN gesendet und nicht im Projekt gespeichert. Bei einem offenen WLAN das Passwortfeld leer lassen.</p><form id="wifi-setup-form" class="wifi-setup-form"><label class="write-label" for="wifi-ssid">WLAN-Name</label><input id="wifi-ssid" class="custom-message" type="text" maxlength="32" autocomplete="off" placeholder="Mein WLAN" required><label class="write-label" for="wifi-password">WLAN-Passwort</label><input id="wifi-password" class="custom-message" type="password" maxlength="63" autocomplete="current-password"><button id="wifi-connect-button" class="primary-button" type="submit">WLAN speichern &amp; verbinden</button></form><p id="wifi-setup-status" class="keyboard-help" aria-live="polite">Dottos Controller bleibt auch ohne Heim-WLAN nutzbar.</p></div></details>
       <details class="ota-card"><summary>Für Erwachsene: Firmware aktualisieren</summary><div class="ota-content"><p>Nur eine normale OTA-Firmware-Datei mit <code>.bin</code> auswählen – niemals eine <code>factory.bin</code>. Während des Hochladens den ESP32 eingeschaltet lassen. Danach startet er selbst neu.</p><p>Vorher am Handy die <strong>mobilen Daten ausschalten</strong>: Android wechselt sonst mitten in der Übertragung ins Mobilfunknetz, weil dieses WLAN kein Internet hat, und der Upload bricht ab.</p><form id="ota-update-form" action="/update" method="post" enctype="multipart/form-data"><label class="write-label" for="ota-firmware">Neue Firmware-Datei</label><input id="ota-firmware" class="ota-file-input" name="update" type="file" accept=".bin,application/octet-stream" required><button id="ota-install-button" class="primary-button" type="submit">Firmware installieren</button><progress id="ota-progress" class="ota-progress" max="100" value="0" hidden aria-describedby="ota-status"></progress><p id="ota-status" class="ota-status" role="status" aria-live="polite">Wähle eine OTA-Datei aus, um den Namen und den Fortschritt zu sehen.</p></form></div></details>

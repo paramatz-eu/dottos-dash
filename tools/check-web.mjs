@@ -6,6 +6,7 @@
 // Run with: node tools/check-web.mjs
 
 import { readFileSync, existsSync } from 'node:fs';
+import { buildGuideMarkup, embeddedGuideIn, GUIDE_START, GUIDE_END } from './embed-build-guide.mjs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -44,6 +45,16 @@ if (embeddedStart < 0 || embeddedEnd < embeddedStart) {
 }
 const embedded = app.slice(embeddedStart, embeddedEnd);
 
+// The offline build lesson inside the ESP template is generated from de/build.html
+// by tools/embed-build-guide.mjs. Its section ids belong to that document, not to
+// the game page, so they are checked against their own source (rule 5) instead of
+// against index.html.
+const guideOpens = embedded.indexOf(GUIDE_START);
+const guideCloses = embedded.indexOf(GUIDE_END);
+const embeddedGame = guideOpens < 0 || guideCloses < guideOpens
+  ? embedded
+  : embedded.slice(0, guideOpens) + embedded.slice(guideCloses + GUIDE_END.length);
+
 const idsIn = (source) => new Set([...source.matchAll(/id="([^"]+)"/g)].map((m) => m[1]));
 const classesIn = (source) => new Set(
   [...source.matchAll(/class="([^"]+)"/g)].flatMap((m) => m[1].trim().split(/\s+/)),
@@ -53,7 +64,7 @@ const missing = (wanted, present) => [...wanted].filter((value) => !present.has(
 const copies = [
   { label: 'index.html', ids: idsIn(en), classes: classesIn(en), esp: false },
   { label: 'de/index.html', ids: idsIn(de), classes: classesIn(de), esp: false },
-  { label: 'app.js embedded ESP template', ids: idsIn(embedded), classes: classesIn(embedded), esp: true },
+  { label: 'app.js embedded ESP template', ids: idsIn(embeddedGame), classes: classesIn(embeddedGame), esp: true },
 ];
 
 // 1. Every element app.js reaches for must exist in each copy that should have it.
@@ -168,6 +179,19 @@ for (const name of firmwareNames) {
   }
 }
 
+// 5. The ESP32 has no internet, so it carries its own copy of the build lesson.
+//    That copy is generated, never hand-edited: an edit to de/build.html that is
+//    not regenerated would ship a stale lesson to every flashed board.
+const embeddedGuide = embeddedGuideIn(app);
+if (embeddedGuide === null) {
+  fail(
+    'app.js no longer contains the BUILD-GUIDE markers, so the offline build lesson cannot be regenerated. ' +
+    'Restore them inside the build-guide details in renderEmbeddedEspGame().',
+  );
+} else if (embeddedGuide !== buildGuideMarkup()) {
+  fail('app.js: the embedded build lesson has drifted from de/build.html. Run: node tools/embed-build-guide.mjs');
+}
+
 if (problems.length) {
   console.error('check-web failed:\n');
   for (const problem of problems) console.error(`  - ${problem}`);
@@ -177,5 +201,6 @@ if (problems.length) {
 console.log(
   `check-web: ok — ${wantedIds.size} ids and ${wantedClasses.size} class hooks consistent across ` +
   `index.html, de/index.html and the embedded ESP template; ` +
-  `${COUPLED_ENTITIES.length} firmware entity names resolved.`,
+  `${COUPLED_ENTITIES.length} firmware entity names resolved; `
+  + `the offline build lesson matches de/build.html.`,
 );

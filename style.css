@@ -344,6 +344,10 @@ summary { cursor: pointer; color: var(--navy); font-size: 1.15rem; font-weight: 
 .lesson-nav a { display: block; padding: .35rem .2rem; color: var(--purple); font-weight: 800; text-decoration: none; }
 .lesson-nav a:hover { text-decoration: underline; }
 .lesson-content { display: grid; gap: 1rem; }
+/* Grid items are min-width: auto by default, so the widest unwrappable line of a
+   wiring diagram would stretch the whole page instead of scrolling inside its own
+   box. That is worst on the ESP32 page, where this lesson sits inside the game. */
+.lesson-content > * { min-width: 0; }
 .lesson-card { padding: 1.35rem; border: 3px solid var(--line); border-radius: 1.3rem; background: white; box-shadow: 0 6px 0 #e9ecf8; }
 .lesson-card h2 { margin: 0 0 .65rem; color: var(--navy); font-size: clamp(1.5rem, 4vw, 2.1rem); }
 .lesson-card h3 { margin: 1rem 0 .4rem; color: var(--purple); }
@@ -353,7 +357,9 @@ summary { cursor: pointer; color: var(--navy); font-size: 1.15rem; font-weight: 
 .safety-card h2 { color: #a2354f; }
 .concept-card { background: linear-gradient(135deg, #e6f6ff, white); }
 .step-label { display: inline-block; margin-bottom: .4rem; padding: .28rem .6rem; border-radius: 99rem; background: var(--purple); color: white; font-size: .82rem; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; }
-.wire-table { width: 100%; border-collapse: collapse; margin: .8rem 0; }
+/* A wiring table cannot wrap below its widest cell, so on a narrow phone it is
+   made a scrollable block of its own rather than widening the page around it. */
+.wire-table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; margin: .8rem 0; }
 .wire-table th, .wire-table td { padding: .55rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .wire-table th { color: var(--navy); }
 .wire-diagram { margin: .8rem 0; padding: 1rem; overflow-x: auto; border-radius: .8rem; background: var(--soft); color: var(--navy); font: 800 .95rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre; }
